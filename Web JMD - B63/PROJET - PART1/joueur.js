@@ -6,7 +6,7 @@ function Ship(x, y){
 	this.powerUp = 0;
 }
 
-Ship.prototype = new MetaObject(0, 0, "rgba(255,255,255, 0.7)", 1);
+Ship.prototype = new MetaObject(0, 0, "rgba(255,255,255, 0.7)", 5);
 Ship.constructor = Ship;
 
 Ship.prototype.bougeRandom=function(){
@@ -15,20 +15,20 @@ Ship.prototype.bougeRandom=function(){
 }
 
 Ship.prototype.shoot = function(){
-	controleur.modele.arrayMissilesJoueur.unshift(new Missile(this.x, this.y - 15));
+	controleur.modele.arrayMissilesJoueur.unshift(new Missile(this.x - 2, this.y - 60, -5, "rgba(255,180,0, 0.9)"));
 }
 
 Ship.prototype.selfCheck = function(){
 	if(this.powerUp == 1){
-		this.speed = 20;
+		this.speed = 10;
 	}
 	else{
-		this.speed = 1;
+		this.speed = 5;
 	}
 }
 
 
-
+/*
 function Joueur(vies, score){
 	this.vies = vies;
 	this.score = score;
@@ -42,3 +42,4 @@ Joueur.constructor = Joueur;
 Joueur.prototype.collision = function(){
 	//no kollision for playa?
 }
+*/

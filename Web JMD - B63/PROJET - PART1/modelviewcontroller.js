@@ -29,6 +29,9 @@ function Constants(maxx, maxy){
 	
 	this.ENEMYC_SIZE_X = 4;
 	this.ENEMYC_SIZE_Y = 9;
+	
+	this.ENEMYMISSILE_SIZE_X = 2;
+	this.ENEMYMISSILE_SIZE_Y = 3;
 }
 
 function loadGame(){
@@ -44,6 +47,8 @@ function loadGame(){
 		
 		document.onkeydown = controleur.keydown;
 		document.onkeyup = controleur.keyup;
+		//document.onkeypress = controleur.keypressed;
+		
 		document.onmousedown = controleur.mousedown;
 		
 		controleur.vue.afficheMenu();
@@ -92,18 +97,20 @@ function Modele(parent){
 	}
 	
 	this.arrayMissilesJoueur = new Array();
-	this.arrayMissilesJoueur.unshift(new Missile(200,100));
+	//this.arrayMissilesJoueur.unshift(new Missile(200,100));
 	
-	this.arrayEnemyA = new Array(20);
-	this.arrayEnemyA.unshift(new EnemyA(200,100));
+	this.arrayMissilesAutres = new Array();
 	
-	this.arrayEnemyB = new Array(20);
-	this.arrayEnemyB.unshift(new EnemyB(400,100));
+	this.arrayEnemyA = new Array();
+	//this.arrayEnemyA.unshift(new EnemyA(200,100));
 	
-	this.arrayEnemyC = new Array(20);
-	this.arrayEnemyC.unshift(new EnemyC(600,100));
+	this.arrayEnemyB = new Array();
+	//this.arrayEnemyB.unshift(new EnemyB(400,100));
 	
-	this.arrayPowerUp = new Array(20);
+	this.arrayEnemyC = new Array();
+	//this.arrayEnemyC.unshift(new EnemyC(600,100));
+	
+	this.arrayPowerUp = new Array();
 	this.arrayStars = new Array();
 }
 
@@ -123,7 +130,7 @@ Vue.prototype.afficheShip= function(x,y, liste){
 		ctx.arc(x,y,20,0,2*Math.PI,false);
 		ctx.fill();
 		ctx.closePath();
-		
+		/*
 		ctx.fillStyle = "rgba(200,200,0,50)";
 		var i = 0;
 		for (i = 0; i < liste.length; i++){
@@ -140,6 +147,7 @@ Vue.prototype.afficheShip= function(x,y, liste){
 				}
 
 		}
+		*/
 		ctx.fillStyle = "rgba(180,124, 20, 0.8)";
 		ctx.font = 'normal 30px sans-serif';
 		
@@ -151,7 +159,7 @@ Vue.prototype.afficheShip= function(x,y, liste){
 	}  
 }
 
-Vue.prototype.afficheEnnemis= function(liste, sizex, sizey){
+Vue.prototype.afficheMetaObject= function(liste, sizex, sizey){
 	var canvas = document.getElementById("canvas");
     if (canvas.getContext) {  
 		var ctx = canvas.getContext("2d");
@@ -167,29 +175,15 @@ Vue.prototype.afficheEnnemis= function(liste, sizex, sizey){
 							
 				liste[i].nextPoint();
 				liste[i].collisionShip(controleur.modele.ship);
-				if(liste[i].y > constants.MAX_Y){
+				liste[i].collisionMissile(controleur.modele.arrayMissilesJoueur, sizex, sizey);
+				
+				if(liste[i].y > constants.MAX_Y || liste[i].dead){
 					liste.splice(i, 1);
 					controleur.modele.ship.hiscore += 10;
 				}
 				}
 
 		}
-	}
-
-}
-
-Vue.prototype.afficheHigh= function(){
-	var canvas = document.getElementById("canvas");
-    if (canvas.getContext) {  
-		var ctx = canvas.getContext("2d");
-		
-		ctx.clearRect(0,0,constants.MAX_X,constants.MAX_Y);
-		
-		var g = "Hi-Score: " + controleur.modele.ship.hiscore;
-		//ctx.measureText(g);
-		ctx.fillText(g, 20 , 20);
-		
-		
 	}
 
 }
@@ -219,8 +213,14 @@ function Controleur(){
 	this.vue=new Vue(this);
 	this.modele=new Modele(this);
 	//this.vue.afficheShip(this.modele.ship.x,this.modele.ship.y, this.modele.arrayMissilesJoueur);
+	this.leftKey = false;
+	this.rightKey = false;
+	this.downKey = false;
+	this.upKey = false;
+	this.shootKey = false;
 	
-	//this.vue.afficheEnnemis(this.modele.arrayEnemyA, 3);
+	
+	//this.vue.afficheMetaObject(this.modele.arrayEnemyA, 3);
 	this.lock = false;
 	this.frame = 0;
 	this.paused = true;
@@ -229,51 +229,27 @@ function Controleur(){
 	this.vue.afficheMenu();
 	
 	this.mainloop = masterloop;
-	
 }
 
 function masterloop(){
 		
+		controleur.deplacement();
 		
-		controleur.modele.arrayStars.unshift(new Star(Math.floor(Math.random()*constants.MAX_X), 0));
-		if(controleur.frame % 150 == 0){
-			controleur.modele.arrayPowerUp.unshift(new PowerUp(Math.floor(Math.random()*constants.MAX_X), 0));
-		}
-		
-		
-		if (controleur.frame % 70 == 0){
-			tempX = Math.floor(Math.random(controleur.frame)*constants.MAX_X);
-			tempY = 0;
-			compteur = 0;
-		}
-		
-		if (compteur < 5){
-			controleur.modele.arrayEnemyC.unshift(new EnemyC(tempX, tempY));
-			tempY += 15;
-			compteur += 1;
-			
-		}
-		
-		
-		if (controleur.frame % 20 == 0){
-			controleur.modele.arrayEnemyA.unshift(new EnemyA(Math.floor(Math.random()*constants.MAX_X), 0));
-			//controleur.modele.arrayEnemyA.unshift(new EnemyA());
-		}
-		
-		if(controleur.frame % 35 == 0){
-			controleur.modele.arrayEnemyB.unshift(new EnemyB(Math.floor(Math.random()*constants.MAX_X), 0));
-		}
+		controleur.newItems();
 		
 		controleur.modele.ship.selfCheck();
 		
 		controleur.vue.afficheShip(controleur.modele.ship.x, controleur.modele.ship.y, controleur.modele.arrayMissilesJoueur);
-		controleur.vue.afficheEnnemis(controleur.modele.arrayEnemyA, constants.ENEMYA_SIZE_X,constants.ENEMYA_SIZE_Y );
-		controleur.vue.afficheEnnemis(controleur.modele.arrayEnemyB, constants.ENEMYB_SIZE_X,constants.ENEMYB_SIZE_Y );
-		controleur.vue.afficheEnnemis(controleur.modele.arrayEnemyC, constants.ENEMYC_SIZE_X,constants.ENEMYC_SIZE_Y );
+		controleur.vue.afficheMetaObject(controleur.modele.arrayEnemyA, constants.ENEMYA_SIZE_X,constants.ENEMYA_SIZE_Y );
+		controleur.vue.afficheMetaObject(controleur.modele.arrayEnemyB, constants.ENEMYB_SIZE_X,constants.ENEMYB_SIZE_Y );
+		controleur.vue.afficheMetaObject(controleur.modele.arrayEnemyC, constants.ENEMYC_SIZE_X,constants.ENEMYC_SIZE_Y );
 		
-		controleur.vue.afficheEnnemis(controleur.modele.arrayPowerUp, constants.POWERUP_SIZE_X,constants.POWERUP_SIZE_Y );
+		controleur.vue.afficheMetaObject(controleur.modele.arrayMissilesJoueur, constants.MISSILE_SIZE_X,constants.MISSILE_SIZE_Y );
+		controleur.vue.afficheMetaObject(controleur.modele.arrayMissilesAutres, constants.ENEMYMISSILE_SIZE_X,constants.ENEMYMISSILE_SIZE_Y );
 		
-		controleur.vue.afficheEnnemis(controleur.modele.arrayStars, constants.STARS_SIZE_X,constants.STARS_SIZE_Y );
+		controleur.vue.afficheMetaObject(controleur.modele.arrayPowerUp, constants.POWERUP_SIZE_X,constants.POWERUP_SIZE_Y );
+		
+		controleur.vue.afficheMetaObject(controleur.modele.arrayStars, constants.STARS_SIZE_X,constants.STARS_SIZE_Y );
 		//controleur.vue.afficheHigh();
 		controleur.frame++;
 		
@@ -288,10 +264,77 @@ function masterloop(){
 			controleur = new Controleur();
 		}
 }
+Controleur.prototype.newItems = function(){
 
+		controleur.modele.arrayStars.unshift(new Star(Math.floor(Math.random()*constants.MAX_X), 0));
+		if(controleur.frame % 150 == 0){
+			controleur.modele.arrayPowerUp.unshift(new PowerUp(Math.floor(Math.random()*constants.MAX_X), 0));
+		}
+		
+		if (controleur.frame % 70 == 0){
+			tempX = Math.floor(Math.random(controleur.frame)*constants.MAX_X);
+			tempY = 0;
+			compteur = 0;
+		}
+		
+		if (compteur < 5){
+			controleur.modele.arrayEnemyC.unshift(new EnemyC(tempX, tempY));
+			tempY += 15;
+			compteur += 1;
+		}
+		
+		if (controleur.frame % 20 == 0){
+			controleur.modele.arrayEnemyA.unshift(new EnemyA(Math.floor(Math.random()*constants.MAX_X), 0));
+			//controleur.modele.arrayEnemyA.unshift(new EnemyA());
+		}
+		
+		if(controleur.frame % 35 == 0){
+			controleur.modele.arrayEnemyB.unshift(new EnemyB(Math.floor(Math.random()*constants.MAX_X), 0));
+		}
+}
+
+Controleur.prototype.deplacement = function(){
+		
+		var speed = controleur.modele.ship.speed;
+		var accel = controleur.modele.ship.acceleration;
+		speed = speed + accel;
+		//console.log(this.leftKey + " " + this.rightKey + " " + this.upKey + " " + this.downKey);
+		
+		if (this.leftKey) {
+			//console.log("left");
+			controleur.modele.ship.movex(-speed);
+		}
+		else if (this.rightKey) {
+			//console.log("right");
+			controleur.modele.ship.movex(speed);
+		}
+		
+		if (this.upKey) {
+			//console.log("up");
+			controleur.modele.ship.movey(-speed);
+		}
+		else if (this.downKey) {
+			//console.log("down");
+			controleur.modele.ship.movey(speed);
+		}
+		
+		if (this.shootKey) {
+			//console.log("space");
+			controleur.modele.ship.shoot();
+			//console.log(controleur.modele.arrayMissilesJoueur.length);
+			// ball.jump(); - à lier avec la balle, selon votre nom de variable/fonction
+		}
+}
+Controleur.prototype.keypressed = function(e) {
+	/*
+	if (controleur.modele.ship.acceleration < 10){
+		controleur.modele.ship.acceleration += 1;
+		console.log(controleur.modele.ship.acceleration);
+	}
+	*/
+}
 Controleur.prototype.keydown = function(e) {
 	var unicode = "";
-	var speed = controleur.modele.ship.speed;
 	
 	if (navigator.appName == "Microsoft Internet Explorer") {
 			unicode = event.keyCode; // not a typo.
@@ -301,32 +344,29 @@ Controleur.prototype.keydown = function(e) {
 	}
 	console.log(unicode);
 		if (unicode == 65 || unicode == 97 || unicode == 37) {
-			//console.log("left");
-			controleur.modele.ship.movex(-speed);
+			
+			controleur.leftKey = true;
 		}
 		else if (unicode == 68  || unicode == 100 || unicode == 39) {
-			//console.log("right");
-			controleur.modele.ship.movex(speed);
+			
+			controleur.rightKey = true;
 		}
 		
 		if (unicode == 87 || unicode == 38) {
-			//console.log("up");
-			controleur.modele.ship.movey(-speed);
+			
+			controleur.upKey = true;
 		}
 		else if (unicode == 83 || unicode == 40) {
-			//console.log("down");
-			controleur.modele.ship.movey(speed);
+			
+			controleur.downKey = true;
 		}
 		
 		if (unicode == 32) {
-			//console.log("space");
-			controleur.modele.ship.shoot();
-			//console.log(controleur.modele.arrayMissilesJoueur.length);
-			// ball.jump(); - à lier avec la balle, selon votre nom de variable/fonction
+			
+			controleur.shootKey = true;
 		}
 	
 }
-
 Controleur.prototype.keyup = function(e) {
 	var unicode = "";
 	
@@ -336,8 +376,28 @@ Controleur.prototype.keyup = function(e) {
 	else{
 		unicode = e.which;
 	}
-	console.log(unicode);
-	
+		if (unicode == 65 || unicode == 97 || unicode == 37) {
+			
+			controleur.leftKey = false;
+		}
+		else if (unicode == 68  || unicode == 100 || unicode == 39) {
+			
+			controleur.rightKey = false;
+		}
+		
+		if (unicode == 87 || unicode == 38) {
+			
+			controleur.upKey = false;
+		}
+		else if (unicode == 83 || unicode == 40) {
+			
+			controleur.downKey = false;
+		}
+		
+		if (unicode == 32) {
+			
+			controleur.shootKey = false;
+		}
 }
 
 Controleur.prototype.mousedown = function(e){
@@ -346,19 +406,4 @@ Controleur.prototype.mousedown = function(e){
 		controleur.mainloop();
 		console.log("red");
 	}
-	/*
-	else if(controleur.paused && controleur.endgame){
-		controleur.vue.afficheMenu();
-		controleur.paused = false;
-		creeCookie("hiscore", controleur.modele.ship.hiscore);
-		console.log("blue");
-		
-	}
-	else if(!controleur.paused && controleur.endgame){
-		controleur.paused = false;
-		controleur.endgame = false;
-		controleur.mainloop();
-		console.log("green");
-	}
-	*/
 }
