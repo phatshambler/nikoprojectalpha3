@@ -12,6 +12,12 @@ function Constants(maxx, maxy){
 	this.NO_OF_SHIPS = 10;
 	this.SHIP_SPEED = 12;
 	
+	this.STARS_SIZE_X = 1;
+	this.STARS_SIZE_Y = 1;
+	
+	this.POWERUP_SIZE_X = 10;
+	this.POWERUP_SIZE_Y = 10;
+	
 	this.MISSILE_SIZE_X = 3;
 	this.MISSILE_SIZE_Y = 4;
 	
@@ -19,7 +25,10 @@ function Constants(maxx, maxy){
 	this.ENEMYA_SIZE_Y = 12;
 	
 	this.ENEMYB_SIZE_X = 7;
-	this.ENEMYB_SIZE_Y = 7;
+	this.ENEMYB_SIZE_Y = 14;
+	
+	this.ENEMYC_SIZE_X = 4;
+	this.ENEMYC_SIZE_Y = 9;
 }
 
 function loadGame(){
@@ -27,9 +36,11 @@ function loadGame(){
 	/*plug mes écouteurs*/
 	
 	if (controleur==""){
-		controleur= new Controleur();
+		
 		constants= new Constants(document.body.clientHeight, document.body.clientWidth);
 		setSize();
+		controleur= new Controleur();
+		
 		
 		document.onkeydown = controleur.keydown;
 		document.onkeyup = controleur.keyup;
@@ -60,8 +71,8 @@ function setSize(){
 	}
 	
 	var canvas = document.getElementById("canvas");
-		canvas.height = winH - 5;
-		canvas.width = winW - 5;
+		canvas.height = (winH - 5);
+		canvas.width = (winW - 5);
 		constants.MAX_X = winW - 5;
 		constants.MAX_Y = winH - 5;
 	
@@ -69,17 +80,31 @@ function setSize(){
 
 function Modele(parent){
 	this.parent = parent;
-	this.ship = new Ship();
+	this.ship = new Ship(Math.floor(constants.MAX_X / 2), constants.MAX_Y - 100);
 	this.score = 0;
+	
+	
+	this.ship.lastHiScore = lisCookie("hiscore");
+	
+	if(this.ship.lastHiScore == null){
+		creeCookie("hiscore", 1, 10);
+		this.ship.lastHiScore = lisCookie("hiscore");
+	}
 	
 	this.arrayMissilesJoueur = new Array();
 	this.arrayMissilesJoueur.unshift(new Missile(200,100));
 	
-	this.arrayEnemyA = new Array(10);
+	this.arrayEnemyA = new Array(20);
 	this.arrayEnemyA.unshift(new EnemyA(200,100));
 	
-	this.arrayEnemyB = new Array(10);
-	this.arrayEnemyB.unshift(new EnemyB(200,100));
+	this.arrayEnemyB = new Array(20);
+	this.arrayEnemyB.unshift(new EnemyB(400,100));
+	
+	this.arrayEnemyC = new Array(20);
+	this.arrayEnemyC.unshift(new EnemyC(600,100));
+	
+	this.arrayPowerUp = new Array(20);
+	this.arrayStars = new Array();
 }
 
 function Vue(parent){
@@ -91,7 +116,7 @@ Vue.prototype.afficheShip= function(x,y, liste){
     var canvas = document.getElementById("canvas");
     if (canvas.getContext) {  
 		var ctx = canvas.getContext("2d");
-		ctx.fillStyle = "rgba(180,124, 20, 0.8)"; 
+		//ctx.fillStyle = "rgba(180,124, 20, 0.8)"; 
 		ctx.clearRect(0,0,constants.MAX_X,constants.MAX_Y);
 		ctx.fillStyle = "rgba(180,124, 20, 0.8)"; 
 		ctx.beginPath();
@@ -115,29 +140,36 @@ Vue.prototype.afficheShip= function(x,y, liste){
 				}
 
 		}
-		var g = "Hi-Score: " + controleur.modele.score;
+		ctx.fillStyle = "rgba(180,124, 20, 0.8)";
+		ctx.font = 'normal 30px sans-serif';
+		
+		var g = "Hi-Score: " + controleur.modele.ship.hiscore;
 		//ctx.measureText(g);
 		ctx.fillText(g, 20 , 30);
+		var h = "Top score: " + controleur.modele.ship.lastHiScore;
+		ctx.fillText(h, 20 , 60);
 	}  
 }
 
-Vue.prototype.afficheEnnemis= function(liste, color){
+Vue.prototype.afficheEnnemis= function(liste, sizex, sizey){
 	var canvas = document.getElementById("canvas");
     if (canvas.getContext) {  
 		var ctx = canvas.getContext("2d");
-		ctx.fillStyle = color;
+		//ctx.fillStyle = color;
 		var i = 0;
 		for (i = 0; i < liste.length; i++){
 			if(liste[i] != null){
+				ctx.fillStyle = liste[i].color;
 				ctx.fillRect(liste[i].x,
 							liste[i].y,
-							constants.ENEMYA_SIZE_X,
-							constants.ENEMYA_SIZE_Y);
+							sizex,
+							sizey);
 							
 				liste[i].nextPoint();
 				liste[i].collisionShip(controleur.modele.ship);
-				if(liste[i].dead){
+				if(liste[i].y > constants.MAX_Y){
 					liste.splice(i, 1);
+					controleur.modele.ship.hiscore += 10;
 				}
 				}
 
@@ -151,12 +183,13 @@ Vue.prototype.afficheHigh= function(){
     if (canvas.getContext) {  
 		var ctx = canvas.getContext("2d");
 		
-		//ctx.clearRect(0,0,constants.MAX_X,constants.MAX_Y);
-		ctx.fillStyle = "rgba(180,124, 20, 0.8)";
-		ctx.font = 'normal 20px sans-serif';
-		var g = "Hi-Score: " + controleur.modele.score;
+		ctx.clearRect(0,0,constants.MAX_X,constants.MAX_Y);
+		
+		var g = "Hi-Score: " + controleur.modele.ship.hiscore;
 		//ctx.measureText(g);
 		ctx.fillText(g, 20 , 20);
+		
+		
 	}
 
 }
@@ -166,6 +199,7 @@ Vue.prototype.afficheMenu= function(){
     if (canvas.getContext) {  
 		var ctx = canvas.getContext("2d");
 		
+		//ctx.clearRect(0,0,700,500);
 		ctx.clearRect(0,0,constants.MAX_X,constants.MAX_Y);
 		ctx.fillStyle = "rgba(180,124, 20, 0.8)";
 		ctx.font = 'normal 20px sans-serif';
@@ -189,7 +223,7 @@ function Controleur(){
 	//this.vue.afficheEnnemis(this.modele.arrayEnemyA, 3);
 	this.lock = false;
 	this.frame = 0;
-	this.finished = true;
+	this.paused = true;
 	this.endgame = false;
 	
 	this.vue.afficheMenu();
@@ -201,6 +235,26 @@ function Controleur(){
 function masterloop(){
 		
 		
+		controleur.modele.arrayStars.unshift(new Star(Math.floor(Math.random()*constants.MAX_X), 0));
+		if(controleur.frame % 150 == 0){
+			controleur.modele.arrayPowerUp.unshift(new PowerUp(Math.floor(Math.random()*constants.MAX_X), 0));
+		}
+		
+		
+		if (controleur.frame % 70 == 0){
+			tempX = Math.floor(Math.random(controleur.frame)*constants.MAX_X);
+			tempY = 0;
+			compteur = 0;
+		}
+		
+		if (compteur < 5){
+			controleur.modele.arrayEnemyC.unshift(new EnemyC(tempX, tempY));
+			tempY += 15;
+			compteur += 1;
+			
+		}
+		
+		
 		if (controleur.frame % 20 == 0){
 			controleur.modele.arrayEnemyA.unshift(new EnemyA(Math.floor(Math.random()*constants.MAX_X), 0));
 			//controleur.modele.arrayEnemyA.unshift(new EnemyA());
@@ -209,22 +263,35 @@ function masterloop(){
 		if(controleur.frame % 35 == 0){
 			controleur.modele.arrayEnemyB.unshift(new EnemyB(Math.floor(Math.random()*constants.MAX_X), 0));
 		}
+		
+		controleur.modele.ship.selfCheck();
+		
 		controleur.vue.afficheShip(controleur.modele.ship.x, controleur.modele.ship.y, controleur.modele.arrayMissilesJoueur);
-		controleur.vue.afficheEnnemis(controleur.modele.arrayEnemyA, constants.ENEMYA_COLOR );
-		controleur.vue.afficheEnnemis(controleur.modele.arrayEnemyB, constants.ENEMYB_COLOR );
+		controleur.vue.afficheEnnemis(controleur.modele.arrayEnemyA, constants.ENEMYA_SIZE_X,constants.ENEMYA_SIZE_Y );
+		controleur.vue.afficheEnnemis(controleur.modele.arrayEnemyB, constants.ENEMYB_SIZE_X,constants.ENEMYB_SIZE_Y );
+		controleur.vue.afficheEnnemis(controleur.modele.arrayEnemyC, constants.ENEMYC_SIZE_X,constants.ENEMYC_SIZE_Y );
+		
+		controleur.vue.afficheEnnemis(controleur.modele.arrayPowerUp, constants.POWERUP_SIZE_X,constants.POWERUP_SIZE_Y );
+		
+		controleur.vue.afficheEnnemis(controleur.modele.arrayStars, constants.STARS_SIZE_X,constants.STARS_SIZE_Y );
 		//controleur.vue.afficheHigh();
 		controleur.frame++;
 		
-		if(!controleur.finished){
+		if(!controleur.paused){
 			setTimeout(masterloop, 30);
 		}
 		else{
+		if(controleur.modele.ship.hiscore >= controleur.modele.ship.lastHiScore){
+				effaceCookie("hiscore");
+				creeCookie("hiscore", controleur.modele.ship.hiscore, 20);
+			}
 			controleur = new Controleur();
 		}
 }
 
 Controleur.prototype.keydown = function(e) {
 	var unicode = "";
+	var speed = controleur.modele.ship.speed;
 	
 	if (navigator.appName == "Microsoft Internet Explorer") {
 			unicode = event.keyCode; // not a typo.
@@ -234,27 +301,27 @@ Controleur.prototype.keydown = function(e) {
 	}
 	console.log(unicode);
 		if (unicode == 65 || unicode == 97 || unicode == 37) {
-			console.log("left");
-			controleur.modele.ship.movex(-5);
+			//console.log("left");
+			controleur.modele.ship.movex(-speed);
 		}
 		else if (unicode == 68  || unicode == 100 || unicode == 39) {
-			console.log("right");
-			controleur.modele.ship.movex(5);
+			//console.log("right");
+			controleur.modele.ship.movex(speed);
 		}
 		
 		if (unicode == 87 || unicode == 38) {
-			console.log("up");
-			controleur.modele.ship.movey(-5);
+			//console.log("up");
+			controleur.modele.ship.movey(-speed);
 		}
 		else if (unicode == 83 || unicode == 40) {
-			console.log("down");
-			controleur.modele.ship.movey(5);
+			//console.log("down");
+			controleur.modele.ship.movey(speed);
 		}
 		
 		if (unicode == 32) {
-			console.log("space");
+			//console.log("space");
 			controleur.modele.ship.shoot();
-			console.log(controleur.modele.arrayMissilesJoueur.length);
+			//console.log(controleur.modele.arrayMissilesJoueur.length);
 			// ball.jump(); - à lier avec la balle, selon votre nom de variable/fonction
 		}
 	
@@ -274,17 +341,24 @@ Controleur.prototype.keyup = function(e) {
 }
 
 Controleur.prototype.mousedown = function(e){
-	if (controleur.finished && !controleur.endgame){
-		controleur.finished = false;
+	if (controleur.paused && !controleur.endgame){
+		controleur.paused = false;
 		controleur.mainloop();
+		console.log("red");
 	}
-	else if(controleur.finished && controleur.endgame){
+	/*
+	else if(controleur.paused && controleur.endgame){
 		controleur.vue.afficheMenu();
-		controleur.finished = false;
+		controleur.paused = false;
+		creeCookie("hiscore", controleur.modele.ship.hiscore);
+		console.log("blue");
+		
 	}
-	else if(!controleur.finished && controleur.endgame){
-		controleur.finished = false;
+	else if(!controleur.paused && controleur.endgame){
+		controleur.paused = false;
 		controleur.endgame = false;
 		controleur.mainloop();
+		console.log("green");
 	}
+	*/
 }

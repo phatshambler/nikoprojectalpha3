@@ -3,6 +3,7 @@ function MetaObject(x,y,color,speed){
 	this.y = y;
 	this.color = color;
 	this.speed = speed;
+	this.acceleration = 0;
 	this.dead = false;
 }
 
@@ -24,7 +25,7 @@ MetaObject.prototype.movey = function(offset){
 
 MetaObject.prototype.collisionShip = function(ship){
 	if (this.x > ship.x -20 && this.x < ship.x + 20 && this.y > ship.y - 20 && this.y < ship.y + 20){
-		controleur.finished = true;
+		controleur.paused = true;
 		controleur.endgame = true;
 	}
 	//console.log(this.x + " " + this.y);

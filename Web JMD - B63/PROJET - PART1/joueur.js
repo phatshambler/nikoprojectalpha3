@@ -1,24 +1,30 @@
-function Ship(){
-	this.x=(Math.floor(500 / 2));
-	this.y=(Math.floor(700 / 5) * 4);
+function Ship(x, y){
+	this.x = x;
+	this.y = y;
+	this.hiscore = 0;
+	this.lastHiScore = 0;
+	this.powerUp = 0;
 }
+
+Ship.prototype = new MetaObject(0, 0, "rgba(255,255,255, 0.7)", 1);
+Ship.constructor = Ship;
 
 Ship.prototype.bougeRandom=function(){
 	this.x=(Math.floor(Math.random()*480))+10;
 	this.y=(Math.floor(Math.random()*680))+10;
 }
-Ship.prototype.movex = function(offset){
-	if(this.x + offset > 0 || this.x + offset < constants.MAX_X - 20){
-		this.x += offset;
-	}
-}
-Ship.prototype.movey = function(offset){
-	if(this.y + offset > 0 || this.y + offset < constants.MAX_Y - 20){
-		this.y += offset;
-	}
-}
+
 Ship.prototype.shoot = function(){
-	controleur.modele.arrayMissilesJoueur.unshift(new Missile(this.x, this.y));
+	controleur.modele.arrayMissilesJoueur.unshift(new Missile(this.x, this.y - 15));
+}
+
+Ship.prototype.selfCheck = function(){
+	if(this.powerUp == 1){
+		this.speed = 20;
+	}
+	else{
+		this.speed = 1;
+	}
 }
 
 
