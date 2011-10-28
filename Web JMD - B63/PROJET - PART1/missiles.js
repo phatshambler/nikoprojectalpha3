@@ -1,9 +1,10 @@
-function Missile(x,y,speed,color){
+function Missile(x,y,speed,color,mode){
 	
 	this.x = x;
 	this.y = y;
 	this.speed = speed;
 	this.color = color;
+	this.mode = mode;
 }
 
 Missile.prototype = new MetaObject(0, 0, "rgba(180,124, 200, 0.8)", 0);
@@ -15,6 +16,23 @@ Missile.prototype.nextPoint = function(){
 
 Missile.prototype.collisionMissile = function(){
 
+}
+
+function CustomMissile(x,y,speed,color,mode, direction){
+	
+	this.x = x;
+	this.y = y;
+	this.speed = speed;
+	this.color = color;
+	this.mode = mode;
+	this.direction = direction;
+}
+CustomMissile.prototype = new Missile(0, 0, 0, "rgba(180,124, 200, 0.8)", 0);
+CustomMissile.constructor = CustomMissile;
+
+CustomMissile.prototype.nextPoint = function(){
+	this.movey(this.speed);
+	this.movex(this.direction);
 }
 
 function Star(x,y){
@@ -29,6 +47,10 @@ Star.constructor = Star;
 
 Star.prototype.collisionShip = function(ship){
 }
+Star.prototype.collisionMissile = function(){
+
+}
+
 Star.prototype.nextPoint = function(){
 	this.movey(this.speed);
 }

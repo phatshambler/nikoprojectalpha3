@@ -26,8 +26,13 @@ MetaObject.prototype.movey = function(offset){
 
 MetaObject.prototype.collisionShip = function(ship){
 	if (this.x > ship.x -20 && this.x < ship.x + 20 && this.y > ship.y - 20 && this.y < ship.y + 20){
-		controleur.paused = true;
-		controleur.endgame = true;
+		if(this.mode == ship.mode){
+			ship.hiscore += constants.VALUEOFMISSILE;
+		}
+		else{
+			controleur.paused = true;
+			controleur.endgame = true;
+		}
 	}
 	//console.log(this.x + " " + this.y);
 }
@@ -55,4 +60,8 @@ MetaObject.prototype.nextPoint = function(){
 	if(this.nbFrames % 50 == 0){
 		this.shoot(1,5,10,10);
 	}
+}
+
+MetaObject.prototype.death = function(ship){
+
 }

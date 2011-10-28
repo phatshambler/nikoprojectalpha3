@@ -32,11 +32,16 @@ function Constants(maxx, maxy){
 	
 	this.ENEMYMISSILE_SIZE_X = 2;
 	this.ENEMYMISSILE_SIZE_Y = 3;
+	
+	this.BLUE = "rgba(10,125,250,0.9)";
+	this.RED = "rgba(250,125,10,0.9)";
+	
+	this.VALUEOFMISSILE = 100;
 }
 
 function loadGame(){
 	console.log("hello");
-	/*plug mes écouteurs*/
+	
 	
 	if (controleur==""){
 		
@@ -44,7 +49,7 @@ function loadGame(){
 		setSize();
 		controleur= new Controleur();
 		
-		
+		/*plug mes écouteurs*/
 		document.onkeydown = controleur.keydown;
 		document.onkeyup = controleur.keyup;
 		//document.onkeypress = controleur.keypressed;
@@ -125,7 +130,7 @@ Vue.prototype.afficheShip= function(x,y, liste){
 		var ctx = canvas.getContext("2d");
 		//ctx.fillStyle = "rgba(180,124, 20, 0.8)"; 
 		ctx.clearRect(0,0,constants.MAX_X,constants.MAX_Y);
-		ctx.fillStyle = "rgba(180,124, 20, 0.8)"; 
+		ctx.fillStyle = controleur.modele.ship.color;
 		ctx.beginPath();
 		ctx.arc(x,y,20,0,2*Math.PI,false);
 		ctx.fill();
@@ -178,8 +183,8 @@ Vue.prototype.afficheMetaObject= function(liste, sizex, sizey){
 				liste[i].collisionMissile(controleur.modele.arrayMissilesJoueur, sizex, sizey);
 				
 				if(liste[i].y > constants.MAX_Y || liste[i].dead){
+					liste[i].death(controleur.modele.ship);
 					liste.splice(i, 1);
-					controleur.modele.ship.hiscore += 10;
 				}
 				}
 
@@ -218,7 +223,8 @@ function Controleur(){
 	this.downKey = false;
 	this.upKey = false;
 	this.shootKey = false;
-	
+	this.shiftKey = false;
+	this.lockShiftKey = false;
 	
 	//this.vue.afficheMetaObject(this.modele.arrayEnemyA, 3);
 	this.lock = false;
@@ -324,6 +330,21 @@ Controleur.prototype.deplacement = function(){
 			//console.log(controleur.modele.arrayMissilesJoueur.length);
 			// ball.jump(); - à lier avec la balle, selon votre nom de variable/fonction
 		}
+		if (this.shiftKey && !this.lockShiftKey) {
+			//console.log("space");
+			if(controleur.modele.ship.mode == 0){
+				controleur.modele.ship.mode = 1;
+				controleur.modele.ship.color = constants.BLUE;
+			}
+			else if(controleur.modele.ship.mode == 1){
+				controleur.modele.ship.mode = 0;
+				controleur.modele.ship.color = constants.RED;
+			}
+			
+			controleur.lockShiftKey = true;
+			//console.log(controleur.modele.arrayMissilesJoueur.length);
+			// ball.jump(); - à lier avec la balle, selon votre nom de variable/fonction
+		}
 }
 Controleur.prototype.keypressed = function(e) {
 	/*
@@ -365,6 +386,11 @@ Controleur.prototype.keydown = function(e) {
 			
 			controleur.shootKey = true;
 		}
+		if (unicode == 16) {
+			
+			controleur.shiftKey = true;
+			
+		}
 	
 }
 Controleur.prototype.keyup = function(e) {
@@ -397,6 +423,11 @@ Controleur.prototype.keyup = function(e) {
 		if (unicode == 32) {
 			
 			controleur.shootKey = false;
+		}
+		if (unicode == 16) {
+			
+			controleur.shiftKey = false;
+			controleur.lockShiftKey = false;
 		}
 }
 

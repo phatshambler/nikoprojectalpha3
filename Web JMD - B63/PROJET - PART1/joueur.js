@@ -4,9 +4,10 @@ function Ship(x, y){
 	this.hiscore = 0;
 	this.lastHiScore = 0;
 	this.powerUp = 0;
+	this.mode = 1;
 }
 
-Ship.prototype = new MetaObject(0, 0, "rgba(255,255,255, 0.7)", 5);
+Ship.prototype = new MetaObject(0, 0, "rgba(10,125,250,0.9)", 5);
 Ship.constructor = Ship;
 
 Ship.prototype.bougeRandom=function(){
