@@ -44,8 +44,9 @@ function Constants(maxx, maxy){
 	this.POWERUPSPEEDVALUE = 1;
 	this.POWERUPMULTIVALUE = 1;
 }
-
+/*
 Constants.prototype.testJSON = function(){
 	console.log("jsontesting1-2-3");
 
 }
+*/

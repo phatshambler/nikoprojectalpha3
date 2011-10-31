@@ -105,7 +105,7 @@ Vue.prototype.afficheMetaObject= function(liste, sizex, sizey){
 				liste[i].collisionShip(controleur.modele.ship);
 				liste[i].collisionMissile(controleur.modele.arrayMissilesJoueur, sizex, sizey);
 				
-				if(liste[i].y > constants.MAX_Y || liste[i].dead){
+				if(liste[i].y > constants.MAX_Y || liste[i].dead || liste[i].x > constants.MAX_X || liste[i].x < 0 || liste[i].y < 0){
 					liste[i].death(controleur.modele.ship);
 					liste.splice(i, 1);
 				}
@@ -136,7 +136,7 @@ Vue.prototype.affichePower= function(liste, sizex, sizey){
 				liste[i].collisionShip(controleur.modele.ship);
 				liste[i].collisionMissile(controleur.modele.arrayMissilesJoueur, sizex, sizey);
 				
-				if(liste[i].y > constants.MAX_Y || liste[i].dead){
+				if(liste[i].y > constants.MAX_Y || liste[i].dead || liste[i].x > constants.MAX_X){
 					liste[i].death(controleur.modele.ship);
 					liste.splice(i, 1);
 				}

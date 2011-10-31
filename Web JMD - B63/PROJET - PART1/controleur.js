@@ -1,11 +1,36 @@
 controleur="";
 constants ="";
 constants= new Constants(0, 0);
-serial = new SaveAndLoadFunctions();
+serial = new SimpleSerial();
 
 window.onload = function(){
 	loadGame();
+	//lalagame();
 }
+
+function lalagame(){
+	var tmp = unescape(window.location.search.substring(1).split("?"));
+	if(tmp != null && tmp != ""){
+	var x = tmp.substring(5).split("=");
+	if( x != "" && x != null){
+	
+	controleur.mainloop();
+	controleur.loadKey = true;
+	controleur.display = true;
+	//serial.loadGame();
+	//controleur.saveSlot
+	}
+	}
+	}
+/*
+     var $_GET = [];
+     for (var i in tmp)
+     if (tmp[i].indexOf("=")>0)
+         $_GET[decodeURI(tmp[i].substring(0, tmp[i].indexOf("=")))] = decodeURI(tmp[i].substring(tmp[i].indexOf("=")+1));
+     else
+         $_GET[decodeURI(tmp[i])]=''; 
+    //alert("game="+$_GET["game"]);
+*/
 
 window.onresize = function(){
 	setSize();
@@ -39,6 +64,8 @@ function loadGame(){
 		
 		controleur.vue.afficheMenu(ship.lastHiScore);
 		console.log("Voici votre nouveau Controleur "+controleur);
+		
+		lalagame();
 	}else{
 		console.log("...!");
 	}
@@ -125,6 +152,19 @@ function Controleur(vue,modele,date){
 	this.vue.afficheMenu();
 	
 	this.mainloop = masterloop;
+	
+	this.toJSON = function(key){
+		var replacement = new Object();
+		
+			replacement["frame"] = this.frame;
+			replacement["phase"] = this.phase;
+			
+			replacement["ship"] = this.modele.ship;
+			
+			replacement["constants"] = constants;
+		
+		return replacement;
+	}
 }
 
 
@@ -132,6 +172,8 @@ function masterloop(){
 		
 		controleur.deplacement();
 		controleur.deplacementSouris();
+		
+		//console.log(controleur.modele.arrayMissilesAutres.length);
 		
 		if(controleur.display){
 			controleur.newItems();
@@ -162,7 +204,7 @@ function masterloop(){
 				effaceCookie("hiscore");
 				creeCookie("hiscore", controleur.modele.ship.hiscore, 20);
 			}
-			
+			window.location.search = "";
 			controleur = "";
 			loadGame();
 			constants.ENEMYA_SPEED = 2;
@@ -292,7 +334,7 @@ Controleur.prototype.keydown = function(e) {
 	else{
 		unicode = e.which;
 	}
-	console.log(unicode);
+	//console.log(unicode);
 		if (unicode == 65 || unicode == 97 || unicode == 37) {
 			
 			controleur.leftKey = true;
@@ -335,6 +377,14 @@ Controleur.prototype.keydown = function(e) {
 			controleur.loadKey = true;
 			
 		}
+		/*
+		if (unicode > 47 && unicode < 58) {
+			
+			console.log(unicode);
+			controleur.saveSlot = unicode;
+			
+		}
+		*/
 	
 }
 Controleur.prototype.keyup = function(e) {
