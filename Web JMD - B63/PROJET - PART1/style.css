@@ -5,7 +5,9 @@
 		
 body{
 	background-color: #000;
+	color: Gray;
 	width: auto;
+	font-family: Calibri, Arial;
 }
 		
 #canvas{
@@ -13,4 +15,37 @@ body{
 	background-color: #000;
 	margin:auto;
 	width: auto;
+}
+
+.square
+{
+    display:block;
+    width: 400px;
+    height: auto;
+    margin: 20px;
+    
+}
+
+.bold
+{
+    font-weight:bold;
+    font-size:large;
+}
+
+.xbold
+{
+    font-weight:bold;
+    font-size:x-large;
+    color:Lime;
+}
+
+a
+{
+    color:Lime;
+    font-weight:bold;
+    
+}
+
+.centered{
+    text-align: center;
 }

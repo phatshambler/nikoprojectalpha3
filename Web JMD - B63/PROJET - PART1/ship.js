@@ -3,11 +3,21 @@ function Ship(x, y){
 	this.y = y;
 	this.hiscore = 0;
 	this.lastHiScore = 0;
-	this.powerUp = 0;
+	this.powerUpSpeed = 0;
+	this.multi = 1.0;
 	this.mode = 1;
+	this.lives = 3;
+	this.beamSize = 1;
+	
+	this.speed = 1;
+	
+	this.baseSpeed = 0;
+	this.baseMulti = 0;
+	this.baseBeam = 0;
+	//this.acceleration = 0;
 }
 
-Ship.prototype = new MetaObject(0, 0, "rgba(10,125,250,0.9)", 5);
+Ship.prototype = new MetaObject(0, 0, constants.SHIP_SIZE_X, constants.SHIP_SIZE_Y, "rgba(10,125,250,0.9)", 5);
 Ship.constructor = Ship;
 
 Ship.prototype.bougeRandom=function(){
@@ -16,9 +26,16 @@ Ship.prototype.bougeRandom=function(){
 }
 
 Ship.prototype.shoot = function(){
-	controleur.modele.arrayMissilesJoueur.unshift(new Missile(this.x - 2, this.y - 60, -5, "rgba(255,180,0, 0.9)"));
+if(this.beamSize == 1){
+	controleur.modele.arrayMissilesJoueur.unshift(new CustomMissile(this.x - 2, this.y - 25, -5, "rgba(255,180,0, 0.9)", 0, 0));
 }
-
+else{
+	for (var i = -this.beamSize + 1; i < this.beamSize; i++){
+	controleur.modele.arrayMissilesJoueur.unshift(new CustomMissile(this.x - 2, this.y - 25, -5, "rgba(255,180,0, 0.9)", 0, i));
+	}
+}
+}
+/*
 Ship.prototype.selfCheck = function(){
 	if(this.powerUp == 1){
 		this.speed = 10;
@@ -27,7 +44,7 @@ Ship.prototype.selfCheck = function(){
 		this.speed = 5;
 	}
 }
-
+*/
 
 /*
 function Joueur(vies, score){
