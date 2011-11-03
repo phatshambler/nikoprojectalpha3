@@ -11,8 +11,11 @@
 		
 		protected function executeAction() {
 			
-			if (isset($_POST["username"])) {
-				$visibility = UserDAO::authenticate($_POST["username"], $_POST["pwd"]);
+			if (isset($_POST["newusername"]) && isset($_POST["newpwd"]) && isset($_POST["courriel"]) ) {
+				
+				
+				
+				$visibility = UserDAO::addUser($_POST["newusername"], $_POST["newpwd"], $_POST["courriel"]);
 				
 				if ($visibility > DefaultAct::$VISIBILITY_PUBLIC) {
 				

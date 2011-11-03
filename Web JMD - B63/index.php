@@ -61,7 +61,9 @@
 		<?php
 		}else{
 		?>
-		
+		<div class="spaced">
+			<p><a>Modifier votre compte</a></p>
+		</div>
 		<form action="index.php?action=logout" method="post">
 			<input class="niceButton" type="submit" value="Déconnexion" />
 		</form>
@@ -75,7 +77,17 @@
         
         <div id="middle" class="square"><p class="bold">JEUX</p> <p><a href="PROJET - PART1/nr_index.html">Awesome Shooter</a></p></div>
 
-		<div id="bottom" class="square"><p class="bold">HI-SCORES/LEADERBOARD</p> <p>Awesome Shooter</p>
+		<div id="bottom" class="square"><p class="bold">HI-SCORES/LEADERBOARD</p> 
+		
+		<?php
+			$liste = UserDAO::getGames();
+			for ($i = 0; $i < count($liste); $i++){ 
+		?>
+			<p><a href="..."><?php echo $liste[$i]; ?> </a></p>
+		<?php 
+		}
+		?>
+		
         </div>
 <?php
 	require_once("PHP/footer.php");

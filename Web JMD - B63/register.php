@@ -28,21 +28,21 @@
 			<label for="username">
 				Nom d'usager : 
 			</label>
-			<input class="niceField" type="text" name="username" id="username" />
+			<input class="niceField" type="text" name="newusername" id="username" />
 		</div>
 
 		<div class="spaced">
 			<label for="password">
 				Mot de passe : 
 			</label>
-			<input class="niceField" type="password" name="pwd" id="password" />
+			<input class="niceField" type="password" name="newpwd" id="password" />
 		</div>
 		
 		<div class="spaced">
 			<label for="password">
 				Courriel : 
 			</label>
-			<input class="niceField" type="password" name="pwd" id="password" />
+			<input class="niceField" type="text" name="courriel" id="courriel" />
 		</div>
 		
 		<input class="niceButton" type="submit" value="Envoyer" />
