@@ -18,41 +18,58 @@
 		}
 		
 		
-		?></p>
-        <p>Login</p>
+		?>
+		</p>
+		
+		<?php if(!isset($_SESSION["username"])){
+		?>
+        <p>Connectez-vous:</p>
 		<form action="index.php" method="post">
+		
 		
 		<?php
 			if ($action->errorCode != null && $action->errorCode === 101) {
-				?>
-				<div style="color:red">
+		?>
+				<div style='color:red'>
 					Erreur d'authentification
 				</div>
 				<?php
 			}
 		?>
 		
-		<div>
+		<div class="spaced">
 			<label for="username">
 				Nom d'usager : 
 			</label>
-			<input type="text" name="username" id="username" />
+			<input class="niceField" type="text" name="username" id="username" />
 		</div>
 
-		<div>
+		<div class="spaced">
 			<label for="password">
 				Mot de passe : 
 			</label>
-			<input type="password" name="pwd" id="password" />
+			<input class="niceField" type="password" name="pwd" id="password" />
 		</div>
 		
-		<input type="submit" value="Connexion" />
+		<input class="niceButton" type="submit" value="Connexion" />
 		
 	</form>
+			
+		<p><a href="register.php">S'enregistrer</a></p>
+		
+		
+		<?php
+		}else{
+		?>
+		
 		<form action="index.php?action=logout" method="post">
-			<input type="submit" value="Logout" />
+			<input class="niceButton" type="submit" value="Déconnexion" />
 		</form>
-        <p>S'enregistrer</p>
+		
+		<?php } ?>
+		
+		
+        
 		
         </div>
         
