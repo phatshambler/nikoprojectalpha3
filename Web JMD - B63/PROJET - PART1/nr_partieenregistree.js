@@ -20,7 +20,7 @@ function Savedgames(){
 Savedgames.prototype.creeMenu = function () {
     var div = document.getElementById("parties");
     for (key in this.savegamekookie) {
-		var link = "jeu.html?game=" + key
+		var link = "nr_jeu.html?game=" + key
         div.innerHTML = div.innerHTML + "<p><a href=\'" + link + "\'>" + key + " : " + this.savegamekookie[key] + "</a></p>";
     }
 }
