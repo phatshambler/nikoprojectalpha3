@@ -1,3 +1,7 @@
+/*	Nicolas Roy-Bourdages - 2011
+*	Web avancé phase 1 - Space shooter
+*/	
+
 function creeCookie(nom,valeur,jour) {
 	if (jour) {
 		// on peut donner le detail du moment de suppression automatique ici en jour

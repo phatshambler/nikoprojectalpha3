@@ -1,6 +1,12 @@
+/*	Nicolas Roy-Bourdages - 2011
+*	Web avancé phase 1 - Space shooter
+*/	
+
 controleur="";
+defaultconstants = "";
 constants ="";
 constants= new Constants(0, 0);
+defaultconstants = constants;
 serial = new SimpleSerial();
 
 window.onload = function(){
@@ -32,6 +38,9 @@ window.onresize = function(){
 	setSize();
 }
 
+/*
+   Load la partie
+*/
 function loadGame(){
 	console.log("hello");
 	
@@ -40,6 +49,8 @@ function loadGame(){
 		constants = new Constants();
 		
 		setSize();
+		
+		defaultconstants = constants;
 		
 		var ship = new Ship(Math.floor(constants.MAX_X / 2), constants.MAX_Y - 100);
 		
@@ -66,7 +77,9 @@ function loadGame(){
 		console.log("...!");
 	}
 }
-
+/*
+Donne la bonne taille au canvas
+*/
 function setSize(){
 
 	var winW = 600, winH = 400;
@@ -92,7 +105,9 @@ function setSize(){
 		constants.MAX_Y = winH - 5;
 	
 }
-
+/*
+	Set les cookies au démarrage
+*/
 function setCookies(ship){
 	var op = new Options();
 	op.lisMultipleCookies();
@@ -106,11 +121,14 @@ function setCookies(ship){
 	ship.baseBeam = ship.beamSize;
 }
 
+/*
+	Le maître du jeu
+*/
+
 function Controleur(vue,modele,date){
 	this.vue=vue;
 	this.modele=modele;
 	
-	//this.vue.afficheShip(this.modele.ship.x,this.modele.ship.y, this.modele.arrayMissilesJoueur);
 	this.leftKey = false;
 	this.rightKey = false;
 	this.downKey = false;
@@ -130,8 +148,6 @@ function Controleur(vue,modele,date){
 	this.mouseRight = false;
 	this.lockMouseRight = false;
 	
-	//this.vue.afficheMetaObject(this.modele.arrayEnemyA, 3);
-	//this.lock = false;
 	this.frame = 0;
 	this.date = date;
 	this.startTime = this.date.getTime();
@@ -162,7 +178,9 @@ function Controleur(vue,modele,date){
 		return replacement;
 	}
 }
-
+/*
+	La boucle principale
+*/
 
 function masterloop(){
 		
@@ -173,8 +191,6 @@ function masterloop(){
 		
 		if(controleur.display){
 			controleur.newItems();
-			
-			//controleur.modele.ship.selfCheck();
 			
 			controleur.vue.afficheShip(controleur.modele.ship.x, controleur.modele.ship.y, controleur.modele.arrayMissilesJoueur);
 			controleur.vue.afficheMetaObject(controleur.modele.arrayEnemyA, constants.ENEMYA_SIZE_X,constants.ENEMYA_SIZE_Y );
@@ -188,7 +204,7 @@ function masterloop(){
 			controleur.vue.affichePower(controleur.modele.arrayPowerUpM, constants.POWERUP_SIZE_X, constants.POWERUP_SIZE_Y );
 			
 			controleur.vue.afficheMetaObject(controleur.modele.arrayStars, constants.STARS_SIZE_X,constants.STARS_SIZE_Y );
-			//controleur.vue.afficheHigh();
+			
 			controleur.frame++;
 		}
 		
@@ -207,10 +223,13 @@ function masterloop(){
 			constants.ENEMYB_SPEED = 4;
 			constants.ENEMYC_SPEED = 3;
 
-			//constants = new Constants();
 			
 		}
 }
+
+/*
+	Contrôle la création des nouveaux items en haut de l'écran
+*/
 Controleur.prototype.newItems = function(){
 
 		controleur.modele.arrayStars.unshift(new Star(Math.floor(Math.random()*constants.MAX_X), 0));
@@ -240,7 +259,6 @@ Controleur.prototype.newItems = function(){
 		
 		if (controleur.frame % Math.floor(20 / this.frequencyE) == 0){
 			controleur.modele.arrayEnemyA.unshift(new EnemyA(Math.floor(Math.random()*constants.MAX_X), 0, 0));
-			//controleur.modele.arrayEnemyA.unshift(new EnemyA());
 		}
 		
 		if(controleur.frame % Math.floor(35 / this.frequencyE) == 0){
@@ -258,13 +276,14 @@ Controleur.prototype.newItems = function(){
 		
 }
 
+/*
+	Agit effectivement sur les commandes de l'usager
+*/
 
 Controleur.prototype.deplacement = function(){
 		
 		var speed = controleur.modele.ship.speed;
-		//var accel = controleur.modele.ship.acceleration;
-		//speed = speed + accel;
-		//console.log(this.leftKey + " " + this.rightKey + " " + this.upKey + " " + this.downKey);
+		
 		
 		if (this.leftKey) {
 			//console.log("left");
@@ -287,11 +306,10 @@ Controleur.prototype.deplacement = function(){
 		if (this.shootKey) {
 			//console.log("space");
 			controleur.modele.ship.shoot();
-			//console.log(controleur.modele.arrayMissilesJoueur.length);
-			// ball.jump(); - à lier avec la balle, selon votre nom de variable/fonction
+			
 		}
 		if (this.shiftKey && !this.lockShiftKey) {
-			//console.log("space");
+			//console.log("shift");
 			if(controleur.modele.ship.mode == 0){
 				controleur.modele.ship.mode = 1;
 				controleur.modele.ship.tempmode = 1;
@@ -314,8 +332,6 @@ Controleur.prototype.deplacement = function(){
 			}
 			
 			controleur.lockShiftKey = true;
-			//console.log(controleur.modele.arrayMissilesJoueur.length);
-			// ball.jump(); - à lier avec la balle, selon votre nom de variable/fonction
 		}
 		
 		if (this.pauseKey && !this.lockPauseKey) {
@@ -333,6 +349,11 @@ Controleur.prototype.deplacement = function(){
 			controleur.lockLoadKey = true;
 		}
 }
+
+/*
+	L'effet du clavier
+*/
+
 Controleur.prototype.keypressed = function(e) {
 	/*
 	if (controleur.modele.ship.acceleration < 10){
@@ -350,7 +371,7 @@ Controleur.prototype.keydown = function(e) {
 	else{
 		unicode = e.which;
 	}
-	console.log(unicode);
+	//console.log(unicode);
 		if (unicode == 65 || unicode == 97 || unicode == 37) {
 			
 			controleur.leftKey = true;
@@ -465,6 +486,10 @@ Controleur.prototype.keyup = function(e) {
 		}
 }
 
+/*
+	L'effet de la souris
+*/
+
 Controleur.prototype.deplacementSouris = function(){
 	if (this.mouseRight && this.lockMouseRight) {
 			
@@ -497,7 +522,9 @@ Controleur.prototype.deplacementSouris = function(){
 
 }
 
-
+/*
+	Keyup, keydown...
+*/
 Controleur.prototype.mousedown = function(e){
 	if (controleur.paused && !controleur.endgame){
 		controleur.paused = false;
@@ -537,7 +564,9 @@ Controleur.prototype.mouseup = function(e){
 	}
 }
 
-
+/*
+	La fonction qui change la phase
+*/
 
 Controleur.prototype.phasedeux = function(){
 

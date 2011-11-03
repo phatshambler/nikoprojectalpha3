@@ -1,4 +1,6 @@
-
+/*	Nicolas Roy-Bourdages - 2011
+*	Web avancé phase 1 - Space shooter
+*/	
 
 function Modele(ship){
 	//this.parent = parent;

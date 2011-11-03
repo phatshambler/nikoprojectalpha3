@@ -1,3 +1,7 @@
+/*	Nicolas Roy-Bourdages - 2011
+*	Web avancé phase 1 - Space shooter
+*/	
+
 ss = "";
 
 window.onload = function () {

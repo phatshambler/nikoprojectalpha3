@@ -1,3 +1,7 @@
+/*	Nicolas Roy-Bourdages - 2011
+*	Web avancé phase 1 - Space shooter
+*/	
+
 function Constants(maxx, maxy){
 
 	this.MAX_X = maxx;
