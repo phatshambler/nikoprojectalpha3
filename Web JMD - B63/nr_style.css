@@ -1,0 +1,57 @@
+* {
+	padding:0;
+	margin:0;
+}
+		
+body{
+	background-color: #000;
+	color: Gray;
+	width: auto;
+	font-family: Calibri, Arial;
+}
+		
+#canvas{
+	display:block;
+	background-color: #000;
+	margin:auto;
+	width: auto;
+}
+
+.square
+{
+    display:block;
+    width: 400px;
+    height: auto;
+    margin: 20px;
+    
+}
+
+.smll
+{
+    font-weight:bold;
+    font-size:small;
+}
+
+.bold
+{
+    font-weight:bold;
+    font-size:large;
+}
+
+.xbold
+{
+    font-weight:bold;
+    font-size:x-large;
+    color:Lime;
+}
+
+a
+{
+    color:Lime;
+    font-weight:bold;
+    
+}
+
+.centered{
+    text-align: center;
+}
