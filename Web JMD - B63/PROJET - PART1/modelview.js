@@ -50,6 +50,7 @@ Vue.prototype.afficheShip= function(x,y, liste){
 		ctx.fill();
 		ctx.closePath();
 		
+		controleur.modele.ship.selfCheck();
 		
 		ctx.font = 'normal 30px sans-serif';
 		var i = "";
@@ -67,7 +68,7 @@ Vue.prototype.afficheShip= function(x,y, liste){
 		i = "Multiplicateur: " + controleur.modele.ship.multi.toPrecision(5) + "X";
 		ctx.fillText(i, 20 , 90);
 		
-		
+		ctx.font = 'normal 30px sans-serif';
 		
 		ctx.fillStyle = "rgba(125,125,125, 0.8)";
 		i = "Hi-score: " + Math.floor(controleur.modele.ship.lastHiScore);
@@ -84,6 +85,21 @@ Vue.prototype.afficheShip= function(x,y, liste){
 		ctx.fillStyle = "rgba(255,255, 255, 0.8)";
 		i = "Vies: " + controleur.modele.ship.lives;
 		ctx.fillText(i, 20 , 240);
+		
+		ctx.font = 'normal 15px sans-serif';
+		
+		ctx.fillStyle = "rgba(255,255, 255, 0.4)";
+		i = "Case Sauvegarde: " + controleur.saveSlot;
+		ctx.fillText(i, 20 , 270);
+		
+		if(controleur.modele.ship.shot){
+			
+			ctx.font = 'normal 30px sans-serif';
+			
+			ctx.fillStyle = "rgba(255,0, 0, 0.4)";
+			i = "Régénération...";
+			ctx.fillText(i, 20 , 300);
+		}
 	}  
 }
 
@@ -124,8 +140,6 @@ Vue.prototype.affichePower= function(liste, sizex, sizey){
 		var i = 0;
 		for (i = 0; i < liste.length; i++){
 			if(liste[i] != null){
-				//ctx.fillStyle = "rgba(180,124, 20, 0.8)"; 
-				//ctx.clearRect(0,0,constants.MAX_X,constants.MAX_Y);
 				ctx.fillStyle = liste[i].color;
 				ctx.beginPath();
 				ctx.arc(liste[i].x, liste[i].y, sizex,0,2*Math.PI,false);
@@ -136,7 +150,7 @@ Vue.prototype.affichePower= function(liste, sizex, sizey){
 				liste[i].collisionShip(controleur.modele.ship);
 				liste[i].collisionMissile(controleur.modele.arrayMissilesJoueur, sizex, sizey);
 				
-				if(liste[i].y > constants.MAX_Y || liste[i].dead || liste[i].x > constants.MAX_X){
+				if(liste[i].y > constants.MAX_Y || liste[i].dead || liste[i].x > constants.MAX_X || liste[i].x < 0 || liste[i].y < 0){
 					liste[i].death(controleur.modele.ship);
 					liste.splice(i, 1);
 				}

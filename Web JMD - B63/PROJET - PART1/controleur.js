@@ -5,32 +5,28 @@ serial = new SimpleSerial();
 
 window.onload = function(){
 	loadGame();
-	//lalagame();
+	
 }
 
+//QUICK GAME LOADER HACKED IN 5 MIN - TO REDO
 function lalagame(){
 	var tmp = unescape(window.location.search.substring(1).split("?"));
 	if(tmp != null && tmp != ""){
 	var x = tmp.substring(5).split("=");
 	if( x != "" && x != null){
+	x = x[0].substring(5);
 	
+	console.log(x);
 	controleur.mainloop();
+	controleur.saveSlot = parseInt(x);
 	controleur.loadKey = true;
+	
 	controleur.display = true;
 	//serial.loadGame();
 	//controleur.saveSlot
 	}
 	}
 	}
-/*
-     var $_GET = [];
-     for (var i in tmp)
-     if (tmp[i].indexOf("=")>0)
-         $_GET[decodeURI(tmp[i].substring(0, tmp[i].indexOf("=")))] = decodeURI(tmp[i].substring(tmp[i].indexOf("=")+1));
-     else
-         $_GET[decodeURI(tmp[i])]=''; 
-    //alert("game="+$_GET["game"]);
-*/
 
 window.onresize = function(){
 	setSize();
@@ -57,7 +53,7 @@ function loadGame(){
 		/*plug mes écouteurs*/
 		document.onkeydown = controleur.keydown;
 		document.onkeyup = controleur.keyup;
-		//document.onkeypress = controleur.keypressed;
+		
 		
 		document.onmousedown = controleur.mousedown;
 		document.onmouseup = controleur.mouseup;
@@ -145,7 +141,7 @@ function Controleur(vue,modele,date){
 	this.display = true;
 	this.endgame = false;
 	
-	this.saveSlot = 0;
+	this.saveSlot = 48;
 	this.frequencyP = 1.0;
 	this.frequencyE = 1.0;
 	
@@ -226,6 +222,10 @@ Controleur.prototype.newItems = function(){
 			controleur.modele.arrayPowerUpM.unshift(new PowerUpMulti(Math.floor(Math.random()*constants.MAX_X), 0));
 		}
 		
+		if(controleur.frame % Math.floor(700 / this.frequencyP) == 0){
+			controleur.modele.arrayPowerUpM.unshift(new PowerUpVies(Math.floor(Math.random()*constants.MAX_X), 0));
+		}
+		
 		if (controleur.frame % Math.floor(70 / this.frequencyE) == 0){
 			tempX = Math.floor(Math.random(controleur.frame)*constants.MAX_X);
 			tempY = 0;
@@ -246,10 +246,14 @@ Controleur.prototype.newItems = function(){
 		if(controleur.frame % Math.floor(35 / this.frequencyE) == 0){
 			controleur.modele.arrayEnemyB.unshift(new EnemyB(Math.floor(Math.random()*constants.MAX_X), 0, 0));
 		}
+		if(controleur.frame % Math.floor(50 / this.frequencyE) == 0){
+			controleur.modele.arrayEnemyC.unshift(new EnemyD(Math.floor(Math.random()*constants.MAX_X), 0, 1));
+		}
+		
 		
 		if(controleur.frame % 1000 == 0){
 			controleur.phasedeux();
-			controleur.phase += 1;
+			
 		}
 		
 }
@@ -290,11 +294,23 @@ Controleur.prototype.deplacement = function(){
 			//console.log("space");
 			if(controleur.modele.ship.mode == 0){
 				controleur.modele.ship.mode = 1;
+				controleur.modele.ship.tempmode = 1;
 				controleur.modele.ship.color = constants.BLUE;
 			}
 			else if(controleur.modele.ship.mode == 1){
 				controleur.modele.ship.mode = 0;
+				controleur.modele.ship.tempmode = 0;
 				controleur.modele.ship.color = constants.RED;
+			}
+			else if(controleur.modele.ship.mode == 666){
+				if(controleur.modele.ship.tempmode == 0){
+					controleur.modele.ship.tempmode = 1;
+				}
+				else if(controleur.modele.ship.tempmode == 1){
+					controleur.modele.ship.tempmode = 0;
+				}
+			
+			
 			}
 			
 			controleur.lockShiftKey = true;
@@ -334,7 +350,7 @@ Controleur.prototype.keydown = function(e) {
 	else{
 		unicode = e.which;
 	}
-	//console.log(unicode);
+	console.log(unicode);
 		if (unicode == 65 || unicode == 97 || unicode == 37) {
 			
 			controleur.leftKey = true;
@@ -377,14 +393,20 @@ Controleur.prototype.keydown = function(e) {
 			controleur.loadKey = true;
 			
 		}
-		/*
-		if (unicode > 47 && unicode < 58) {
+		
+		if (unicode > 47 && unicode < 54) {
 			
 			console.log(unicode);
 			controleur.saveSlot = unicode;
 			
 		}
-		*/
+		if (unicode == 27) {
+			if(!controleur.endgame && !controleur.paused){
+			controleur.paused = true;
+			controleur.endgame = true;
+			}
+		}
+		
 	
 }
 Controleur.prototype.keyup = function(e) {
@@ -448,11 +470,23 @@ Controleur.prototype.deplacementSouris = function(){
 			
 			if(controleur.modele.ship.mode == 0){
 				controleur.modele.ship.mode = 1;
+				
 				controleur.modele.ship.color = constants.BLUE;
 			}
 			else if(controleur.modele.ship.mode == 1){
 				controleur.modele.ship.mode = 0;
+				
 				controleur.modele.ship.color = constants.RED;
+			}
+			else if(controleur.modele.ship.mode == 666){
+				if(controleur.modele.ship.tempmode == 0){
+					controleur.modele.ship.tempmode = 1;
+				}
+				else if(controleur.modele.ship.tempmode == 1){
+					controleur.modele.ship.tempmode = 0;
+				}
+			
+			
 			}
 			
 			controleur.lockMouseRight = false;
@@ -507,6 +541,7 @@ Controleur.prototype.mouseup = function(e){
 
 Controleur.prototype.phasedeux = function(){
 
+
 var temp;
 
 temp = EnemyA.prototype.shoot;
@@ -528,14 +563,15 @@ constants.ENEMYC_SPEED += 1;
 controleur.frequencyP += 0.3;
 controleur.frequencyE += 0.5;
 
-	constants.ENEMYA_SIZE_X += 2;
-	constants.ENEMYA_SIZE_Y += 2;
+	constants.ENEMYA_SIZE_X += 3;
+	constants.ENEMYA_SIZE_Y += 3;
 	
-	constants.ENEMYB_SIZE_X += 2;
-	constants.ENEMYB_SIZE_Y += 2;
+	constants.ENEMYB_SIZE_X += 3;
+	constants.ENEMYB_SIZE_Y += 3;
 	
-	constants.ENEMYC_SIZE_X += 2;
-	constants.ENEMYC_SIZE_Y += 2;
+	constants.ENEMYC_SIZE_X += 3;
+	constants.ENEMYC_SIZE_Y += 3;
 
 console.log("switcheroo");
+controleur.phase += 1;
 }

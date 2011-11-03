@@ -17,18 +17,18 @@ Savedgames.prototype.creeMenu = function () {
     var div = document.getElementById("parties");
     for (key in this.savegamekookie) {
 		var link = "jeu.html?game=" + key
-        div.innerHTML = div.innerHTML + "<a href=\'" + link + "\'>" + key + " : " + this.savegamekookie[key] + "</a>";
+        div.innerHTML = div.innerHTML + "<p><a href=\'" + link + "\'>" + key + " : " + this.savegamekookie[key] + "</a></p>";
     }
 }
 
 Savedgames.prototype.read = function(){
 
-	for (var i = 0; i < 10; i++){
+	for (var i = 0; i < 60; i++){
 	
 			var k = lisCookie("state"+i);
 			if(k != null){
 				var text = JSON.parse(k);
-				this.savegamekookie["state"+i] = "---=== Phase = " + text["phase"] + " Score = " + text["ship"].hiscore;
+				this.savegamekookie["state"+i] = ".... Phase = " + text["phase"] + " Score = " + text["ship"].hiscore;
 			}
 		console.log(i);
 		

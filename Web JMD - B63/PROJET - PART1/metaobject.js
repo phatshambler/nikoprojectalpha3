@@ -16,7 +16,7 @@ function MetaObject(x,y, lenx, leny, color, speed){
 }
 
 MetaObject.prototype.movex = function(offset){
-	if(this.x + offset > 0 || this.x + offset < constants.MAX_X){
+	if(this.x + offset > 0 && this.x + offset < constants.MAX_X){
 		this.x += offset;
 	}
 	else{
@@ -25,7 +25,7 @@ MetaObject.prototype.movex = function(offset){
 }
 
 MetaObject.prototype.movey = function(offset){
-	if(this.y + offset > 0 || this.y + offset < constants.MAX_Y){
+	if(this.y + offset > 0 && this.y + offset < constants.MAX_Y){
 		this.y += offset;
 	}
 	else{
@@ -52,14 +52,16 @@ MetaObject.prototype.collisionShip = function(ship){
 				break;
 			}
 			else{
-				if(ship.lives > 0){
+				if(ship.lives > 0 && !ship.shot){
 					ship.lives -= 1;
 					ship.multi = ship.baseMulti;
 					ship.speed = ship.baseSpeed;
 					ship.beamSize = ship.baseBeam;
 					this.dead = true;
+					ship.shot = true;
+					ship.firstStrike = true;
 				}
-				else{
+				else if(ship.lives < 1){
 					controleur.paused = true;
 					controleur.endgame = true;
 				}
