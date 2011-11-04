@@ -8,7 +8,7 @@
 ?>
 
 		<div id="top" class="square"><p class="bold">AWESOME GAME PLATFORM</p>
-        <p id="username">Bienvenue, 
+        <p id="username" class="logged">Bienvenue, 
 		
 		<?php if(isset($_SESSION["username"])){
 			echo $_SESSION["username"];
@@ -51,7 +51,7 @@
 			<input class="niceField" type="password" name="pwd" id="password" />
 		</div>
 		
-		<input class="niceButton" type="submit" value="Connexion" />
+		<input class="niceButton" style="color:yellow" type="submit" value="Connexion" />
 		
 	</form>
 			
@@ -61,11 +61,13 @@
 		<?php
 		}else{
 		?>
-		<div class="spaced">
-			<p><a>Modifier votre compte</a></p>
-		</div>
+		
 		<form action="index.php?action=logout" method="post">
-			<input class="niceButton" type="submit" value="Déconnexion" />
+			<input class="niceButton" style="color:yellow" type="submit" value="Votre compte" />
+		</form>
+
+		<form action="index.php?action=logout" method="post">
+			<input class="niceButton" style="color:yellow" type="submit" value="Déconnexion" />
 		</form>
 		
 		<?php } ?>
@@ -83,11 +85,39 @@
 			$liste = UserDAO::getGames();
 			for ($i = 0; $i < count($liste); $i++){ 
 		?>
-			<p><a href="..."><?php echo $liste[$i]; ?> </a></p>
+			<p>
+
+			<!-- <a href="..."><?php echo $liste[$i]; ?> </a> -->
+			<form action="index.php" method="post">
+				<input class="niceButton" type="submit" name="currenthi" value="<?php echo $liste[$i]; ?>" />
+			</form>
+			
+			</p>
+			<?php if(isset($_POST["currenthi"]) && $_POST["currenthi"] === $liste[$i] ){
+				
+				$scores = UserDAO::loadHiScoresCSV($_POST["currenthi"]);
+				for ($j = 0; $j < count($scores); $j += 2){
+				 ?>
+				 	<p><?php echo $scores[$j]; echo $scores[$j + 1];?></p>
+				 <?php
+				}
+			?>
+
+
 		<?php 
+			}
 		}
 		?>
 		
+		<p>
+
+			<!-- <a href="..."><?php echo $liste[$i]; ?> </a> -->
+			<form action="index.php" method="post">
+				<input class="niceButton" style="color:yellow" type="submit" name="currenthi" value="Fermer" />
+			</form>
+			
+			</p>
+
         </div>
 <?php
 	require_once("PHP/footer.php");

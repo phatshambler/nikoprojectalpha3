@@ -3,10 +3,6 @@
 
 	class UserDAO {
 		
-		private $arrUsers;
-		private $arrPasswords;
-		private $strIndex;
-		private $strCourriel;
 		
 		public function __construct() {
 			//$this.arrUsers = new array();
@@ -70,13 +66,13 @@
 			$visibility = 1;
 			if($nom != "" && $pwd != "" && $courriel != ""){
 			
-				UserDAO::addNewUser($nom, $pwd, $courriel);
+				UserDAO::writeNewUser($nom, $pwd, $courriel);
 			}
 			
 			return $visibility;
 		}
 		
-		private static function addNewUser($nom, $pwd, $crl){
+		private static function writeNewUser($nom, $pwd, $crl){
 		$myFile = "PHP/InfoUsers/users.txt";
 		
 		$olddata = UserDAO::loadUsersRaw();
@@ -113,7 +109,7 @@
 			}
 
 			closedir($handle);
-		}
+			}
 			//var_dump($liste);
 			return $liste;
 		}
@@ -122,6 +118,7 @@
 			$ourFileName = "PHP/InfoJeux/" . $nomjeu . ".txt";
 			$ourFileHandle = fopen($ourFileName, 'w') or die("can't open file");
 			fclose($ourFileHandle);
+
 		}
 		
 		private static function addHiScores($nomjeu, $stringAnom, $stringBscore){
@@ -156,6 +153,23 @@
 		}
 			return $theData;
 		
+		}
+
+		public static function loadHiScoresCSV($nomjeu){
+			
+			$csv = array();
+			
+			$myFile = "PHP/InfoJeux/" . $nomjeu . ".txt";
+			$fh = fopen($myFile, 'r');
+			
+			$csv = fgetcsv($fh, 0, ";");
+			
+			//$theData = fread($fh, filesize($myFile));
+			fclose($fh);
+			//var_dump($theData);
+			//var_dump($csv);
+			
+			return $csv;
 		}
 		
 		private static function loadUsersRaw(){

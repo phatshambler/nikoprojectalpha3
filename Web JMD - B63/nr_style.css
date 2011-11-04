@@ -23,6 +23,8 @@ body{
     width: 400px;
     height: auto;
     margin: 20px;
+    float: left;
+    clear: both;
     
 }
 
@@ -47,8 +49,9 @@ body{
 
 a
 {
-    color:Lime;
+    color:orange;
     font-weight:bold;
+    font-size: large;
     
 }
 
@@ -57,10 +60,11 @@ a
 }
 
 .niceButton {
-	color: lime;
+	color: orange;
 	background-color: black;
 	font-weight: bold;
 	font-size: normal;
+	text-decoration:underline;
 	padding: 1px;
 	border: 1px solid black;
 
@@ -72,7 +76,7 @@ a
 	font-weight: normal;
 	font-size: normal;
 	padding: 1px;
-	border: 1px solid lime;
+	border: 1px solid orange;
 
 }
 
@@ -80,4 +84,10 @@ a
 	margin-bottom: 2px;
 	margin-top: 2px;
 
+}
+
+.logged{
+	color: orange;
+	background-color: black;
+	font-size: normal;
 }

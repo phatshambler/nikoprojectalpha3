@@ -25,5 +25,8 @@
 					$this->errorCode = 101;
 				}
 			}
+			if(isset($_POST["currenthi"])){
+				//echo $_POST["currenthi"];
+			}
 		}
 	}

@@ -39,7 +39,7 @@
 		</div>
 		
 		<div class="spaced">
-			<label for="password">
+			<label for="courriel">
 				Courriel : 
 			</label>
 			<input class="niceField" type="text" name="courriel" id="courriel" />
