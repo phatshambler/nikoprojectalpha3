@@ -26,7 +26,10 @@
 				}
 			}
 			if(isset($_POST["currenthi"])){
-				//echo $_POST["currenthi"];
+				$_SESSION["menuopen"] = $_POST["currenthi"];
+			}
+			if(isset($_POST["order"])){
+				$_SESSION["order"] = $_POST["order"];
 			}
 		}
 	}

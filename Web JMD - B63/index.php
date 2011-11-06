@@ -62,8 +62,8 @@
 		}else{
 		?>
 		
-		<form action="index.php?action=logout" method="post">
-			<input class="niceButton" style="color:yellow" type="submit" value="Votre compte" />
+		<form action="index.php" method="post">
+			<input class="niceButton" style="color:yellow" type="submit" value="+++" />
 		</form>
 
 		<form action="index.php?action=logout" method="post">
@@ -82,6 +82,7 @@
 		<div id="bottom" class="square"><p class="bold">HI-SCORES/LEADERBOARD</p> 
 		
 		<?php
+			if(isset($_SESSION["username"])){
 			$liste = UserDAO::getGames();
 			for ($i = 0; $i < count($liste); $i++){ 
 		?>
@@ -95,28 +96,38 @@
 			</p>
 			<?php if(isset($_POST["currenthi"]) && $_POST["currenthi"] === $liste[$i] ){
 				
+				?> 
+
+				<p><a>Derniers </a><a>Mes scores</a></p> 
+
+				<?php
+
 				$scores = UserDAO::loadHiScoresCSV($_POST["currenthi"]);
 				for ($j = 0; $j < count($scores); $j += 2){
 				 ?>
-				 	<p><?php echo $scores[$j]; echo $scores[$j + 1];?></p>
+				 	<p><?php echo $scores[$j];?> : <?php echo $scores[$j + 1];?></p>
 				 <?php
 				}
-			?>
+			
 
 
-		<?php 
+		
 			}
 		}
 		?>
 		
-		<p>
+			<p>
 
-			<!-- <a href="..."><?php echo $liste[$i]; ?> </a> -->
 			<form action="index.php" method="post">
 				<input class="niceButton" style="color:yellow" type="submit" name="currenthi" value="Fermer" />
 			</form>
 			
 			</p>
+		<?php
+		}
+		?>
+		
+		
 
         </div>
 <?php
