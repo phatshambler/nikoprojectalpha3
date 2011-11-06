@@ -8,14 +8,14 @@
 ?>
 
 		<div id="top" class="square"><p class="bold">ENREGISTERMENT</p>
-        <p class="xBold">Bienvenue sur notre plateforme!</p>
+        <p class="bold">Bienvenue sur notre plateforme!</p>
 		
         <p>Entrez vos informations personelles:</p>
 		<form action="register.php" method="post">
 		
 		
 		<?php
-			if ($action->errorCode != null && $action->errorCode === 101) {
+			if ($action->errorCode != null && $action->errorCode === 102) {
 		?>
 				<div style='color:red'>
 					Erreur dans l'entrée des données, veuillez reccomencer...

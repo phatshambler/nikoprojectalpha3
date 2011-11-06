@@ -91,3 +91,25 @@ a
 	background-color: black;
 	font-size: normal;
 }
+
+.scores{
+	float:left;
+	clear:both;
+}
+
+.menuscores{
+	float: left;
+
+}
+
+.niceButtonTwo {
+	color: yellow;
+	background-color: black;
+	font-weight: bold;
+	font-size: normal;
+	text-decoration:underline;
+	padding: 1px;
+	margin: 2px;
+	border: 1px solid black;
+
+}

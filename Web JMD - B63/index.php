@@ -79,33 +79,75 @@
         
         <div id="middle" class="square"><p class="bold">JEUX</p> <p><a href="PROJET - PART1/nr_index.html">Awesome Shooter</a></p></div>
 
-		<div id="bottom" class="square"><p class="bold">HI-SCORES/LEADERBOARD</p> 
+		<div id="bottom" class="square">
+		<p class="bold">HI-SCORES/LEADERBOARD</p> 
 		
 		<?php
 			if(isset($_SESSION["username"])){
 			$liste = UserDAO::getGames();
 			for ($i = 0; $i < count($liste); $i++){ 
 		?>
-			<p>
+			<div>
 
-			<!-- <a href="..."><?php echo $liste[$i]; ?> </a> -->
+			
 			<form action="index.php" method="post">
 				<input class="niceButton" type="submit" name="currenthi" value="<?php echo $liste[$i]; ?>" />
 			</form>
 			
-			</p>
-			<?php if(isset($_POST["currenthi"]) && $_POST["currenthi"] === $liste[$i] ){
+			</div>
+			<?php if(isset($_SESSION["menuopen"]) && $_SESSION["menuopen"] === $liste[$i] ){
 				
 				?> 
 
-				<p><a>Derniers </a><a>Mes scores</a></p> 
+				<div class="scores">
+
+			
+				<form class="menuscores" action="index.php" method="post">
+					<input class="niceButtonTwo" type="submit" name="order" value="Top Scores" />
+				</form>
+
+				<form class="menuscores" action="index.php" method="post">
+					<input class="niceButtonTwo" type="submit" name="order" value="Mes Scores" />
+				</form>
+
+				<form class="menuscores" action="index.php" method="post">
+					<input class="niceButtonTwo" type="submit" name="order" value="Derniers" />
+				</form>
+
+				<form class="menuscores" action="index.php" method="post">
+					<input class="niceButtonTwo" type="submit" name="order" value="7 Jours" />
+				</form>
+
+				<form class="menuscores" action="index.php" method="post">
+					<input class="niceButtonTwo" type="submit" name="order" value="Mois" />
+				</form>
+
+				<form class="menuscores" action="index.php" method="post">
+					<input class="niceButtonTwo" type="submit" name="order" value="Annee" />
+				</form>
+			
+				</div>
+
+				<div class="scores">
 
 				<?php
+				if(isset($_SESSION["order"])){
+					$currentorder = $_SESSION["order"];
+				}
+				else{
+					$currentorder = "Top Scores";
+				}
 
-				$scores = UserDAO::loadHiScoresCSV($_POST["currenthi"]);
-				for ($j = 0; $j < count($scores); $j += 2){
+				$scores = UserDAO::loadHiScoresOrdered($_SESSION["menuopen"], $currentorder, $_SESSION["username"]);
+
+				//reset($scores);
+				foreach ($scores as $key => $value) {
+    			//echo "Key: $key; Value: $value<br />\n";
+				
+
+				//for ($j = 0; $j + 1 < count($scores); $j += 2){
 				 ?>
-				 	<p><?php echo $scores[$j];?> : <?php echo $scores[$j + 1];?></p>
+				 	<p><?php echo $key;?> : <?php echo $value;?></p>
 				 <?php
 				}
 			
@@ -115,15 +157,17 @@
 			}
 		}
 		?>
-		
-			<p>
+			</div>
+			<?php if(isset($_SESSION["menuopen"]) && $_SESSION["menuopen"] != "Fermer"){ ?>
+			<div class="scores">
 
 			<form action="index.php" method="post">
-				<input class="niceButton" style="color:yellow" type="submit" name="currenthi" value="Fermer" />
+				<input class="niceButtonTwo" type="submit" name="currenthi" value="Fermer" />
 			</form>
 			
-			</p>
+			</div>
 		<?php
+			}
 		}
 		?>
 		

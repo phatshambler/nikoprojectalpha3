@@ -19,7 +19,7 @@
 			
 			if(isset($username) && isset($password) && $username != "" && $password != ""){
 			
-			$csv = UserDAO::loadDataCSV();
+			$csv = UserDAO::loadUsersCSV();
 			
 			
 				for($i = 0; $i < count($csv); $i += 3){
@@ -35,13 +35,13 @@
 			//UserDAO::createNewHiScoreFile("Awesome Shooter");
 			//UserDAO::addHiScores("Awesome Shooter", "niko", "30000");
 			
-			UserDAO::getGames();
+			//UserDAO::getGames();
 			
 			return $visibility;
 		}
 		
 		
-		private static function loadDataCSV (){
+		private static function loadUsersCSV (){
 			
 			$csv = array();
 			
@@ -63,10 +63,26 @@
 		
 		public static function addUser($nom, $pwd, $courriel){
 			
-			$visibility = 1;
+			$visibility = 0;
+
+			$valid = true;
+
+			$users = UserDAO::LoadUsersCSV();
+
 			if($nom != "" && $pwd != "" && $courriel != ""){
-			
-				UserDAO::writeNewUser($nom, $pwd, $courriel);
+				$k = 0;
+
+				while($k + 2 < count($users)){
+
+					if($nom == $users[$k] || $courriel == $users[$k + 2]){
+						$valid = false;
+					}
+					$k += 3;
+				}
+				if($valid){
+					$visibility = 1;
+					UserDAO::writeNewUser($nom, $pwd, $courriel);
+				}
 			}
 			
 			return $visibility;
@@ -155,7 +171,64 @@
 		
 		}
 
-		public static function loadHiScoresCSV($nomjeu){
+		public static function loadHiScoresOrdered($nomjeu, $ordre, $nomuser){
+			
+			$csv = UserDAO::loadHiScoresCSV($nomjeu);
+
+			$noms = array();
+			$scores = array();
+
+			$asok = array();
+
+			$k = 1;
+
+			for ($i = 0; $i + 1 < count($csv) ; $i+= 2){
+				//array_push($noms, $csv[$i]);
+				//array_push($scores, intval($csv[$i + 1]));
+				$key = $csv[$i] . "(" . $k . ")";
+
+				$asok[$key] = intval($csv[$i + 1]);
+				$k++;
+			}
+			//var_dump($asok);
+			if($ordre === "Top Scores"){
+				arsort($asok);
+			}
+			else if($ordre === "Mes Scores"){
+				
+				foreach ($asok as $key => $value) {
+					if(!strstr($key, $nomuser)){
+						unset($asok[$key]);
+					}
+				}
+				arsort($asok);
+			}
+			else if($ordre === "Derniers"){
+
+				
+			}
+			else if($ordre === "7 jours"){
+
+				
+			}
+			else if($ordre === "Mois"){
+
+				
+			}
+			else if($ordre === "Annee"){
+
+				
+			}
+
+
+
+			//var_dump($asok);
+
+			return $asok;
+
+		}
+
+		private static function loadHiScoresCSV($nomjeu){
 			
 			$csv = array();
 			

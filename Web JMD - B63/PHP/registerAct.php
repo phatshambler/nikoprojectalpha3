@@ -13,19 +13,19 @@
 			
 			if (isset($_POST["newusername"]) && isset($_POST["newpwd"]) && isset($_POST["courriel"]) ) {
 				
-				
+				$visibility = 0;
 				
 				$visibility = UserDAO::addUser($_POST["newusername"], $_POST["newpwd"], $_POST["courriel"]);
 				
 				if ($visibility > DefaultAct::$VISIBILITY_PUBLIC) {
 				
-					parent::setUserCredentials($_POST["username"], $visibility);
+					parent::setUserCredentials($_POST["newusername"], $visibility);
 				
 					header("location:index.php");
 					exit;
 				}
 				else {
-					$this->errorCode = 101;
+					$this->errorCode = 102;
 				}
 			}
 		}
