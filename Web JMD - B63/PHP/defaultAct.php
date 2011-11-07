@@ -38,6 +38,11 @@
 		protected function setUserCredentials($username, $visibility) {
 			$_SESSION["username"] = $username;
 			$_SESSION["user_visibility"] = $visibility;
+			
+		}
+		
+		protected function setCourriel($courriel){
+			$_SESSION["courriel"] = $courriel;
 		}
 	
 		public function getUsername() {

@@ -5,11 +5,6 @@
 		
 		
 		public function __construct() {
-			//$this.arrUsers = new array();
-			//$this.arrPasswords = new array();
-			//strIndex = "";
-			//strCourriel = "";
-			
 			
 		}
 		
@@ -259,6 +254,38 @@
 		}
 			return $theData;
 		
+		}
+		
+		public static function addJSON($object){
+		$myFile = "PHP/InfoJeux/" . "json.txt";
+		
+		$olddata = UserDAO::loadJSON();
+		
+		$fh = fopen($myFile, 'w') or die("can't open file");
+		
+		$stringData = $olddata;
+		fwrite($fh, $stringData);
+		
+		$stringData = json_encode($object);
+		
+		fwrite($fh, $stringData);
+		
+		fclose($fh);
+		}
+		
+		public static function loadJSON(){
+		
+			$myFile = "PHP/InfoJeux/" . "json.txt";
+		
+		if(filesize($myFile) == 0){
+			$theData = "";
+		}
+		else{
+			$fh = fopen($myFile, 'r');
+			$theData = fread($fh, filesize($myFile));
+			fclose($fh);
+		}
+			return $theData;
 		}
 		
 		public function getAuth($username, $password){

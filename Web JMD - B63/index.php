@@ -62,7 +62,8 @@
 		}else{
 		?>
 		
-		<form action="index.php" method="post">
+		
+		<form action="user.php" method="post">
 			<input class="niceButton" style="color:yellow" type="submit" value="+++" />
 		</form>
 
