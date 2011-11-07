@@ -87,7 +87,7 @@
 			$liste = UserDAO::getGames();
 			for ($i = 0; $i < count($liste); $i++){ 
 		?>
-			<div>
+			<div class="scores">
 
 			
 			<form action="index.php" method="post">
@@ -150,13 +150,8 @@
 				 	<p><?php echo $key;?> : <?php echo $value;?></p>
 				 <?php
 				}
-			
+			?>
 
-
-		
-			}
-		}
-		?>
 			</div>
 			<?php if(isset($_SESSION["menuopen"]) && $_SESSION["menuopen"] != "Fermer"){ ?>
 			<div class="scores">
@@ -166,8 +161,16 @@
 			</form>
 			
 			</div>
-		<?php
+
+			<?php
 			}
+		
+			}
+		}
+		
+			
+		
+			
 		}
 		?>
 		
