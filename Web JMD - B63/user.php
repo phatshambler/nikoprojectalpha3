@@ -7,16 +7,47 @@
 	require_once("PHP/header.php");
 ?>
 <div class="square">
-<p class="bold">OPTIONS DE CHARGEMENT</p>
+<p class="bold">OPTIONS</p>
 </div>
+<?php if($_SESSION["user_visibility"] > 1){ ?>
+<div class="square">
+<p class="bold">JEUX PRÉSENTS</p>
+	
+	<form action="user.php" method="post">
+				
+	
+	<?php
+		$liste = UserDAO::loadJSON("games.txt");
+		if($liste != ""){
+		foreach($liste as $value){
+	
+		?>
+			<input class="niceField" id="createur" type="radio" name="love" value="<?php echo $value[0]; ?>" /> <?php echo $value[0]; ?>
+		<?php
+	
+	}
+	?>
+		<input class="niceButton" type="submit" name="removegame" value="Enlever le jeu sélectionné" />
+	</form>
+</div>
+<?php 
+	}
+}
+?>
 
 <div class="square">
+<p class="bold">AJOUTER UN JEU</p>
 <p class="logged">Remplir tous les champs pour ajouter un jeu:</p>
 <p></p>
-<p>Usager: <?php echo $_SESSION["username"] ?></p>
-<p>Courriel: <?php echo $_SESSION["username"] ?></p>
+<p>Usager: <?php echo $_SESSION["username"]; ?></p>
+<p>Courriel: 
+<?php 
+	$u = UserDAO::getUser($_SESSION["username"]);
+	echo $u[2];
+?>
+</p>
 		<form enctype="multipart/form-data" action="user.php" method="post">
-		<input type="hidden" name="MAX_FILE_SIZE" value="10000000" />
+		<input type="hidden" name="MAX_FILE_SIZE" value="100000000" />
 		<?php
 			if ($action->errorCode != null && $action->errorCode === 103) {
 		?>
@@ -36,7 +67,7 @@
 
 		<div class="spaced">
 			<label for="siteid">
-				Site du jeu : 
+				Site web du jeu (sans http://): 
 			</label>
 			<input class="niceField" type="text" name="site" id="password" />
 		</div>
@@ -62,7 +93,7 @@
 			<input class="niceField" type="file" name="fichier" id="fichiersid" />
 		</div>
 		
-		<input class="niceButton" style="color:yellow" type="submit" value="Envoyer votre jeu" />
+		<input class="niceButton" name="sender" style="color:yellow" type="submit" value="Envoyer votre jeu" />
 		
 	</form>
 

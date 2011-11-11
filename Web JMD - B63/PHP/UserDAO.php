@@ -14,115 +14,55 @@
 			
 			if(isset($username) && isset($password) && $username != "" && $password != ""){
 			
-			$csv = UserDAO::loadUsersCSV();
-			
-			
-				for($i = 0; $i < count($csv); $i += 3){
-			
-			
-				if ($csv[$i] === $username && $csv[$i + 1] === $password) {
-					$visibility = 1;
+			$csv = UserDAO::loadJSON("users.txt");
+			var_dump($csv);
+				for($i = 0; $i < count($csv); $i++){
+				if ($csv[$i][0] === $username && $csv[$i][1] === $password) {
+					$visibility = $csv[$i][3];
 				}
-			
-				}
-			}
-			
-			//UserDAO::createNewHiScoreFile("Awesome Shooter");
-			//UserDAO::addHiScores("Awesome Shooter", "niko", "30000");
-			
-			//UserDAO::getGames();
-			
-			return $visibility;
-		}
-		
-		
-		private static function loadUsersCSV (){
-			
-			$csv = array();
-			
-			//echo "LOADING";
-			$myFile = "PHP/InfoUsers/users.txt";
-			$fh = fopen($myFile, 'r');
-			
-			$csv = fgetcsv($fh, 0, ";");
-			
-			//$theData = fread($fh, filesize($myFile));
-			fclose($fh);
-			//var_dump($theData);
-			//var_dump($csv);
-			
-			return $csv;
-			//parsing
-			
-		}
-		
-		public static function addUser($nom, $pwd, $courriel){
-			
-			$visibility = 0;
-
-			$valid = true;
-
-			$users = UserDAO::LoadUsersCSV();
-
-			if($nom != "" && $pwd != "" && $courriel != ""){
-				$k = 0;
-
-				while($k + 2 < count($users)){
-
-					if($nom == $users[$k] || $courriel == $users[$k + 2]){
-						$valid = false;
-					}
-					$k += 3;
-				}
-				if($valid){
-					$visibility = 1;
-					UserDAO::writeNewUser($nom, $pwd, $courriel);
 				}
 			}
 			
 			return $visibility;
 		}
 		
-		private static function writeNewUser($nom, $pwd, $crl){
-		$myFile = "PHP/InfoUsers/users.txt";
-		
-		$olddata = UserDAO::loadUsersRaw();
-		
-		$fh = fopen($myFile, 'w') or die("can't open file");
-		
-		$stringData = $olddata;
-		fwrite($fh, $stringData);
-		
-		$stringData = $nom . ";";
-		fwrite($fh, $stringData);
-		
-		$stringData = $pwd . ";";
-		fwrite($fh, $stringData);
-		
-		$stringData = $crl . ";";
-		fwrite($fh, $stringData);
-		
-		fclose($fh);
-		}
-		
-		
-		public static function getGames(){
-			$liste = array();
+		public static function getUser($username){
+			$user = "";
 			
-			if ($handle = opendir('PHP/InfoJeux')) {
-				
-
-			/* This is the correct way to loop over the directory. */
-			while (false !== ($file = readdir($handle))) {
-				if ($file != "." && $file != "..") {
-				array_push($liste, basename($file, ".txt"));
+			$users = UserDAO::loadJSON("users.txt");
+			
+			foreach ($users as $value){
+				if($value[0] === $username){
+				$user = $value;
 				}
 			}
-
-			closedir($handle);
+			
+			return $user;
+		}
+		
+		public static function addUser($nom, $pwd, $courriel, $createur, $admin){
+			
+			$visibility = 1;
+			if($createur === "oui"){
+				$createur = true;
+				$visibility = 2;
 			}
-			//var_dump($liste);
-			return $liste;
+			else{
+				$createur = false;
+			}
+			
+			if($admin === "oui"){
+				$admin = true;
+				$visibility = 3;
+			}
+			else{
+				$admin = false;
+			}
+			
+			$var = array($nom, $pwd, $courriel, $visibility, $createur, $admin);
+			UserDAO::addJSON($var, "users.txt");
+			
+			return $visibility;
 		}
 		
 		private static function createNewHiScoreFile($nomjeu){
@@ -168,21 +108,29 @@
 
 		public static function loadHiScoresOrdered($nomjeu, $ordre, $nomuser){
 			
-			$csv = UserDAO::loadHiScoresCSV($nomjeu);
-
-			$noms = array();
-			$scores = array();
-
+			$games = UserDAO::loadJSON("games.txt");
+			
+			$hiscores = "";
+			
+			foreach($games as $value){
+				if($value[0] === $nomjeu){
+				$hiscores = $value["hiscores"];
+				}
+			}
+			
 			$asok = array();
+			$asoktime = array();
 
 			$k = 1;
+			
+			if($hiscores != ""){
+			
+			foreach ($hiscores as $value){
+				$key = $value->name . "(" . $k . ")";
 
-			for ($i = 0; $i + 1 < count($csv) ; $i+= 2){
-				//array_push($noms, $csv[$i]);
-				//array_push($scores, intval($csv[$i + 1]));
-				$key = $csv[$i] . "(" . $k . ")";
-
-				$asok[$key] = intval($csv[$i + 1]);
+				$asok[$key] = intval($value->score);
+				$asoktime[$key] = $value->date;
+				
 				$k++;
 			}
 			//var_dump($asok);
@@ -215,11 +163,12 @@
 				
 			}
 
-
-
-			//var_dump($asok);
-
 			return $asok;
+			}
+			
+			else{
+			return null;
+			}
 
 		}
 
@@ -232,82 +181,132 @@
 			
 			$csv = fgetcsv($fh, 0, ";");
 			
-			//$theData = fread($fh, filesize($myFile));
 			fclose($fh);
-			//var_dump($theData);
-			//var_dump($csv);
 			
 			return $csv;
 		}
 		
-		private static function loadUsersRaw(){
 		
-			$myFile = "PHP/InfoUsers/users.txt";
+		public static function addJSON($object, $txtname){
+		$myFile = "PHP/JSON/" . $txtname;
 		
-		if(filesize($myFile) == 0){
-			$theData = "";
+		$array = "";
+		
+		if(!file_exists($myFile)){
+		
+			$array = array();
+			array_push($array, $object);
 		}
 		else{
-			$fh = fopen($myFile, 'r');
-			$theData = fread($fh, filesize($myFile));
-			fclose($fh);
+			$olddata = UserDAO::loadJSON($txtname);
+		
+			$array = $olddata;
+			array_push($array, $object);
 		}
-			return $theData;
-		
-		}
-		
-		public static function addJSON($object){
-		$myFile = "PHP/InfoJeux/" . "json.txt";
-		
-		$olddata = UserDAO::loadJSON();
 		
 		$fh = fopen($myFile, 'w') or die("can't open file");
 		
-		$stringData = $olddata;
-		fwrite($fh, $stringData);
-		
-		$stringData = json_encode($object);
+		$stringData = json_encode($array);
 		
 		fwrite($fh, $stringData);
 		
 		fclose($fh);
 		}
 		
-		public static function loadJSON(){
+		public static function loadJSON($txtname){
 		
-			$myFile = "PHP/InfoJeux/" . "json.txt";
+			$myFile = "PHP/JSON/" . $txtname;
+			
+			if(file_exists($myFile)){
+			
+			if(filesize($myFile) == 0){
+				$theData = "";
+			}
+			else{
+				$fh = fopen($myFile, 'r');
+				$theData = fread($fh, filesize($myFile));
+				fclose($fh);
+			}
+				return json_decode($theData);
+			}
+			else{
+				return "";
+			}
 		
-		if(filesize($myFile) == 0){
-			$theData = "";
 		}
-		else{
-			$fh = fopen($myFile, 'r');
-			$theData = fread($fh, filesize($myFile));
+		
+		public static function crushJSON($array, $txtname){
+		
+			$worked = false;
+			
+			$myFile = "PHP/JSON/" . $txtname;
+			
+			if(file_exists($myFile)){
+			
+			$fh = fopen($myFile, 'w') or die("can't open file");
+			
+			$stringData = json_encode($array);
+			
+			fwrite($fh, $stringData);
+			
 			fclose($fh);
-		}
-			return $theData;
-		}
-		
-		public function getAuth($username, $password){
-		
-		}
-		
-		public function getIndex(){
-		
+			
+			$worked = true;
+			}
+			
+			return $worked;
 		}
 		
-		public function getCourriel(){
+		public static function crushobjectJSON($object, $txtname){
 		
+			$worked = false;
+			
+			$myFile = "PHP/JSON/" . $txtname;
+			
+			$array = "";
+			
+			$id = $object[0];
+			
+			if(file_exists($myFile)){
+				
+				$array = UserDAO::loadJSON($txtname);
+				
+				for($i = 0; $i < count($array); $i++){
+					if($array[$i][0] === $id){
+						$array[$i] = $object;
+					}
+				}
+				
+				$fh = fopen($myFile, 'w') or die("can't open file");
+				
+				$stringData = json_encode($array);
+				
+				fwrite($fh, $stringData);
+				
+				fclose($fh);
+				
+				$worked = true;
+			}
+				
+				return $worked;
 		}
 		
-		public function setIndex(){
 		
-		}
 		
-		public function setCourriel(){
-		
-		}
+	}
 	
+	
+	class Score {
+		
+		public $name;
+		public $score;
+		public $date;
+		
+		public function __construct($name, $score, $date) {
+			$this->name = $name;
+			$this->score = $score;
+			$this->date = $date;
+		}
 	
 	}
 

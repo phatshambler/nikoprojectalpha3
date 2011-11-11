@@ -11,6 +11,10 @@
 		
 		protected function executeAction() {
 			
+			if (isset($_GET["action"]) && $_GET["action"] === "succes") {
+				$this->errorCode = 110;
+			}
+			
 			if (isset($_POST["username"])) {
 				$visibility = UserDAO::authenticate($_POST["username"], $_POST["pwd"]);
 				

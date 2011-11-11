@@ -8,7 +8,19 @@
 ?>
 
 		<div id="top" class="square"><p class="bold">AWESOME GAME PLATFORM</p>
-        <p id="username" class="logged">Bienvenue, 
+        
+		<?php
+			if ($action->errorCode != null && $action->errorCode === 110) {
+		?>
+				<div style='color:lime'>
+					Votre jeu à été ajouté avec succès!
+				</div>
+				<?php
+			}
+		?>
+		
+		
+		<p id="username" class="logged">Bienvenue, 
 		
 		<?php if(isset($_SESSION["username"])){
 			echo $_SESSION["username"];
@@ -77,26 +89,54 @@
         
 		
         </div>
+        <div class="clear"></div>
         
-        <div id="middle" class="square"><p class="bold">JEUX</p> <p><a href="PROJET - PART1/nr_index.html">Awesome Shooter</a></p></div>
-
+		<div id="middle" class="square"><p class="bold">JEUX</p> <p><a href="PROJET - PART1/nr_index.html">Awesome Shooter</a></p></div>
+		
+		<div class="clear"></div>
+		
+		<div id="modegames" class="container">
+		<p class="bold">JEUX DES UTILISATEURS</p>
+		<?php 
+		
+		$games = UserDAO::loadJSON("games.txt");
+		if($games != ""){
+		for ($i = 0; $i < count($games); $i++){
+		
+		?>
+			<div class="squareNoClear">
+			<p class="bold"><a href ="<?php echo $games[$i][4];?>"><?php echo $games[$i][0];?></a></p>
+			<p class="exlink"><a href="http://<?php echo $games[$i][1];?>" alt="<?php echo $games[$i][1];?>"> http://<?php echo $games[$i][1];?></a></p>
+			<p><a href ="<?php echo $games[$i][4];?>"> <img class="img" src="<?php echo $games[$i][2];?>" alt="<?php echo $games[$i][2];?>" /></a></p>
+			
+				  
+			</div>
+		<?php
+		
+		}
+		?>
+		
+		</div>
+		
+		<div class="clear"></div>
+		
 		<div id="bottom" class="square">
 		<p class="bold">HI-SCORES/LEADERBOARD</p> 
 		
 		<?php
 			if(isset($_SESSION["username"])){
-			$liste = UserDAO::getGames();
+			$liste = UserDAO::loadJSON("games.txt");
 			for ($i = 0; $i < count($liste); $i++){ 
 		?>
 			<div class="scores">
 
 			
 			<form action="index.php" method="post">
-				<input class="niceButton" type="submit" name="currenthi" value="<?php echo $liste[$i]; ?>" />
+				<input class="niceButton" type="submit" name="currenthi" value="<?php echo $liste[$i][0]; ?>" />
 			</form>
 			
 			</div>
-			<?php if(isset($_SESSION["menuopen"]) && $_SESSION["menuopen"] === $liste[$i] ){
+			<?php if(isset($_SESSION["menuopen"]) && $_SESSION["menuopen"] === $liste[$i][0] ){
 				
 				?> 
 
@@ -170,7 +210,7 @@
 		}
 		
 			
-		
+		}
 			
 		}
 		?>

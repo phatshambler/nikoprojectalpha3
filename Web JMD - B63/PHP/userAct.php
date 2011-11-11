@@ -13,9 +13,11 @@
 		protected function executeAction() {
 			
 			if (isset($_SESSION["username"])) {
-				echo "lala";
-				if(isset($_POST["gamename"]) && isset($_POST["site"]) && isset($_FILES["image"]) && isset($_POST["chemin"]) && isset($_FILES["fichier"])) {
-					
+				
+				if(isset($_POST["sender"])/* && isset($_POST["site"]) && isset($_FILES["image"]) && isset($_POST["chemin"]) && isset($_FILES["fichier"])*/) {
+				
+				echo "lovely";
+				
 				$content_dir = 'PHP/upload/'; // dossier où sera déplacé le fichier
 
 				$tmp_file = $_FILES['image']['tmp_name'];
@@ -48,16 +50,36 @@
 				
 				$date = getdate();
 				
-				$newgame = array($_POST["gamename"], $_POST["site"], $imagepath, $_POST["chemin"], $dir, $date);
+				$newgame = array($_POST["gamename"], $_POST["site"], $imagepath, $_POST["chemin"], $dir, $date, $_SESSION["username"]);
+				$newgame["hiscores"] = array();
 				var_dump($newgame);
 				
-				UserDAO::addJSON($newgame);
+				UserDAO::addJSON($newgame, "games.txt");
+				
+				header("location:index.php?action=succes");
+				exit;
 				
 				}
-				else {
+				else{
 					$this->errorCode = 103;
 				}
-			
+				
+				if(isset($_POST["removegame"])){
+					$games = UserDAO::loadJSON("games.txt");
+					$test = false;
+					
+					for ($i = 0; $i < count($games); $i++){
+						if($games[$i][0] == $_POST["love"]){
+							unset($games[$i]);
+							$test = true;
+						}
+					}
+					
+					if($test){
+						UserDAO::crushJSON($games, "games.txt");
+					}
+					
+				}
 			
 			}
 		}

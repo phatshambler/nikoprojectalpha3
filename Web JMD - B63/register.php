@@ -45,6 +45,24 @@
 			<input class="niceField" type="text" name="courriel" id="courriel" />
 		</div>
 		
+		<div class="spaced">
+			<label for="createur">
+				 Envoyer du contenu?
+			</label>
+			<input class="niceField" id="createur" type="radio" name="createur" value="oui" /> Oui
+			<input class="niceField" id="createur" type="radio" name="createur" value="non" /> Non
+			
+		</div>
+		
+		<div class="spaced">
+			<label for="admin">
+				 Administrateur?
+			</label>
+			<input class="niceField" id="admin" type="radio" name="admin" value="oui" /> Oui
+			<input class="niceField" id="admin" type="radio" name="admin" value="non" /> Non
+			
+		</div>
+		
 		<input class="niceButton" type="submit" value="Envoyer" />
 		
 	</form>

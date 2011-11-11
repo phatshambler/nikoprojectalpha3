@@ -9,6 +9,10 @@ body{
 	width: auto;
 	font-family: Calibri, Arial;
 }
+
+.clear{
+	clear: both;
+}
 		
 #canvas{
 	display:block;
@@ -28,6 +32,21 @@ body{
     
 }
 
+.squareNoClear
+{
+    display:block;
+    width: 200px;
+    height: auto;
+    margin: 20px;
+    float: left;
+}
+
+.img{
+	display:block;
+	width : 80px;
+	height: 80px;
+}
+
 .smll
 {
     font-weight:bold;
@@ -45,6 +64,12 @@ body{
     font-weight:bold;
     font-size:x-large;
     color:Lime;
+}
+
+.exlink{
+	font-weight:bold;
+    font-size:small;
+	color:Lime;
 }
 
 a
@@ -112,4 +137,10 @@ a
 	margin: 2px;
 	border: 1px solid black;
 
+}
+
+.container{
+	float:left; 
+	width:810px;
+	margin: 20px;
 }
