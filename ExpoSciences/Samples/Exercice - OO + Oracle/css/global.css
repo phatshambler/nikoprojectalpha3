@@ -1,0 +1,88 @@
+* {
+	margin:0;
+	padding:0;
+}
+
+html {
+	color:#492a27;
+	background-image:url('../images/gradient-2.jpg');
+	background-repeat:repeat-x;
+	background-position:bottom center;
+	background-color:#d1d1d1;
+}
+
+body {
+	font-family:Verdana;
+	background-image:url('../images/gradient.jpg');
+	background-repeat:repeat-x;
+	background-position:top center;
+}
+
+p {
+	margin-top:10px;
+	margin-bottom:10px;
+}
+
+a {
+	text-decoration:none;
+	color:white;
+}
+
+a:hover {
+	text-decoration:underline;
+}
+
+.clear {
+	clear:both;
+}
+
+.container {
+	background-color:white;
+	width:930px;
+	min-height:350px;
+	margin:5px auto;
+	border:1px solid #6b5736;
+	padding:15px;
+	background-image:url('../images/coffee-grain.jpg');
+	background-repeat:no-repeat;
+	background-position:bottom right;
+}
+
+.header {
+	width:940px;
+	margin:0px auto;
+	margin-bottom:5px;
+	color:white;
+	padding:10px;
+	padding-bottom:3px;
+}
+
+.header h1 {
+	text-indent:-1000px;
+	background-image:url('../images/logo.png');
+	background-position:top left;
+	background-repeat:no-repeat;
+	height: 55px;
+}
+
+.header .menu {
+	margin-top:20px;
+	text-align:right;
+}
+
+.header .menu ul li {
+	display:inline;
+	padding-right:15px;
+}
+
+.header .username-section {
+	float:right;
+	width:240px;
+	font-style:italic;
+	text-align:right;
+}
+
+.header .site-title-section {
+	float:left;
+	width:700px;
+}
