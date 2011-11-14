@@ -184,16 +184,22 @@
 				}
 
 				$scores = UserDAO::loadHiScoresOrdered($_SESSION["menuopen"], $currentorder, $_SESSION["username"]);
-
+				$max = 0;
 				//reset($scores);
+				
 				foreach ($scores as $key => $value) {
 					if(is_array($value)){
-						$value = $value[0] . " (epoch time)";
+						$value = $value["mday"] . " - " . $value["month"] . " - " . $value["year"];
+					}
+					$max++;
+					if($max > 12){
+					break;
 					}
 				 ?>
 				 	<p><?php echo $key;?> : <?php echo $value;?></p>
 				 <?php
 				}
+				
 			?>
 
 			</div>

@@ -69,7 +69,7 @@
 						//cheat code
 						echo '<script language="Javascript">
 						<!--
-						document.location.replace("indx.php");
+						document.location.replace("index.php");
 						// -->
 						</script>';
 					}
