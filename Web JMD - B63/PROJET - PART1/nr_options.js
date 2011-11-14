@@ -52,10 +52,12 @@ Options.prototype.creeBaseCookies = function(){
 
 Options.prototype.creeMenu = function () {
     var div = document.getElementById("divoptions");
+	
     for (key in this.masterkookie) {
-
+		if(div != null){
         div.innerHTML = div.innerHTML + "<p>" + key + " : " + this.masterkookie[key] + "</p>" + "<span class='xbold' onclick=options.add('" + key + "')> +</span>   <span>&#160;</span>    <span class='xbold' onclick=options.remove('" + key + "')> - </span>";
     }
+	}
 }
 
 Options.prototype.clean = function(){

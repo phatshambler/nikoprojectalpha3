@@ -6,6 +6,9 @@
         <script type="text/javascript" src="nr_options.js"></script>
 		<link href="nr_style.css" rel="stylesheet" type="text/css" />
 	</head>
+	
+	
+		  
 	<body>
 		
 	    <div class="square">
@@ -23,12 +26,33 @@
 	        <p></p>
 		    <p><a href="http://www.slashdot.org">Quitter</a></p>
 		 </div>
+		 
+		<div class="square">
+		 <form action="../index.php" method="post">
+		 <input type="hidden" name="nom" value="666" />
+		 <input type="hidden" name="jeu" value="Awesome Shooter" />
+		 <input id="score" type="hidden" name="score" value="" onclick="getLastScore" />
+		
+		 <input style="background-color:black;color:green" type="submit" name="envoyerscore" value="Envoyez votre dernier score" />
+		
+		 </form>
+		 </div>
 			
 		 <div class="square">
          <p class="smll">Copyright - Nicolas Roy - 2011</p></div>
 		
-          <script type="text/javascript">
-              
+         <script type="text/javascript">
+              window.onload = function (){
+					var y = document.getElementById("score");
+					var x = lisCookie("lastscore");
+					if(x != null){
+						y.value = x;
+					}
+					else{
+						y.value = "1001";
+					}
+					console.log();
+			  }
 		  </script>
 	                  
 </body>

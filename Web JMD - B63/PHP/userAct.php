@@ -14,7 +14,7 @@
 			
 			if (isset($_SESSION["username"])) {
 				
-				if(isset($_POST["sender"])/* && isset($_POST["site"]) && isset($_FILES["image"]) && isset($_POST["chemin"]) && isset($_FILES["fichier"])*/) {
+				if(isset($_POST["sender"]) && isset($_POST["site"]) && isset($_FILES["image"]) && isset($_POST["chemin"]) && isset($_FILES["fichier"])) {
 				
 				echo "lovely";
 				
@@ -51,26 +51,27 @@
 				$date = getdate();
 				
 				$newgame = array($_POST["gamename"], $_POST["site"], $imagepath, $_POST["chemin"], $dir, $date, $_SESSION["username"]);
-				$newgame["hiscores"] = array();
-				var_dump($newgame);
+				$newgame["hiscores"] = array(new Score("niko", "1", getdate()));
+				#var_dump($newgame);
 				
 				UserDAO::addJSON($newgame, "games.txt");
 				
-				header("location:index.php?action=succes");
-				exit;
+				#header("location:index.php?action=succes");
+				#exit;
 				
 				}
 				else{
 					$this->errorCode = 103;
 				}
 				
+				
 				if(isset($_POST["removegame"])){
 					$games = UserDAO::loadJSON("games.txt");
 					$test = false;
 					
-					for ($i = 0; $i < count($games); $i++){
-						if($games[$i][0] == $_POST["love"]){
-							unset($games[$i]);
+					foreach ($games as $key => $value){
+						if($value[0] == $_POST["love"]){
+							unset($games[$key]);
 							$test = true;
 						}
 					}
@@ -80,6 +81,24 @@
 					}
 					
 				}
+				
+				if(isset($_POST["removeuser"])){
+					$users = UserDAO::loadJSON("users.txt");
+					$test = false;
+					
+					foreach ($users as $key => $value){
+						if($value[0] == $_POST["love"]){
+							unset($users[$key]);
+							$test = true;
+						}
+					}
+					
+					if($test){
+						UserDAO::crushJSON($users, "users.txt");
+					}
+					
+				}
+				
 			
 			}
 		}

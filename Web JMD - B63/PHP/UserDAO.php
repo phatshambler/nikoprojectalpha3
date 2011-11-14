@@ -15,12 +15,16 @@
 			if(isset($username) && isset($password) && $username != "" && $password != ""){
 			
 			$csv = UserDAO::loadJSON("users.txt");
+			
+			if($csv != null && $csv != ""){
+			
 			var_dump($csv);
 				for($i = 0; $i < count($csv); $i++){
 				if ($csv[$i][0] === $username && $csv[$i][1] === $password) {
 					$visibility = $csv[$i][3];
 				}
 				}
+			}
 			}
 			
 			return $visibility;
@@ -123,13 +127,15 @@
 
 			$k = 1;
 			
+			
 			if($hiscores != ""){
 			
 			foreach ($hiscores as $value){
-				$key = $value->name . "(" . $k . ")";
+				var_dump($value);
+				$key = $value["name"] . "(" . $k . ")";
 
-				$asok[$key] = intval($value->score);
-				$asoktime[$key] = $value->date;
+				$asok[$key] = intval($value["score"]);
+				$asoktime[$key] = $value["date"];
 				
 				$k++;
 			}
@@ -190,7 +196,7 @@
 		public static function addJSON($object, $txtname){
 		$myFile = "PHP/JSON/" . $txtname;
 		
-		$array = "";
+		#$array = "";
 		
 		if(!file_exists($myFile)){
 		
@@ -198,9 +204,8 @@
 			array_push($array, $object);
 		}
 		else{
-			$olddata = UserDAO::loadJSON($txtname);
+			$array = UserDAO::loadJSON($txtname);
 		
-			$array = $olddata;
 			array_push($array, $object);
 		}
 		
@@ -227,7 +232,7 @@
 				$theData = fread($fh, filesize($myFile));
 				fclose($fh);
 			}
-				return json_decode($theData);
+				return json_decode($theData, true);
 			}
 			else{
 				return "";

@@ -216,6 +216,12 @@ function masterloop(){
 				effaceCookie("hiscore");
 				creeCookie("hiscore", controleur.modele.ship.hiscore, 20);
 			}
+			effaceCookie("lastscore");
+			creeCookie("lastscore", controleur.modele.ship.hiscore, 20);
+			
+			
+			
+			
 			window.location.search = "";
 			controleur = "";
 			loadGame();

@@ -100,14 +100,17 @@
 		<?php 
 		
 		$games = UserDAO::loadJSON("games.txt");
+		#var_dump($games);
 		if($games != ""){
-		for ($i = 0; $i < count($games); $i++){
+		
+		#for ($i = 0; $i < count($games); $i++)
+		foreach($games as $value){
 		
 		?>
 			<div class="squareNoClear">
-			<p class="bold"><a href ="<?php echo $games[$i][4];?>"><?php echo $games[$i][0];?></a></p>
-			<p class="exlink"><a href="http://<?php echo $games[$i][1];?>" alt="<?php echo $games[$i][1];?>"> http://<?php echo $games[$i][1];?></a></p>
-			<p><a href ="<?php echo $games[$i][4];?>"> <img class="img" src="<?php echo $games[$i][2];?>" alt="<?php echo $games[$i][2];?>" /></a></p>
+			<p class="bold"><a href ="<?php echo $value[4];?>"><?php echo $value[0];?></a></p>
+			<p class="exlink"><a href="http://<?php echo $value[1];?>" alt="<?php echo $value[1];?>"> http://<?php echo $value[1];?></a></p>
+			<p><a href ="<?php echo $value[4];?>"> <img class="img" src="<?php echo $value[2];?>" alt="<?php echo $value[2];?>" /></a></p>
 			
 				  
 			</div>
@@ -126,17 +129,18 @@
 		<?php
 			if(isset($_SESSION["username"])){
 			$liste = UserDAO::loadJSON("games.txt");
-			for ($i = 0; $i < count($liste); $i++){ 
+			#for ($i = 0; $i < count($liste); $i++)
+			foreach ($liste as $value){ 
 		?>
 			<div class="scores">
 
 			
 			<form action="index.php" method="post">
-				<input class="niceButton" type="submit" name="currenthi" value="<?php echo $liste[$i][0]; ?>" />
+				<input class="niceButton" type="submit" name="currenthi" value="<?php echo $value[0]; ?>" />
 			</form>
 			
 			</div>
-			<?php if(isset($_SESSION["menuopen"]) && $_SESSION["menuopen"] === $liste[$i][0] ){
+			<?php if(isset($_SESSION["menuopen"]) && $_SESSION["menuopen"] === $value[0] ){
 				
 				?> 
 

@@ -35,5 +35,33 @@
 			if(isset($_POST["order"])){
 				$_SESSION["order"] = $_POST["order"];
 			}
+			if(isset($_POST["envoyerscore"])){
+				var_dump($_POST["nom"]);
+				var_dump($_POST["jeu"]);
+				var_dump($_POST["score"]);
+				
+				$games = UserDAO::loadJSON("games.txt");
+				
+				$name = "Anonymous";
+				$date = getdate();
+				
+				if(isset($_SESSION["username"])){
+					$name = $_SESSION["username"];
+				}
+				
+				if($games){
+				
+				foreach($games as $value){
+					if($_POST["jeu"] === $value[0]){
+						//adds a hi score!
+						var_dump($value);
+						$score = new Score($name, $_POST["score"], $date);
+						
+						array_push($value["hiscores"], $score);
+						echo "lol";
+					}
+				}
+				}
+			}
 		}
 	}
