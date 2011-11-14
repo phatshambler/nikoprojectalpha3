@@ -131,7 +131,7 @@
 			if($hiscores != ""){
 			
 			foreach ($hiscores as $value){
-				var_dump($value);
+				//var_dump($value);
 				$key = $value["name"] . "(" . $k . ")";
 
 				$asok[$key] = intval($value["score"]);
@@ -153,27 +153,52 @@
 				arsort($asok);
 			}
 			else if($ordre === "Derniers"){
-
+				arsort($asoktime);
+				$asok = $asoktime;
 				
 			}
-			else if($ordre === "7 jours"){
-
+			else if($ordre === "Semaine"){
+				arsort($asoktime);
+				$lastWeek = time() - (7 * 24 * 60 * 60);
+				
+				foreach($asoktime as $key =>$value){
+					if($value[0] < $lastWeek){
+						unset($asoktime[$key]);
+					}
+				}
+				$asok = $asoktime;
+				//echo "winning";
 				
 			}
 			else if($ordre === "Mois"){
-
+				arsort($asoktime);
+				$lastWeek = time() - (30 * 24 * 60 * 60);
+				
+				foreach($asoktime as $key =>$value){
+					if($value[0] < $lastWeek){
+						unset($asoktime[$key]);
+					}
+				}
+				$asok = $asoktime;
 				
 			}
 			else if($ordre === "Annee"){
-
+				arsort($asoktime);
+				$lastWeek = time() - (365 * 24 * 60 * 60);
+				
+				foreach($asoktime as $key =>$value){
+					if($value[0] < $lastWeek){
+						unset($asoktime[$key]);
+					}
+				}
+				$asok = $asoktime;
 				
 			}
 
 			return $asok;
 			}
-			
 			else{
-			return null;
+				return null;
 			}
 
 		}
@@ -276,9 +301,9 @@
 				
 				$array = UserDAO::loadJSON($txtname);
 				
-				for($i = 0; $i < count($array); $i++){
-					if($array[$i][0] === $id){
-						$array[$i] = $object;
+				foreach ($array as $key => $value){
+					if($value[0] === $id){
+						$array[$key] = $object;
 					}
 				}
 				

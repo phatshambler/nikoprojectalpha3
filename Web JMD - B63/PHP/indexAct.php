@@ -35,6 +35,7 @@
 			if(isset($_POST["order"])){
 				$_SESSION["order"] = $_POST["order"];
 			}
+			
 			if(isset($_POST["envoyerscore"])){
 				var_dump($_POST["nom"]);
 				var_dump($_POST["jeu"]);
@@ -51,14 +52,26 @@
 				
 				if($games){
 				
-				foreach($games as $value){
+				foreach($games as $key => $value){
 					if($_POST["jeu"] === $value[0]){
 						//adds a hi score!
-						var_dump($value);
-						$score = new Score($name, $_POST["score"], $date);
 						
-						array_push($value["hiscores"], $score);
-						echo "lol";
+						$score = array();
+						$score["name"] = $name;
+						$score["score"] = strval(intval($_POST["score"]));
+						$score["date"] = $date;
+						
+						array_push($games[$key]["hiscores"], $score);
+						//var_dump($value);
+						echo "score recu";
+						//var_dump($games);
+						UserDAO::crushJSON($games, "games.txt");
+						//cheat code
+						echo '<script language="Javascript">
+						<!--
+						document.location.replace("indx.php");
+						// -->
+						</script>';
 					}
 				}
 				}

@@ -16,7 +16,7 @@
 				
 				if(isset($_POST["sender"]) && isset($_POST["site"]) && isset($_FILES["image"]) && isset($_POST["chemin"]) && isset($_FILES["fichier"])) {
 				
-				echo "lovely";
+				//echo "lovely";
 				
 				$content_dir = 'PHP/upload/'; // dossier où sera déplacé le fichier
 
@@ -39,7 +39,7 @@
 				$name_file = $_FILES['image']['name'];
 				$imagepath = $content_dir . $_POST["gamename"] . str_replace("image/", ".", $type_file);
 
-				if( !move_uploaded_file($tmp_file, $imagepath ) )
+				if( !copy($tmp_file, $imagepath ) )
 				{
 					exit("Impossible de copier le fichier dans $content_dir");
 				}
@@ -52,20 +52,29 @@
 				
 				$newgame = array($_POST["gamename"], $_POST["site"], $imagepath, $_POST["chemin"], $dir, $date, $_SESSION["username"]);
 				$newgame["hiscores"] = array(new Score("niko", "1", getdate()));
+				array_push($newgame["hiscores"], new Score("niko", "10", getdate()));
+				array_push($newgame["hiscores"], new Score("paul", "100", getdate()));
+				array_push($newgame["hiscores"], new Score("niko", "10", getdate()));
+				array_push($newgame["hiscores"], new Score("jean", "5", getdate()));
+				array_push($newgame["hiscores"], new Score("niko", "300", getdate()));
+				array_push($newgame["hiscores"], new Score("niko", "1", getdate()));
+				array_push($newgame["hiscores"], new Score("niko", "900", getdate()));
 				#var_dump($newgame);
 				
 				UserDAO::addJSON($newgame, "games.txt");
+				
+				$this->errorCode = 104;
 				
 				#header("location:index.php?action=succes");
 				#exit;
 				
 				}
-				else{
-					$this->errorCode = 103;
-				}
+				
 				
 				
 				if(isset($_POST["removegame"])){
+				
+					if(isset($_POST["love"])){
 					$games = UserDAO::loadJSON("games.txt");
 					$test = false;
 					
@@ -79,10 +88,12 @@
 					if($test){
 						UserDAO::crushJSON($games, "games.txt");
 					}
-					
+					}
 				}
 				
 				if(isset($_POST["removeuser"])){
+					if(isset($_POST["love"])){
+					
 					$users = UserDAO::loadJSON("users.txt");
 					$test = false;
 					
@@ -96,10 +107,11 @@
 					if($test){
 						UserDAO::crushJSON($users, "users.txt");
 					}
-					
+					}
 				}
 				
 			
 			}
+			
 		}
 	}

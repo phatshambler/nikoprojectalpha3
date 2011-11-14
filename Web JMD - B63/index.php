@@ -103,7 +103,7 @@
 		#var_dump($games);
 		if($games != ""){
 		
-		#for ($i = 0; $i < count($games); $i++)
+		
 		foreach($games as $value){
 		
 		?>
@@ -129,7 +129,7 @@
 		<?php
 			if(isset($_SESSION["username"])){
 			$liste = UserDAO::loadJSON("games.txt");
-			#for ($i = 0; $i < count($liste); $i++)
+			
 			foreach ($liste as $value){ 
 		?>
 			<div class="scores">
@@ -160,7 +160,7 @@
 				</form>
 
 				<form class="menuscores" action="index.php" method="post">
-					<input class="niceButtonTwo" type="submit" name="order" value="7 Jours" />
+					<input class="niceButtonTwo" type="submit" name="order" value="Semaine" />
 				</form>
 
 				<form class="menuscores" action="index.php" method="post">
@@ -187,10 +187,9 @@
 
 				//reset($scores);
 				foreach ($scores as $key => $value) {
-    			//echo "Key: $key; Value: $value<br />\n";
-				
-
-				//for ($j = 0; $j + 1 < count($scores); $j += 2){
+					if(is_array($value)){
+						$value = $value[0] . " (epoch time)";
+					}
 				 ?>
 				 	<p><?php echo $key;?> : <?php echo $value;?></p>
 				 <?php

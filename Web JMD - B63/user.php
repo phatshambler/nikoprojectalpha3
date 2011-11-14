@@ -34,6 +34,16 @@
 			}
 		?>
 		
+		<?php
+			if ($action->errorCode != null && $action->errorCode === 104) {
+		?>
+				<div style='color:lime'>
+					Merci d'avoir envoyé votre jeu!
+				</div>
+				<?php
+			}
+		?>
+		
 		<div class="spaced">
 			<label for="gamenameid">
 				Nom du Jeu : 
