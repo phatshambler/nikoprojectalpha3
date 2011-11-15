@@ -565,6 +565,76 @@
 			return $result;
 		
 		}
+		
+		public static function getCriteres(){
+			$connection = Connection::getConnection();
+			
+			$query = "SELECT * FROM P_CRITERE";
+
+			$statement = oci_parse($connection, $query);
+			
+			oci_execute($statement);
+			
+			$result = array();
+			
+			while (($row = oci_fetch_array($statement, OCI_ASSOC))) {
+				array_push($result, $row);
+			}
+			
+			Connection::closeConnection();
+			
+			return $result;
+		}
+		
+			public static function newEvaluation($noauditeur, $noatel, $critere, $cote) {
+			$connection = Connection::getConnection();
+			
+			$query = "INSERT INTO p_evaluation (NOAUDITEUR, NOATEL, NOCRITERE, COTE) VALUES(:id_bv, :text_bv, :critere_bv, :cote_bv)";
+
+			$statement = oci_parse($connection, $query);
+			
+			oci_bind_by_name($statement, ":id_bv", $noauditeur);
+			oci_bind_by_name($statement, ":text_bv", $noatel);
+			oci_bind_by_name($statement, ":critere_bv", $critere);
+			oci_bind_by_name($statement, ":cote_bv", $cote);
+			
+			
+			if(oci_execute($statement)){
+				$result = true;
+			}
+			else{
+				$result = false;
+			}
+			
+			
+			Connection::closeConnection();
+			
+			return $result;
+			
+		}
+		
+		public static function getCritereSpecific($auditeur, $atelier, $nocritere){
+			$connection = Connection::getConnection();
+			
+			$query = "SELECT * FROM P_EVALUATION WHERE NOAUDITEUR = :pUsername AND NOATEL = :pAtel AND NOCRITERE = :pCritere";
+
+			$statement = oci_parse($connection, $query);
+
+			oci_bind_by_name($statement, ":pUsername", $auditeur);
+			oci_bind_by_name($statement, ":pAtel", $atelier);
+			oci_bind_by_name($statement, ":pCritere", $nocritere);
+			oci_execute($statement);
+			
+			$result = array();
+			
+			while (($row = oci_fetch_array($statement, OCI_ASSOC))) {
+				array_push($result, $row);
+			}
+			
+			Connection::closeConnection();
+			
+			return $result;
+		}
 	}
 	
 	
