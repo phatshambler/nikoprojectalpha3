@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 	<link href="nr_style.css" rel="stylesheet" type="text/css" /> 
 	<head>
-		<title>AWESOME GAME PLATFORM</title>
+		<title>EXPO-SCIENCES</title>
 	</head>
 	<body>
 	

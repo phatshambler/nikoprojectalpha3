@@ -85,7 +85,7 @@
 			<input class="niceField" type="text" name="<?php echo $key?>" id="<?php echo $key?>" 
 			
 			<?php
-			if($key === "NOCOORD" || $key === "NOAUDITEUR"){
+			if($key === "NOCOORD" || $key === "NOAUDITEUR" || $key === "JUGE"){
 			echo ' readonly="readonly" style="background-color: grey" ';
 			}			
 			if($key === "JUGE" || $key === "CANDIDATJUGE"){

@@ -17,7 +17,7 @@
 	</form>
 	
 	<?php
-	}else{
+	}else if(isset($_SESSION["administrator"]) && $_SESSION["administrator"] === true){
 	?>
 	<form action="dv_juge.php" method="post">
 	<p>M'assigner comme juge à partir de maintenant: </p>

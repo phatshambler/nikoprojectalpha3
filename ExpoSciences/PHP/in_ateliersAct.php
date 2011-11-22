@@ -97,7 +97,7 @@
 			
 			if(isset($_POST["enregistrer"])){
 				if(isset($_POST["sex"]) && $_POST["sex"] != "" && $_POST["sex"] != null){
-				
+				echo "kill1";
 				$test = true;
 				
 				$atel = $this->ateliers[intval($_POST["sex"])];
@@ -115,6 +115,7 @@
 				
 				if($test){
 					UserDAO::newInscription($nouser, $noatel);
+					echo "kill";
 				
 					$this->ateliersIns = UserDAO::getInscriptionsAll($this->user["NOAUDITEUR"]);
 				}

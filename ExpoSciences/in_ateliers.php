@@ -60,7 +60,7 @@
 						<?php echo $i; ?>
 						</label>
 						
-						<input type="radio" name="index" value="<?php echo $i; ?>" /> <?php echo $action->ateliers[$i]["TITRE"]; ?><br /> 
+						<input type="radio" name="sex" value="<?php echo $i; ?>" /> <?php echo $action->ateliers[$i]["TITRE"]; ?><br /> 
 						<p>
 						<span>Détails: </span>
 						<?php

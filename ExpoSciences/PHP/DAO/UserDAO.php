@@ -29,6 +29,33 @@
 			return $result;
 		}
 		
+	public static function authenticateAdmin($noauditeur) {
+			$connection = Connection::getConnection();
+			
+			$query = "SELECT * FROM P_ADMIN WHERE NOAUDITEUR = :pUsername";
+
+			$statement = oci_parse($connection, $query);
+
+			oci_bind_by_name($statement, ":pUsername", $noauditeur);
+						
+			oci_execute($statement);
+			
+			$result = null;
+			
+			if ($row = oci_fetch_array($statement)) {
+				$result = $row;
+			}
+			
+			Connection::closeConnection();
+			
+			if(count($result) > 0){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		
 		public static function getTableDesc($table){
 		
 			$connection = Connection::getConnection();
@@ -136,7 +163,7 @@
 
 			$statement = oci_parse($connection, $query);
 			
-			if($juge == "Oui"){
+			if($juge === "Oui"){
 			$juge = date("dmY");
 			}
 			else{
@@ -613,6 +640,33 @@
 			
 		}
 		
+	public static function updateEvaluation($noauditeur, $noatel, $critere, $cote) {
+			$connection = Connection::getConnection();
+			
+			$query = "UPDATE p_evaluation SET COTE = :cote_bv WHERE NOAUDITEUR = :id_bv AND NOATEL = :text_bv AND NOCRITERE = :critere_bv";
+
+			$statement = oci_parse($connection, $query);
+			
+			oci_bind_by_name($statement, ":id_bv", $noauditeur);
+			oci_bind_by_name($statement, ":text_bv", $noatel);
+			oci_bind_by_name($statement, ":critere_bv", $critere);
+			oci_bind_by_name($statement, ":cote_bv", $cote);
+			
+			
+			if(oci_execute($statement)){
+				$result = true;
+			}
+			else{
+				$result = false;
+			}
+			
+			
+			Connection::closeConnection();
+			
+			return $result;
+			
+		}
+		
 		public static function getCritereSpecific($auditeur, $atelier, $nocritere){
 			$connection = Connection::getConnection();
 			
@@ -623,6 +677,34 @@
 			oci_bind_by_name($statement, ":pUsername", $auditeur);
 			oci_bind_by_name($statement, ":pAtel", $atelier);
 			oci_bind_by_name($statement, ":pCritere", $nocritere);
+			oci_execute($statement);
+			
+			$result = array();
+			
+			while (($row = oci_fetch_array($statement, OCI_ASSOC))) {
+				array_push($result, $row);
+			}
+			
+			Connection::closeConnection();
+			
+			if(count($result) > 0){
+				return $result;
+			}
+			else{
+				return null;
+			}
+		}
+		
+	public static function getLastEval($auditeur, $atelier){
+			$connection = Connection::getConnection();
+			
+			$query = "SELECT * FROM P_EVALUATION WHERE NOAUDITEUR = :pUsername AND NOATEL = :pAtel";
+
+			$statement = oci_parse($connection, $query);
+
+			oci_bind_by_name($statement, ":pUsername", $auditeur);
+			oci_bind_by_name($statement, ":pAtel", $atelier);
+			
 			oci_execute($statement);
 			
 			$result = array();

@@ -30,7 +30,7 @@ if ((key==null) || (key==0) || (key==8) ||
    return true;
 
 // numbers
-else if ((("0123456789").indexOf(keychar) > -1))
+else if ((("012345").indexOf(keychar) > -1))
    return true;
 
 // decimal point jump
@@ -45,7 +45,7 @@ else
 
 
 function loadEv(){
-
+	
 }
 
 //-->
@@ -98,6 +98,7 @@ function loadEv(){
 	
 	if($action->criteres != null){
 			for($i = 0; $i < count($action->criteres); $i++){
+					 
 					//echo " -- ";
 						?>
 						<label for="<?php $i; ?>">
@@ -130,6 +131,10 @@ function loadEv(){
 	
 	
 	<?php
+	}
+	else{
+	
+	echo "<br/>Vous n'êtes malheureusement pas juge!";
 	}
 	?>
 </div>

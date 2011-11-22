@@ -19,6 +19,20 @@
 		
 		
 		?>
+		
+		</p>
+		
+		<p id="administrator" class="logged">
+		<?php if(isset($_SESSION["administrator"]) && $_SESSION["administrator"] === true){
+			echo "(Statut: Administrateur)";
+		}
+		else{
+			echo "(Statut: Usager Régulier)";
+		}
+		
+		
+		?>
+		
 		</p>
 		
 		<?php if(!isset($_SESSION["username"])){
@@ -86,6 +100,15 @@
 		}
 		?>
         </div>
+        <?php if(isset($_SESSION["administrator"]) && $_SESSION["administrator"] === true){
+        ?>
+        <div class="square">
+        <p class="bold">Options Administrateur</p>
+        	<p><a href="atel_admin.php">Modifier les évaluations des auditeurs</a></p>
+        	<p><a href="juge_admin.php">Modifier le statut juge des auditeurs</a></p>
+        	<p><a href="notes_admin.php">Statistiques des notes</a></p>
+        </div>
+        <?php }?>
 <?php
 	require_once("PHP/footer.php");
 ?>

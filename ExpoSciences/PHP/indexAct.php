@@ -15,7 +15,19 @@
 				$visibility = UserDAO::authenticate($_POST["username"], $_POST["pwd"]);
 				
 				if ($visibility > DefaultAct::$VISIBILITY_PUBLIC) {
-				
+					
+					$user = UserDAO::getUser($_POST["username"]);
+					
+					$admin = UserDAO::authenticateAdmin($user["NOAUDITEUR"]);
+					
+					if($admin){
+						$_SESSION["administrator"] = true;
+					}
+					else{
+						$_SESSION["administrator"] = false;
+						
+					}
+					
 					parent::setUserCredentials($_POST["username"], $visibility);
 				
 					header("location:index.php");
