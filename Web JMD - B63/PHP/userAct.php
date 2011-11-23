@@ -52,13 +52,13 @@
 				
 				$newgame = array($_POST["gamename"], $_POST["site"], $imagepath, $_POST["chemin"], $dir, $date, $_SESSION["username"]);
 				$newgame["hiscores"] = array(new Score("niko", "1", getdate()));
-				array_push($newgame["hiscores"], new Score("niko", "10", getdate()));
-				array_push($newgame["hiscores"], new Score("paul", "100", getdate()));
-				array_push($newgame["hiscores"], new Score("niko", "10", getdate()));
-				array_push($newgame["hiscores"], new Score("jean", "5", getdate()));
-				array_push($newgame["hiscores"], new Score("niko", "300", getdate()));
-				array_push($newgame["hiscores"], new Score("niko", "1", getdate()));
-				array_push($newgame["hiscores"], new Score("niko", "900", getdate()));
+				#array_push($newgame["hiscores"], new Score("niko", "10", getdate()));
+				#array_push($newgame["hiscores"], new Score("paul", "100", getdate()));
+				#array_push($newgame["hiscores"], new Score("niko", "10", getdate()));
+				#array_push($newgame["hiscores"], new Score("jean", "5", getdate()));
+				#array_push($newgame["hiscores"], new Score("niko", "300", getdate()));
+				#array_push($newgame["hiscores"], new Score("niko", "1", getdate()));
+				#array_push($newgame["hiscores"], new Score("niko", "900", getdate()));
 				#var_dump($newgame);
 				
 				UserDAO::addJSON($newgame, "games.txt");

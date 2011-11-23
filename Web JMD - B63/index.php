@@ -91,7 +91,7 @@
         </div>
         <div class="clear"></div>
         
-		<div id="middle" class="square"><p class="bold">JEUX</p> <p><a href="PROJET - PART1/nr_index.html">Awesome Shooter</a></p></div>
+		
 		
 		<div class="clear"></div>
 		

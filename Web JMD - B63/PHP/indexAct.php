@@ -14,6 +14,28 @@
 			if (isset($_POST["startgame"])){
 				$xxx = UserDAO::loadObjectJSON("games.txt", $_POST["startgame"]);
 				//var_dump($xxx);
+				
+				if($_POST["startgame"] == "Awesome Shooter" && isset($_SESSION["username"])){
+					$scores = UserDAO::loadHiScoresOrdered("Awesome Shooter", "Mes Scores", $_SESSION["username"]);
+					
+					$extralife = 0;
+					
+					$val = 0;
+					$var = 0;
+					
+					foreach($scores as $value){
+						if ($value > $val){
+							$val = $value;
+							$var = intval($value) / 1000;
+							echo round($var) . " - ";
+						}
+					}
+					
+					setcookie("extralife", round($var));
+					
+				}
+				
+				
 				$this->inject($xxx[0], $_SESSION["username"], $xxx[4]);
 				
 				

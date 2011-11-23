@@ -56,6 +56,13 @@ function loadGame(){
 		
 		setCookies(ship);
 		
+		//bonus
+		var extra = lisCookie("extralife");
+		
+		if(extra != null){
+			ship.lives += parseInt(extra);
+			alert("Bonus: 5 vies extra!);
+		}
 		var v = new Vue();
 		var m = new Modele(ship);
 		var d = new Date();
