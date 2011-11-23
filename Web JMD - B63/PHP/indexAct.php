@@ -16,6 +16,8 @@
 				//var_dump($xxx);
 				$this->inject($xxx[0], $_SESSION["username"], $xxx[4]);
 				
+				
+				
 			}
 		
 			if (isset($_GET["action"]) && $_GET["action"] === "succes") {
