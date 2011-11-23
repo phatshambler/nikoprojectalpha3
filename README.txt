@@ -1,3 +1,4 @@
 A wonderful space shooter in JS
 Plus a new great game platform in php!
-rev 1000
+Plus a superb oracle db interfaced platform in Php!
+rev 1001!
