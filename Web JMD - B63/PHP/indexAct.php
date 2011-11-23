@@ -11,6 +11,13 @@
 		
 		protected function executeAction() {
 			
+			if (isset($_POST["startgame"])){
+				$xxx = UserDAO::loadObjectJSON("games.txt", $_POST["startgame"]);
+				//var_dump($xxx);
+				$this->inject($xxx[0], $_SESSION["username"], $xxx[4]);
+				
+			}
+		
 			if (isset($_GET["action"]) && $_GET["action"] === "succes") {
 				$this->errorCode = 110;
 			}
@@ -76,5 +83,38 @@
 				}
 				}
 			}
+			
+		}
+		
+		protected function inject($nomjeu, $nomjoueur, $path){
+		
+		
+		$code = '<form action="rec.php" method="post">
+		 <input type="hidden" name="nom" value="' . $nomjoueur . '" />
+		 <input type="hidden" name="jeu" value="' . $nomjeu .  '" />
+		 <input id="score" type="hidden" name="score" value=""  />
+		
+		 <input style="background-color:black;color:green" type="submit" name="envoyerscore" value="Envoyez votre dernier score" />
+		
+		 </form>
+		  
+		 
+		 
+		 ';
+		
+		$phpcode = '<?php
+					
+		
+					header("HTTP/1.1 307 Temporary Redirect");
+					header("Location: /nikoprojectalpha3/Web JMD - B63/index.php"); exit;
+					
+					';
+		
+		//echo $nomjeu . "  " . $nomjoueur . "  " . $path;
+		
+		$location = UserDAO::injectIntoFile($path, "</body>", $code, $phpcode);
+		header("Location: " . $location);
+		exit;
+		
 		}
 	}

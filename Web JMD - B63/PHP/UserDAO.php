@@ -76,6 +76,35 @@
 
 		}
 		
+		public static function injectIntoFile($path, $position, $data, $phpdata){
+			$ourFileName = $path . ".logged.html";
+			$ourReciever = dirname($path) . "/rec.php";
+			//var_dump($ourFileName);
+			$ourFileHandle = fopen($ourFileName, 'w') or die("can't open file");
+			$ourFileHandle2 = fopen($ourReciever, 'w') or die("can't open file");
+			
+			$trimmed = file($path, FILE_USE_INCLUDE_PATH);
+			//var_dump($trimmed);
+			
+			foreach($trimmed as $key => $value){
+				if(strstr($value, "<body>")){
+					$trimmed[$key] = $trimmed[$key] . $data;
+				}
+			}
+			
+			
+			foreach($trimmed as $value){
+				fwrite($ourFileHandle, $value);
+			}
+			fclose($ourFileHandle);
+			
+			fwrite($ourFileHandle2, $phpdata);
+			fclose($ourFileHandle2);
+			
+			return $ourFileName;
+
+		}
+		
 		private static function addHiScores($nomjeu, $stringAnom, $stringBscore){
 		$myFile = "PHP/InfoJeux/" . $nomjeu . ".txt";
 		
@@ -202,7 +231,7 @@
 			}
 
 		}
-
+/*
 		private static function loadHiScoresCSV($nomjeu){
 			
 			$csv = array();
@@ -216,7 +245,7 @@
 			
 			return $csv;
 		}
-		
+		*/
 		
 		public static function addJSON($object, $txtname){
 		$myFile = "PHP/JSON/" . $txtname;
@@ -258,6 +287,44 @@
 				fclose($fh);
 			}
 				return json_decode($theData, true);
+			}
+			else{
+				return "";
+			}
+		
+		}
+		
+	public static function loadObjectJSON($txtname, $objectid){
+		
+			$myFile = "PHP/JSON/" . $txtname;
+			
+			if(file_exists($myFile)){
+			
+			if(filesize($myFile) == 0){
+				$theData = "";
+			}
+			else{
+				$fh = fopen($myFile, 'r');
+				$theData = fread($fh, filesize($myFile));
+				fclose($fh);
+			}
+				$array = json_decode($theData, true);
+				$toReturn = "";
+				
+				foreach ($array as $value){
+					//var_dump($value);
+					foreach ($value as $item){
+						//var_dump($item);
+						if(isset($item) && $item == $objectid){
+							$toReturn = $value;
+						
+						}
+						else if(isset($item["0"]) && $item["0"] == $objectid)
+							$toReturn = $value;
+						}
+				
+				}
+				return $toReturn;
 			}
 			else{
 				return "";
@@ -320,6 +387,7 @@
 				
 				return $worked;
 		}
+		
 		
 		
 		

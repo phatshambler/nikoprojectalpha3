@@ -104,14 +104,21 @@
 		if($games != ""){
 		
 		
+		
 		foreach($games as $value){
 		
 		?>
 			<div class="squareNoClear">
-			<p class="bold"><a href ="<?php echo $value[4];?>"><?php echo $value[0];?></a></p>
-			<p class="exlink"><a href="http://<?php echo $value[1];?>" alt="<?php echo $value[1];?>"> http://<?php echo $value[1];?></a></p>
-			<p><a href ="<?php echo $value[4];?>"> <img class="img" src="<?php echo $value[2];?>" alt="<?php echo $value[2];?>" /></a></p>
+			<form action="index.php" method="post">
+				<input name="startgame" class="niceButton" style="font-size: 16px" type="submit" value="<?php echo $value[0]; ?>" />
+			</form>
 			
+			<p class="exlink"><a href="http://<?php echo $value[1];?>" alt="<?php echo $value[1];?>"> http://<?php echo $value[1];?></a></p>
+			
+			
+			<form action="index.php" method="post">
+				<input border=0 src="<?php echo $value[2];?>" type=image name="startgame" class="img" value="<?php echo $value[0]; ?>" />
+			</form>
 				  
 			</div>
 		<?php
