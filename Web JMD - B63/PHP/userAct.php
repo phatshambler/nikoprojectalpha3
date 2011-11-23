@@ -114,4 +114,21 @@
 			}
 			
 		}
+		
+		protected function inject($nomjeu, $file){
+		
+		$code = '<form action="../index.php" method="post">
+		 <input type="hidden" name="nom" value="666" />
+		 <input type="hidden" name="jeu" value="' . $nomjeu .  '" />
+		 <input id="score" type="hidden" name="score" value="" onclick="getLastScore" />
+		
+		 <input style="background-color:black;color:green" type="submit" name="envoyerscore" value="Envoyez votre dernier score" />
+		
+		 </form>';
+		
+		
+		
+		
+		}
+		
 	}
