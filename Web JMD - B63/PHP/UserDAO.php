@@ -54,6 +54,20 @@
 			return $user;
 		}
 		
+		public static function getGame($gamename){
+			$game = "";
+			
+			$games = UserDAO::loadJSON("games.txt");
+			
+			foreach ($games as $value){
+				if($value[0] === $gamename){
+				$game = $value;
+				}
+			}
+			
+			return $game;
+		}
+		
 		public static function addUser($nom, $pwd, $courriel, $createur, $admin){
 			
 			$visibility = 0;
@@ -97,8 +111,8 @@
 			//var_dump($trimmed);
 			
 			foreach($trimmed as $key => $value){
-				if(strstr($value, "<body>")){
-					$value = "<body>" . $data;
+				if(strstr($value, $position)){
+					$value = $data . $position;
 				}
 			}
 			
@@ -191,7 +205,7 @@
 					$asok[$key] = "Score: " . $asok[$key] . ", " . $asoktime[$key]["mday"] . "-" . $asoktime[$key]["month"] . "-" . $asoktime[$key]["year"] . "-" . $asoktime[$key]["hours"] . ":" . $asoktime[$key]["minutes"] . ":" . $asoktime[$key]["seconds"];
 				}
 			}
-			else if($ordre === "Mes Scores"){
+			else if($ordre === "Mes Scores(top)"){
 				
 				foreach ($asok as $key => $value) {
 					if(!strstr($key, $nomuser)){
@@ -207,8 +221,28 @@
 				
 				
 			}
+			
+			else if($ordre === "Mes Scores(date)"){
+				
+				foreach ($asok as $key => $value) {
+					if(!strstr($key, $nomuser)){
+						unset($asok[$key]);
+						unset($asoktime[$key]);
+					}
+				}
+				//arsort($asok);
+				
+				uasort($asoktime, "UserDAO::cmp");
+				
+				foreach ($asoktime as $key => $value){
+					$asoktime[$key] = "Score: " . $asok[$key] . ", " . $asoktime[$key]["mday"] . "-" . $asoktime[$key]["month"] . "-" . $asoktime[$key]["year"] . "-" . $asoktime[$key]["hours"] . ":" . $asoktime[$key]["minutes"] . ":" . $asoktime[$key]["seconds"];
+				}
+				
+				$asok = $asoktime;
+				
+			}
 			else if($ordre === "Derniers"){
-				arsort($asoktime);
+				uasort($asoktime, "UserDAO::cmp");
 				
 				foreach ($asoktime as $key => $value){
 					$asoktime[$key] = "Score: " . $asok[$key] . ", " . $asoktime[$key]["mday"] . "-" . $asoktime[$key]["month"] . "-" . $asoktime[$key]["year"] . "-" . $asoktime[$key]["hours"] . ":" . $asoktime[$key]["minutes"] . ":" . $asoktime[$key]["seconds"];
@@ -218,7 +252,7 @@
 				
 			}
 			else if($ordre === "Semaine"){
-				arsort($asoktime);
+				uasort($asoktime, "UserDAO::cmp");
 				$lastWeek = time() - (7 * 24 * 60 * 60);
 				
 				foreach($asoktime as $key =>$value){
@@ -236,7 +270,7 @@
 				
 			}
 			else if($ordre === "Mois"){
-				ksort($asoktime);
+				uasort($asoktime, "UserDAO::cmp");
 				$lastWeek = time() - (30 * 24 * 60 * 60);
 				
 				foreach($asoktime as $key =>$value){
@@ -253,10 +287,10 @@
 				
 			}
 			else if($ordre === "Annee"){
-				usort($asoktime, "UserDAO::cmp");
+				uasort($asoktime, "UserDAO::cmp");
 				$lastWeek = time() - (365 * 24 * 60 * 60);
 				
-				var_dump($asoktime);
+				//var_dump($asoktime);
 				
 				foreach($asoktime as $key =>$value){
 					if($value[0] < $lastWeek){

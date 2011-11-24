@@ -16,6 +16,8 @@
 				
 				if(isset($_POST["sender"]) && isset($_POST["site"]) && isset($_FILES["image"]) && isset($_POST["chemin"]) && isset($_FILES["fichier"])) {
 				
+				
+				if(UserDAO::getGame($_POST["gamename"]) == ""){
 				//echo "lovely";
 				
 				$content_dir = 'PHP/upload/'; // dossier où sera déplacé le fichier
@@ -67,7 +69,7 @@
 				
 				#header("location:index.php?action=succes");
 				#exit;
-				
+				}
 				}
 				
 				

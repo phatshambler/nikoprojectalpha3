@@ -159,7 +159,13 @@
 				</form>
 
 				<form class="menuscores" action="index.php" method="post">
-					<input class="niceButtonTwo" type="submit" name="order" value="Mes Scores" />
+					<input class="niceButtonTwo" type="submit" name="order" value="Mes Scores(top)" />
+				</form>
+				
+				<p></p>
+				
+				<form class="menuscores" action="index.php" method="post">
+					<input class="niceButtonTwo" type="submit" name="order" value="Mes Scores(date)" />
 				</form>
 
 				<form class="menuscores" action="index.php" method="post">
