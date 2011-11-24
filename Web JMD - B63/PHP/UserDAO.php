@@ -21,7 +21,17 @@
 			var_dump($csv);
 				for($i = 0; $i < count($csv); $i++){
 				if ($csv[$i][0] === $username && $csv[$i][1] === $password) {
-					$visibility = $csv[$i][3];
+					$visibility = 1;
+					
+					if($csv[$i][3] == true && $csv[$i][4] == false){
+					$visibility = 2;
+					}
+					else if($csv[$i][3] == false && $csv[$i][4] == true){
+					$visibility = 3;
+					}
+					else if($csv[$i][3] == true && $csv[$i][4] == true){
+					$visibility = 4;
+					}
 				}
 				}
 			}
@@ -46,26 +56,30 @@
 		
 		public static function addUser($nom, $pwd, $courriel, $createur, $admin){
 			
-			$visibility = 1;
-			if($createur === "oui"){
-				$createur = true;
-				$visibility = 2;
-			}
-			else{
-				$createur = false;
-			}
+			$visibility = 0;
 			
-			if($admin === "oui"){
-				$admin = true;
-				$visibility = 3;
+			if(UserDAO::getUser($nom) == ""){
+				$visibility = 1;
+				if($createur === "oui" $admin === "non"){
+					$true_createur = true;
+					$true_admin = false;
+					$visibility = 2;
+				}
+				if($createur === "non" $admin === "oui"){
+					$true_createur = false;
+					$true_admin = true;
+					$visibility = 3;
+				}
+				
+				if($createur === "oui" $admin === "oui"){
+					$true_createur = true;
+					$true_admin = true;
+					$visibility = 4;
+				}
+				
+				$var = array($nom, $pwd, $courriel, $visibility, $createur, $admin);
+				UserDAO::addJSON($var, "users.txt");
 			}
-			else{
-				$admin = false;
-			}
-			
-			$var = array($nom, $pwd, $courriel, $visibility, $createur, $admin);
-			UserDAO::addJSON($var, "users.txt");
-			
 			return $visibility;
 		}
 		

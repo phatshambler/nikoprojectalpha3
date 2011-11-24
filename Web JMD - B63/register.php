@@ -24,6 +24,16 @@
 			}
 		?>
 		
+		<?php
+			if ($action->errorCode != null && $action->errorCode === 103) {
+		?>
+				<div style='color:red'>
+					Cet usager existe déja.
+				</div>
+				<?php
+			}
+		?>
+		
 		<div class="spaced">
 			<label for="username">
 				Nom d'usager : 

@@ -10,6 +10,7 @@
 <p class="bold">OPTIONS</p>
 </div>
 
+<?php if($_SESSION["user_visibility"] == 2 || $_SESSION["user_visibility"] == 4){ ?>
 
 <div class="square">
 <p class="bold">AJOUTER UN JEU</p>
@@ -86,7 +87,9 @@
 
 </div>
 
-<?php if($_SESSION["user_visibility"] > 1){ ?>
+<?php }?>
+
+<?php if($_SESSION["user_visibility"] == 3 || $_SESSION["user_visibility"] == 4){ ?>
 <div class="square">
 <p class="bold">JEUX PRÉSENTS</p>
 	

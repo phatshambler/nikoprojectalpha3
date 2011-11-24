@@ -17,7 +17,10 @@
 				
 				$visibility = UserDAO::addUser($_POST["newusername"], $_POST["newpwd"], $_POST["courriel"], $_POST["createur"], $_POST["admin"]);
 				
-				if ($visibility > DefaultAct::$VISIBILITY_PUBLIC) {
+				if($visibility == 0){
+					$this->errorCode = 103;
+				}
+				else if ($visibility > DefaultAct::$VISIBILITY_PUBLIC) {
 				
 					parent::setUserCredentials($_POST["newusername"], $visibility);
 				
@@ -28,5 +31,8 @@
 					$this->errorCode = 102;
 				}
 			}
+			else {
+					$this->errorCode = 102;
+				}
 		}
 	}
