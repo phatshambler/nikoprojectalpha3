@@ -109,15 +109,15 @@
 		?>
 		<input class="niceButton" type="submit" name="removegame" value="Enlever le jeu sélectionné" />
 	</form>
-</div>
+
 <?php 
 	}
 }
 ?>
-
-<?php if($_SESSION["user_visibility"] > 1){ ?>
+</div>
+<?php if($_SESSION["user_visibility"] == 3 || $_SESSION["user_visibility"] == 4){ ?>
 <div class="square">
-<p class="bold">Liste des utilisateurs</p>
+<p class="bold">LISTE DES UTILISATEURS</p>
 	
 	<form action="user.php" method="post">
 				

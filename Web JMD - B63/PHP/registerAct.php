@@ -31,8 +31,8 @@
 					$this->errorCode = 102;
 				}
 			}
-			else {
+			else if(isset($_POST["newusername"])){
 					$this->errorCode = 102;
-				}
+			}
 		}
 	}

@@ -196,7 +196,7 @@
 				
 				foreach ($scores as $key => $value) {
 					if(is_array($value)){
-						$value = $value["mday"] . " - " . $value["month"] . " - " . $value["year"];
+						//$value = $value["mday"] . " - " . $value["month"] . " - " . $value["year"];
 					}
 					$max++;
 					if($max > 12){

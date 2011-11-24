@@ -60,52 +60,53 @@
 			
 			if(UserDAO::getUser($nom) == ""){
 				$visibility = 1;
-				if($createur === "oui" $admin === "non"){
+				if($createur === "oui" && $admin === "non"){
 					$true_createur = true;
 					$true_admin = false;
 					$visibility = 2;
 				}
-				if($createur === "non" $admin === "oui"){
+				if($createur === "non" && $admin === "oui"){
 					$true_createur = false;
 					$true_admin = true;
 					$visibility = 3;
 				}
 				
-				if($createur === "oui" $admin === "oui"){
+				if($createur === "oui" && $admin === "oui"){
 					$true_createur = true;
 					$true_admin = true;
 					$visibility = 4;
 				}
 				
-				$var = array($nom, $pwd, $courriel, $visibility, $createur, $admin);
+				$var = array($nom, $pwd, $courriel, $visibility, $true_createur, $true_admin);
 				UserDAO::addJSON($var, "users.txt");
 			}
 			return $visibility;
 		}
-		
+		/*
 		private static function createNewHiScoreFile($nomjeu){
 			$ourFileName = "PHP/InfoJeux/" . $nomjeu . ".txt";
 			$ourFileHandle = fopen($ourFileName, 'w') or die("can't open file");
 			fclose($ourFileHandle);
 
 		}
-		
+		*/
 		public static function injectIntoFile($path, $position, $data, $phpdata){
-			$ourFileName = $path . ".logged.html";
-			$ourReciever = dirname($path) . "/rec.php";
-			//var_dump($ourFileName);
-			$ourFileHandle = fopen($ourFileName, 'w') or die("can't open file");
-			$ourFileHandle2 = fopen($ourReciever, 'w') or die("can't open file");
+			
 			
 			$trimmed = file($path, FILE_USE_INCLUDE_PATH);
 			//var_dump($trimmed);
 			
 			foreach($trimmed as $key => $value){
 				if(strstr($value, "<body>")){
-					$trimmed[$key] = $trimmed[$key] . $data;
+					$value = "<body>" . $data;
 				}
 			}
 			
+			$ourFileName = $path;
+			$ourReciever = dirname($path) . "/rec.php";
+			//var_dump($ourFileName);
+			$ourFileHandle = fopen($ourFileName, 'w') or die("can't open file");
+			$ourFileHandle2 = fopen($ourReciever, 'w') or die("can't open file");
 			
 			foreach($trimmed as $value){
 				fwrite($ourFileHandle, $value);
@@ -118,7 +119,7 @@
 			return $ourFileName;
 
 		}
-		
+		/*
 		private static function addHiScores($nomjeu, $stringAnom, $stringBscore){
 		$myFile = "PHP/InfoJeux/" . $nomjeu . ".txt";
 		
@@ -152,7 +153,7 @@
 			return $theData;
 		
 		}
-
+		*/
 		public static function loadHiScoresOrdered($nomjeu, $ordre, $nomuser){
 			
 			$games = UserDAO::loadJSON("games.txt");
@@ -185,6 +186,10 @@
 			//var_dump($asok);
 			if($ordre === "Top Scores"){
 				arsort($asok);
+				
+				foreach ($asok as $key => $value){
+					$asok[$key] = "Score: " . $asok[$key] . ", " . $asoktime[$key]["mday"] . "-" . $asoktime[$key]["month"] . "-" . $asoktime[$key]["year"] . "-" . $asoktime[$key]["hours"] . ":" . $asoktime[$key]["minutes"] . ":" . $asoktime[$key]["seconds"];
+				}
 			}
 			else if($ordre === "Mes Scores"){
 				
@@ -194,9 +199,21 @@
 					}
 				}
 				arsort($asok);
+				
+				foreach ($asok as $key => $value){
+					$asok[$key] = "Score: " . $asok[$key] . ", " . $asoktime[$key]["mday"] . "-" . $asoktime[$key]["month"] . "-" . $asoktime[$key]["year"] . "-" . $asoktime[$key]["hours"] . ":" . $asoktime[$key]["minutes"] . ":" . $asoktime[$key]["seconds"];
+				}
+				
+				
+				
 			}
 			else if($ordre === "Derniers"){
 				arsort($asoktime);
+				
+				foreach ($asoktime as $key => $value){
+					$asoktime[$key] = "Score: " . $asok[$key] . ", " . $asoktime[$key]["mday"] . "-" . $asoktime[$key]["month"] . "-" . $asoktime[$key]["year"] . "-" . $asoktime[$key]["hours"] . ":" . $asoktime[$key]["minutes"] . ":" . $asoktime[$key]["seconds"];
+				}
+				
 				$asok = $asoktime;
 				
 			}
@@ -209,12 +226,17 @@
 						unset($asoktime[$key]);
 					}
 				}
+				
+				foreach ($asoktime as $key => $value){
+					$asoktime[$key] = "Score: " . $asok[$key] . ", " . $asoktime[$key]["mday"] . "-" . $asoktime[$key]["month"] . "-" . $asoktime[$key]["year"] . "-" . $asoktime[$key]["hours"] . ":" . $asoktime[$key]["minutes"] . ":" . $asoktime[$key]["seconds"];
+				}
+				
 				$asok = $asoktime;
 				//echo "winning";
 				
 			}
 			else if($ordre === "Mois"){
-				arsort($asoktime);
+				ksort($asoktime);
 				$lastWeek = time() - (30 * 24 * 60 * 60);
 				
 				foreach($asoktime as $key =>$value){
@@ -222,18 +244,30 @@
 						unset($asoktime[$key]);
 					}
 				}
+				
+				foreach ($asoktime as $key => $value){
+					$asoktime[$key] = "Score: " . $asok[$key] . ", " . $asoktime[$key]["mday"] . "-" . $asoktime[$key]["month"] . "-" . $asoktime[$key]["year"] . "-" . $asoktime[$key]["hours"] . ":" . $asoktime[$key]["minutes"] . ":" . $asoktime[$key]["seconds"];
+				}
+				
 				$asok = $asoktime;
 				
 			}
 			else if($ordre === "Annee"){
-				arsort($asoktime);
+				usort($asoktime, "UserDAO::cmp");
 				$lastWeek = time() - (365 * 24 * 60 * 60);
+				
+				var_dump($asoktime);
 				
 				foreach($asoktime as $key =>$value){
 					if($value[0] < $lastWeek){
 						unset($asoktime[$key]);
 					}
 				}
+				
+				foreach ($asoktime as $key => $value){
+					$asoktime[$key] = "Score: " . $asok[$key] . ", " . $asoktime[$key]["mday"] . "-" . $asoktime[$key]["month"] . "-" . $asoktime[$key]["year"] . "-" . $asoktime[$key]["hours"] . ":" . $asoktime[$key]["minutes"] . ":" . $asoktime[$key]["seconds"];
+				}
+				
 				$asok = $asoktime;
 				
 			}
@@ -244,6 +278,9 @@
 				return null;
 			}
 
+		}
+		private static function cmp($a, $b){ 
+			return strcmp($b['0'], $a['0']); 
 		}
 /*
 		private static function loadHiScoresCSV($nomjeu){

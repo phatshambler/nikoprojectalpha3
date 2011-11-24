@@ -61,7 +61,7 @@ function loadGame(){
 		
 		if(extra != null){
 			ship.lives += parseInt(extra);
-			alert("Bonus: 5 vies extra!);
+			alert("Bonus: 5 vies extra!");
 		}
 		var v = new Vue();
 		var m = new Modele(ship);
