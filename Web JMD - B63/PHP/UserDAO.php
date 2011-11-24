@@ -59,12 +59,15 @@
 			
 			$games = UserDAO::loadJSON("games.txt");
 			
+			if($games != ""){
+			
 			foreach ($games as $value){
 				if($value[0] === $gamename){
 				$game = $value;
 				}
 			}
 			
+			}
 			return $game;
 		}
 		
@@ -111,14 +114,15 @@
 			//var_dump($trimmed);
 			
 			foreach($trimmed as $key => $value){
-				if(strstr($value, $position)){
-					$value = $data . $position;
+				if(strstr($value, "<body>")){
+					$trimmed[$key] = "<body>" . $data;
+					break;
 				}
 			}
 			
 			$ourFileName = $path;
 			$ourReciever = dirname($path) . "/rec.php";
-			//var_dump($ourFileName);
+			//var_dump($trimmed);
 			$ourFileHandle = fopen($ourFileName, 'w') or die("can't open file");
 			$ourFileHandle2 = fopen($ourReciever, 'w') or die("can't open file");
 			

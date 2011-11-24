@@ -113,18 +113,7 @@
 		protected function inject($nomjeu, $nomjoueur, $path){
 		
 		
-		$code = '<form action="rec.php" method="post">
-		 <input type="hidden" name="nom" value="' . $nomjoueur . '" />
-		 <input type="hidden" name="jeu" value="' . $nomjeu .  '" />
-		 <input id="score" type="hidden" name="score" value=""  />
-		
-		 <input style="background-color:black;color:green" type="submit" name="envoyerscore" value="Envoyez votre dernier score" />
-		
-		 </form>
-		  
-		 
-		 
-		 ';
+		$code = '<form action="rec.php" method="post"> <input type="hidden" name="nom" value="' . $nomjoueur . '" /> <input type="hidden" name="jeu" value="' . $nomjeu .  '" /> <input id="score" type="hidden" name="score" value=""  /> <input style="background-color:black;color:green" type="submit" name="envoyerscore" value="Envoyez votre dernier score" /> </form> ';
 		
 		$phpcode = '<?php
 					
@@ -136,7 +125,7 @@
 		
 		//echo $nomjeu . "  " . $nomjoueur . "  " . $path;
 		
-		$location = UserDAO::injectIntoFile($path, "</body>", $code, $phpcode);
+		$location = UserDAO::injectIntoFile($path, "<body>", $code, $phpcode);
 		header("Location: " . $location);
 		exit;
 		

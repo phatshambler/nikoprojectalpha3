@@ -1,1 +1,0 @@
-niko;30000;niko;40000;niko;20000;niko;70000;niko;90000;niko;20000;niko;10000;paul;3000;jean;8000;

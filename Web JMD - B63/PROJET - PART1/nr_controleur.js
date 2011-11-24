@@ -57,12 +57,7 @@ function loadGame(){
 		setCookies(ship);
 		
 		//bonus
-		var extra = lisCookie("extralife");
 		
-		if(extra != null){
-			ship.lives += parseInt(extra);
-			alert("Bonus: 5 vies extra!");
-		}
 		var v = new Vue();
 		var m = new Modele(ship);
 		var d = new Date();
@@ -540,6 +535,13 @@ Controleur.prototype.deplacementSouris = function(){
 */
 Controleur.prototype.mousedown = function(e){
 	if (controleur.paused && !controleur.endgame){
+		var extra = lisCookie("extralife");
+		
+		if(extra != null && extra != 0){
+			controleur.modele.ship.lives += parseInt(extra);
+			alert("Bonus Hi-Score: " + extra + " vies extra!");
+		}
+		
 		controleur.paused = false;
 		controleur.mainloop();
 		console.log("red");
@@ -559,6 +561,9 @@ Controleur.prototype.mousedown = function(e){
 
 Controleur.prototype.mouseup = function(e){
 	if (controleur.paused && !controleur.endgame){
+	
+		
+	
 		controleur.paused = false;
 		controleur.mainloop();
 		console.log("red");
