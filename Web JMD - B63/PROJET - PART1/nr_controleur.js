@@ -429,12 +429,18 @@ Controleur.prototype.keydown = function(e) {
 			controleur.saveSlot = unicode;
 			
 		}
-		if (unicode == 27) {
+		if (unicode == 80) {
 			if(!controleur.endgame && !controleur.paused){
 			controleur.paused = true;
 			controleur.endgame = true;
 			}
 		}
+		if (unicode == 27) {
+			
+			window.location = "nr_index.html";
+			
+		}
+		
 		
 	
 }

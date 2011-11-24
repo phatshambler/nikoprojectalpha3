@@ -177,12 +177,15 @@ Vue.prototype.afficheMenu= function(score){
 		var i = "Espace/Souris-gauche pour tirer,";
 		var j = "Shift/Souris-droit pour changer de mode";
 		var k = "Cliquez pour débuter une partie";
+		var l = "(Escape en tout temps pour revenir, p pour pause)";
+		
 		//ctx.measureText(g);
 		ctx.fillText(g, 100 , 100);
 		ctx.fillText(h, 100 , 200);
 		ctx.fillText(i, 100 , 300);
 		ctx.fillText(j, 100 , 400);
 		ctx.fillText(k, 100 , 500);
+		ctx.fillText(l, 100 , 700);
 		//ctx.fillText(i, 100 , 300);
 		
 		ctx.fillText("Hi-Score: " + Math.floor(score), 100 , 600);
