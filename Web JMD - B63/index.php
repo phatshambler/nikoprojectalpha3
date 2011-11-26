@@ -91,7 +91,13 @@
         </div>
         <div class="clear"></div>
         
+		<?php if(isset($_SESSION["username"])){ ?>
+		<div class="square">
+		<p class="bold"><a href="multiplayer.php">MULTIJOUEUR: Awesome Shooter</a></p>
 		
+		</div>
+		
+		<?php } ?>
 		
 		<div class="clear"></div>
 		
