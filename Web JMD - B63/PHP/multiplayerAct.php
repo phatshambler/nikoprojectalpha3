@@ -10,6 +10,7 @@
 		public $nom_jeu_choisi;
 		public $no_jeu;
 		public $no_partie;
+		public $liste_users;
 		
 		public $user;
 		
@@ -25,22 +26,34 @@
 		
 		protected function executeAction() {
 			
-			if(!isset($this->status)){
-				$this->status = MultiplayerAction::$STATUS_OFF;
+			$this->liste_users = MagicDAO::getAllGamesStatus();
+			
+			if(!isset($_SESSION["status"])){
+				$_SESSION["status"] = MultiplayerAction::$STATUS_OFF;
 			}
 			
 			if(isset($_POST["newmulti"]) && $_POST["newmulti"] == "Awesome Shooter"){
 				echo "new game";
 				$this->nom_jeu_choisi = $_POST["newmulti"];
 				
-				$lol = MagicDAO::getAllGamesStatus();
+				//$lol = MagicDAO::getAllGamesStatus();
 				
-				var_dump($lol);
+				//var_dump($lol);
 				
-				MagicDAO::newGame($this->nom_jeu_choisi, 1 , 4, 3, $_SESSION["username"]);
+				$_SESSION["userid"] = rand();
+				$_SESSION["status"] = MultiplayerAction::$STATUS_WAITING;
+				
+				MagicDAO::newGame($this->nom_jeu_choisi, 1 , 1, $_SESSION["userid"], $_SESSION["username"]);
+				
+				$this->liste_users = MagicDAO::getAllGamesStatus();
 			
 			}
-		
+			
+			if(isset($_POST["delete"])){
+				MagicDAO::deleteRecords();
+				$_SESSION["status"] = MultiplayerAction::$STATUS_OFF;
+				$this->liste_users = MagicDAO::getAllGamesStatus();
+			}
 		
 		}
 		

@@ -68,10 +68,10 @@
 			return $result;
 		}
 		
-		public static function getAllGamesStatus (){
+		public static function getAllGamesStatus(){
 			$connection = Connection::getConnection();
 			
-			$query = "SELECT DISTINCT NOPARTIE, NOJEU, NOJOUEUR FROM current_game";
+			$query = "SELECT DISTINCT NOMJOUEUR FROM current_game";
 			
 			$statement = oci_parse($connection, $query);
 			
@@ -86,6 +86,19 @@
 			Connection::closeConnection();
 			
 			return $result;
+		}
+		
+		public static function deleteRecords (){
+			$connection = Connection::getConnection();
+			
+			$query = "DELETE FROM current_game";
+			
+			$statement = oci_parse($connection, $query);
+			
+			oci_execute($statement);
+			
+			Connection::closeConnection();
+			
 		}
 		
 		
