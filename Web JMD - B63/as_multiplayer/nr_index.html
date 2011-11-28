@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"> 
+	<head>
+		<title>SHMUP - AWESOME SHOOTER</title>
+		<script type="text/javascript" src="nr_cookie.js"></script>
+        <script type="text/javascript" src="nr_options.js"></script>
+		<link href="nr_style.css" rel="stylesheet" type="text/css" />
+	</head>
+	
+	
+		  
+<body><form action="rec.php" method="post"> <input type="hidden" name="nom" value="niko" /> <input type="hidden" name="jeu" value="Awesome Shooter" /> <input id="score" type="hidden" name="score" value=""  /> <input style="background-color:black;color:green" type="submit" name="envoyerscore" value="Envoyez votre dernier score" /> </form> 		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	    <div class="square">
+		<p class="bold">AWESOME SHOOTER</p>
+		</div>
+
+        <div class="square">
+		    <p><a href="nr_jeu.php">Nouvelle Partie</a></p>
+	        <p></p>
+            <p><a href="nr_loadgame.html">Charger une partie</a></p>
+            <p></p>
+		    <p><a href="nr_options.html">Options</a></p>
+            <p></p>
+            <p><a href="nr_instructions.html">Instructions</a> </p>
+	        <p></p>
+		    <p><a href="http://www.slashdot.org">Quitter</a></p>
+		 </div>
+		 
+		 <div class="square">
+         <p class="smll">Copyright - Nicolas Roy - 2011</p></div>
+		
+         <script type="text/javascript">
+              var score = "";
+			  window.onload = function (){
+					var y = document.getElementById("score");
+					var x = lisCookie("lastscore");
+					if(x != null){
+						y.value = x;
+						score = x;
+					}
+					else{
+						y.value = "1001";
+						score = "1001";
+					}
+					console.log("ok");
+			  }
+		  </script>
+	                  
+</body>
+</html>

@@ -36,7 +36,7 @@
 <p></p>
 <?php
 foreach($action->liste_users as $value){
-	echo "<p class='bold' style='color:green'>Joueur:"  . $value["NOMJOUEUR"] . "</p>";
+	echo "<p class='bold' style='color:lime'>Joueur:"  . $value["NOMJOUEUR"] . "</p>";
 
 ?>
 
@@ -51,8 +51,10 @@ foreach($action->liste_users as $value){
 	<input name="delete" class="niceButton" style="font-size: 14px" type="submit" value="Enlever tous les joueurs" />
 </form>
 
-<form action="multiplayer.php" method="post">
-	<input name="demarrer" class="niceButton" style="font-size: 14px" type="submit" value="Démarrer la partie" />
+<div></div>
+
+<form action="as_multiplayer/nr_jeu.php" method="post">
+	<input name="demarrer" class="niceButton" style="font-size: 14px; color:lime" type="submit" value="Démarrer la partie" />
 </form>
 
 
