@@ -45,7 +45,7 @@ foreach($action->liste_users as $value){
 ?>
 
 
-<?php if($_SESSION["status"] == MultiplayerAction::$STATUS_WAITING){ ?>
+<?php if($_SESSION["status"] >= MultiplayerAction::$STATUS_WAITING){ ?>
 
 <form action="multiplayer.php" method="post">
 	<input name="delete" class="niceButton" style="font-size: 14px" type="submit" value="Enlever tous les joueurs" />
@@ -53,16 +53,39 @@ foreach($action->liste_users as $value){
 
 <div></div>
 
+<form action="multiplayer.php" method="post">
+	<input name="lock" class="niceButton" style="font-size: 14px; color:lime" type="submit" value="Synchroniser et démarrer" />
+</form>
+
+<div></div>
+<!--
 <form action="as_multiplayer/nr_jeu.php" method="post">
 	<input name="demarrer" class="niceButton" style="font-size: 14px; color:lime" type="submit" value="Démarrer la partie" />
 </form>
-
+-->
 
 
 
 <?php }?>
 
 </div>
+
+<?php if($_SESSION["status"] == MultiplayerAction::$STATUS_LOCKED){ ?>
+
+<div class="square">
+<p class="bold">
+
+<?php 
+echo "En attente des autres utilisateurs";
+$action->start();
+?>
+
+</p>
+</div>
+
+<?php } ?>
+
+
 <?php
 	require_once("PHP/footer.php");
 ?>

@@ -11,13 +11,16 @@
 		public $no_jeu;
 		public $no_partie;
 		public $liste_users;
+		public $timeout;
 		
 		public $user;
 		
 		public static $STATUS_OFF = 0;
 		public static $STATUS_WAITING = 1;
-		public static $STATUS_STARTED = 2;
-		public static $STATUS_ENDGAME = 3;
+		public static $STATUS_LOCKED = 2;
+		public static $STATUS_RUNNING = 3;
+		public static $STATUS_PAUSED = 4;
+		public static $STATUS_ENDGAME = 5;
 		
 	
 		public function __construct() {
@@ -41,12 +44,20 @@
 				//var_dump($lol);
 				
 				$_SESSION["userid"] = rand();
+				$_SESSION["partie"] = 1;
 				$_SESSION["status"] = MultiplayerAction::$STATUS_WAITING;
 				
-				MagicDAO::newGame($this->nom_jeu_choisi, 1 , 1, $_SESSION["userid"], $_SESSION["username"]);
+				MagicDAO::newGame($this->nom_jeu_choisi, 1 , 1, $_SESSION["userid"], $_SESSION["username"], MultiplayerAction::$STATUS_WAITING);
 				
 				$this->liste_users = MagicDAO::getAllGamesStatus();
 			
+			}
+			
+			if(isset($_POST["lock"])){
+				MagicDAO::updateStatus($_SESSION["userid"], MultiplayerAction::$STATUS_LOCKED);
+				$_SESSION["status"] = MultiplayerAction::$STATUS_LOCKED;
+				$this->liste_users = MagicDAO::getAllGamesStatus();
+				$this->timeout = 10;
 			}
 			
 			if(isset($_POST["delete"])){
@@ -54,6 +65,49 @@
 				$_SESSION["status"] = MultiplayerAction::$STATUS_OFF;
 				$this->liste_users = MagicDAO::getAllGamesStatus();
 			}
+		
+		}
+		
+		public function start(){
+			/*
+			$this->timeout = intval($_GET["timeout"]) - 1;
+			
+			$errorCode = "Le jeu démarrera dans " . $this->timeout . " secondes.";
+			if($this->timeout > 0){
+			echo '<script language="Javascript">
+						<!--
+						document.location.replace("multiplayer.php?timeout='. $timeout .'");
+						// -->
+						</script>';
+						
+			}
+			else{
+			echo '<script language="Javascript">
+						<!--
+						document.location.replace("as_multiplayer/nr_jeu.php");
+						// -->
+						</script>';
+			}
+			*/
+			$lol = false;
+			while (!$lol){
+				
+				$lol = true;
+				$arr = MagicDAO::getStartingConditions($_SESSION["partie"]);
+				
+				foreach ($arr as $value){
+					if ($value["STATUS"] != MultiplayerAction::$STATUS_LOCKED){
+						$lol = false;
+					}
+				}
+				
+			}
+			echo '<script language="Javascript">
+						<!--
+						document.location.replace("as_multiplayer/nr_jeu.php");
+						// -->
+						</script>';
+			
 		
 		}
 		
