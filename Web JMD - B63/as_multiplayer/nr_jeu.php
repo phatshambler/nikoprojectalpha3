@@ -2,7 +2,7 @@
 session_start();
 require_once("GameMulti.php");
 $master = new GameMulti();
-$master->run();
+
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -28,6 +28,9 @@ $master->run();
 		<link href="nr_style.css" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
+	<?php
+	$master->run();
+	?>
 		<canvas id="canvas" style="border:1px solid black;">
 		
 		</canvas>
@@ -35,6 +38,8 @@ $master->run();
 		<script type="text/javascript">
 		//loadGame();
 		</script>
-		
+	
+	
+	
 	</body>
 </html>

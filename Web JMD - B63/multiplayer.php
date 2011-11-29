@@ -44,12 +44,13 @@ foreach($action->liste_users as $value){
 }
 ?>
 
-
-<?php if($_SESSION["status"] >= MultiplayerAction::$STATUS_WAITING){ ?>
-
 <form action="multiplayer.php" method="post">
 	<input name="delete" class="niceButton" style="font-size: 14px" type="submit" value="Enlever tous les joueurs" />
 </form>
+
+<?php if($_SESSION["status"] >= MultiplayerAction::$STATUS_WAITING){ ?>
+
+
 
 <div></div>
 

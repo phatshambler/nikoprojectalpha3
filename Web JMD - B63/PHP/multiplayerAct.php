@@ -21,7 +21,7 @@
 		public static $STATUS_RUNNING = 3;
 		public static $STATUS_PAUSED = 4;
 		public static $STATUS_ENDGAME = 5;
-		
+		public static $STATUS_EXIT = 6;
 	
 		public function __construct() {
 			parent::__construct(DefaultAct::$VISIBILITY_PUBLIC);
