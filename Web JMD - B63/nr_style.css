@@ -5,6 +5,8 @@
 		
 body{
 	background-color: #000;
+	background-image:url('bkg2.gif');
+	background-repeat:repeat-y;
 	color: Gray;
 	width: auto;
 	font-family: Calibri, Arial;
@@ -23,6 +25,7 @@ body{
 
 .square
 {
+	background-color: #333;
     display:block;
     width: 500px;
     height: auto;
@@ -32,9 +35,17 @@ body{
     
 }
 
+.center{
+	display: block;
+	margin-left: auto;   
+	margin-right: auto;
+
+}
+
 .squareNoClear
 {
     display:block;
+	background-color: #666;
     width: 200px;
     height: auto;
     margin: 20px;
@@ -56,7 +67,7 @@ body{
 .bold
 {
     font-weight:bold;
-    font-size:large;
+    font-size:1.3em;
 }
 
 .xbold
@@ -67,6 +78,7 @@ body{
 }
 
 .exlink{
+	text-align:center;
 	font-weight:bold;
     font-size:small;
 	color:Lime;
@@ -86,12 +98,12 @@ a
 
 .niceButton {
 	color: orange;
-	background-color: black;
+	background-color: #333;
 	font-weight: bold;
 	font-size: normal;
 	text-decoration:underline;
-	padding: 1px;
-	border: 1px solid black;
+	padding: 2px;
+	border: 2px solid #333;
 
 }
 
@@ -106,14 +118,25 @@ a
 }
 
 .spaced{
-	margin-bottom: 2px;
-	margin-top: 2px;
+	background-color: #333;
+	margin-bottom: 3px;
+	margin-top: 3px;
+	width: 500px;
+	clear: both;
+}
 
+.limed{
+	background-color: black;
+	color:lime;
+}
+
+.oranged{
+	color: orange;
 }
 
 .logged{
 	color: orange;
-	background-color: black;
+	background-color: #666;
 	font-size: normal;
 }
 
@@ -140,6 +163,7 @@ a
 }
 
 .container{
+	background-color: #333;
 	float:left; 
 	width:810px;
 	margin: 20px;

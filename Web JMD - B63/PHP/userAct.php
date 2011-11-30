@@ -14,7 +14,7 @@
 			
 			if (isset($_SESSION["username"])) {
 				
-				if(isset($_POST["sender"]) && isset($_POST["site"]) && isset($_FILES["image"]) && isset($_POST["chemin"]) && isset($_FILES["fichier"])) {
+				if(isset($_POST["sender"]) && isset($_POST["site"]) && isset($_POST["gamename"]) && isset($_FILES["image"]) && isset($_POST["chemin"]) && isset($_FILES["fichier"])) {
 				
 				
 				if(UserDAO::getGame($_POST["gamename"]) == ""){
@@ -26,7 +26,7 @@
 
 				if( !is_uploaded_file($tmp_file) )
 				{
-					exit("Le fichier est introuvable");
+					$this->errorCode = 105; //("Le fichier est introuvable");
 				}
 
 				// on vérifie maintenant l'extension
@@ -34,7 +34,7 @@
 
 				if( !strstr($type_file, 'jpg') && !strstr($type_file, 'jpeg') && !strstr($type_file, 'bmp') && !strstr($type_file, 'gif') && !strstr($type_file, 'png') )
 				{
-					exit("Le fichier n'est pas une image");
+					$this->errorCode = 106; //exit("Le fichier n'est pas une image");
 				}
 
 				// on copie le fichier dans le dossier de destination
@@ -43,10 +43,10 @@
 
 				if( !copy($tmp_file, $imagepath ) )
 				{
-					exit("Impossible de copier le fichier dans $content_dir");
+					$this->errorCode = 105; //exit("");
 				}
 				
-				unzip($_FILES['fichier']['tmp_name'], "PHP/upload/" . $_POST["gamename"] . "/", true, false);
+				if(unzip($_FILES['fichier']['tmp_name'], "PHP/upload/" . $_POST["gamename"] . "/", true, false)){
 				
 				$dir = $content_dir . $_POST["gamename"] . "/" . $_POST["chemin"];
 				
@@ -66,7 +66,10 @@
 				UserDAO::addJSON($newgame, "games.txt");
 				
 				$this->errorCode = 104;
-				
+				}
+				else{
+					$this->errorCode = 107;
+				}
 				#header("location:index.php?action=succes");
 				#exit;
 				}

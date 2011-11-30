@@ -10,14 +10,24 @@
 <p class="bold">OPTIONS</p>
 </div>
 
+		<?php
+			if ($action->errorCode != null && $action->errorCode === 104) {
+		?>
+				<div class="square" style='color:lime'>
+					Merci d'avoir envoyé votre jeu!
+				</div>
+				<?php
+			}
+		?>
+
 <?php if($_SESSION["user_visibility"] == 2 || $_SESSION["user_visibility"] == 4){ ?>
 
 <div class="square">
 <p class="bold">AJOUTER UN JEU</p>
-<p class="logged">Remplir tous les champs pour ajouter un jeu:</p>
+<p class="spaced logged">Remplir tous les champs pour ajouter un jeu:</p>
 <p></p>
-<p>Usager: <?php echo $_SESSION["username"]; ?></p>
-<p>Courriel: 
+<p class="spaced oranged">Usager: <?php echo $_SESSION["username"]; ?></p>
+<p class="spaced oranged">Courriel: 
 <?php 
 	$u = UserDAO::getUser($_SESSION["username"]);
 	echo $u[2];
@@ -36,14 +46,36 @@
 		?>
 		
 		<?php
-			if ($action->errorCode != null && $action->errorCode === 104) {
+			if ($action->errorCode != null && $action->errorCode === 105) {
 		?>
-				<div style='color:lime'>
-					Merci d'avoir envoyé votre jeu!
+				<div style='color:red'>
+					Le fichier image est introuvable.
 				</div>
 				<?php
 			}
 		?>
+		
+		<?php
+			if ($action->errorCode != null && $action->errorCode === 106) {
+		?>
+				<div style='color:red'>
+					Erreur avec le fichier image.
+				</div>
+				<?php
+			}
+		?>
+		
+		<?php
+			if ($action->errorCode != null && $action->errorCode === 107) {
+		?>
+				<div style='color:red'>
+					Le fichier zip est introuvable/invalide.
+				</div>
+				<?php
+			}
+		?>
+		
+		
 		
 		<div class="spaced">
 			<label for="gamenameid">
@@ -75,7 +107,7 @@
 		
 		<div class="spaced">
 			<label for="fichiersid">
-				Fichiers (sous format zip, fichiers à la racine du dossier):
+				Fichiers (sous format zip):
 			</label>
 			<input class="niceField" type="file" name="fichier" id="fichiersid" />
 		</div>
@@ -107,7 +139,7 @@
 	
 		}
 		?>
-		<input class="niceButton" type="submit" name="removegame" value="Enlever le jeu sélectionné" />
+		<input class="niceButton" style="color:yellow" type="submit" name="removegame" value="Enlever le jeu sélectionné" />
 	</form>
 
 <?php 
@@ -133,7 +165,7 @@
 	
 		}
 		?>
-		<input class="niceButton" type="submit" name="removeuser" value="Enlever l'utilisateur sélectionné" />
+		<input class="niceButton" style="color:yellow" type="submit" name="removeuser" value="Enlever l'utilisateur sélectionné" />
 	</form>
 </div>
 <?php 

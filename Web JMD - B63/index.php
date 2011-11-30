@@ -115,15 +115,15 @@
 		
 		?>
 			<div class="squareNoClear">
-			<form action="index.php" method="post">
+			<form class="center" action="index.php" method="post">
 				<input name="startgame" class="niceButton" style="font-size: 16px" type="submit" value="<?php echo $value[0]; ?>" />
 			</form>
 			
-			<p class="exlink"><a href="http://<?php echo $value[1];?>" alt="<?php echo $value[1];?>"> http://<?php echo $value[1];?></a></p>
+			<p class="exlink center"><a href="http://<?php echo $value[1];?>" alt="<?php echo $value[1];?>"> http://<?php echo $value[1];?></a></p>
 			
 			
 			<form action="index.php" method="post">
-				<input border=0 src="<?php echo $value[2];?>" type=image name="startgame" class="img" value="<?php echo $value[0]; ?>" />
+				<input border=0 src="<?php echo $value[2];?>" type=image name="startgame" class="img center" value="<?php echo $value[0]; ?>" />
 			</form>
 				  
 			</div>
@@ -215,7 +215,7 @@
 					break;
 					}
 				 ?>
-				 	<p><?php echo $key;?> : <?php echo $value;?></p>
+				 	<p class="oranged"><?php echo $key;?> : <?php echo $value;?></p>
 				 <?php
 				}
 				

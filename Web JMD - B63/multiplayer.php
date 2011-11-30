@@ -45,12 +45,22 @@ foreach($action->liste_users as $value){
 ?>
 
 <form action="multiplayer.php" method="post">
-	<input name="delete" class="niceButton" style="font-size: 14px" type="submit" value="Enlever tous les joueurs" />
+	<input name="delete" class="niceButton" style="font-size: 14px; color:lime" type="submit" value="Enlever tous les joueurs" />
 </form>
 
 <?php if($_SESSION["status"] >= MultiplayerAction::$STATUS_WAITING){ ?>
 
+<div></div>
 
+<form action="multiplayer.php" method="post">
+	<input name="reload" class="niceButton" style="font-size: 14px; color:lime" type="submit" value="Rafraichir" />
+</form>
+
+<div></div>
+
+<form action="multiplayer.php" method="post">
+	<input name="reloadme" class="niceButton" style="font-size: 14px; color:lime" type="submit" value="M'enlever de la liste" />
+</form>
 
 <div></div>
 
@@ -59,6 +69,11 @@ foreach($action->liste_users as $value){
 </form>
 
 <div></div>
+
+
+
+
+
 <!--
 <form action="as_multiplayer/nr_jeu.php" method="post">
 	<input name="demarrer" class="niceButton" style="font-size: 14px; color:lime" type="submit" value="Démarrer la partie" />
@@ -86,7 +101,8 @@ $action->start();
 
 <?php } ?>
 
-
+<div class="square"><p class="bold">NAVIGATION</p> <p><a href="index.php">Retour</a></p></div>
+</div>
 <?php
 	require_once("PHP/footer.php");
 ?>

@@ -34,6 +34,12 @@
 			if(!isset($_SESSION["status"])){
 				$_SESSION["status"] = MultiplayerAction::$STATUS_OFF;
 			}
+			if(isset($_SESSION["status"])){
+				if($_SESSION["status"] == MultiplayerAction::$STATUS_EXIT){
+				
+				}
+			}
+			
 			
 			if(isset($_POST["newmulti"]) && $_POST["newmulti"] == "Awesome Shooter"){
 				echo "new game";
@@ -61,6 +67,17 @@
 			}
 			
 			if(isset($_POST["delete"])){
+				MagicDAO::deleteRecords();
+				$_SESSION["status"] = MultiplayerAction::$STATUS_OFF;
+				$this->liste_users = MagicDAO::getAllGamesStatus();
+			}
+			
+			if(isset($_POST["reload"])){
+				
+				$this->liste_users = MagicDAO::getAllGamesStatus();
+			}
+			
+			if(isset($_POST["deleteme"])){
 				MagicDAO::deleteRecords();
 				$_SESSION["status"] = MultiplayerAction::$STATUS_OFF;
 				$this->liste_users = MagicDAO::getAllGamesStatus();
