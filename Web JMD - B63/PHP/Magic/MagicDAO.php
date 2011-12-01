@@ -14,10 +14,10 @@
 		
 		}
 		
-		public static function newGame($nomjeu, $nopartie, $nojeu, $nojoueur, $nomjoueur) {
+		public static function newGame($nomjeu, $nopartie, $nojeu, $nojoueur, $nomjoueur, $status) {
 			$connection = Connection::getConnection();
 			
-			$query = "INSERT INTO current_game (ID, SCORE, X, Y, NOMJEU, NOPARTIE, NOJEU, NOJOUEUR, NOMJOUEUR) VALUES(:id_bv, :score_bv, :x_bv, :y_bv, :nomjeu_bv, :nopartie_bv, :nojeu_bv, :nojoueur_bv, :nomjoueur_bv)";
+			$query = "INSERT INTO current_game (ID, SCORE, X, Y, NOMJEU, NOPARTIE, NOJEU, NOJOUEUR, NOMJOUEUR, STATUS) VALUES(:id_bv, :score_bv, :x_bv, :y_bv, :nomjeu_bv, :nopartie_bv, :nojeu_bv, :nojoueur_bv, :nomjoueur_bv, :status_bv)";
 
 			$statement = oci_parse($connection, $query);
 			
@@ -32,6 +32,7 @@
 			oci_bind_by_name($statement, ":nojeu_bv", $nojeu);
 			oci_bind_by_name($statement, ":nojoueur_bv", $nojoueur);
 			oci_bind_by_name($statement, ":nomjoueur_bv", $nomjoueur);
+			oci_bind_by_name($statement, ":status_bv", $status);
 			
 			if(oci_execute($statement)){
 				$result = true;
@@ -144,6 +145,22 @@
 			Connection::closeConnection();
 			
 		}
+		
+		public static function deleteMyRecords ($user){
+			$connection = Connection::getConnection();
+			
+			$query = "DELETE FROM current_game WHERE NOMJOUEUR = :pJoueur";
+			
+			$statement = oci_parse($connection, $query);
+			
+			oci_bind_by_name($statement, ":pJoueur", $user);
+			
+			oci_execute($statement);
+			
+			Connection::closeConnection();
+			
+		}
+		
 		public static function updateStatus($id, $status){
 		
 			

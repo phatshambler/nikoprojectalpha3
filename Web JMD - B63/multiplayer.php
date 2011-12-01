@@ -36,8 +36,14 @@
 <p></p>
 <?php
 foreach($action->liste_users as $value){
-	echo "<p class='bold' style='color:lime'>Joueur:"  . $value["NOMJOUEUR"] . "</p>";
-
+	
+	if(isset($value["status"]) && $value["status"] == MultiplayerAction::$STATUS_WAITING){
+		echo "<p class='bold' style='color:lime'>Joueur:"  . $value["NOMJOUEUR"];
+		echo " --- JOUEUR EN ATTENTE</p>";
+	}
+	else{
+		echo "<p class='bold' style='color:red'>Joueur:"  . $value["NOMJOUEUR"] . "</p>";
+	}
 ?>
 
 <?php
@@ -59,7 +65,7 @@ foreach($action->liste_users as $value){
 <div></div>
 
 <form action="multiplayer.php" method="post">
-	<input name="reloadme" class="niceButton" style="font-size: 14px; color:lime" type="submit" value="M'enlever de la liste" />
+	<input name="deleteme" class="niceButton" style="font-size: 14px; color:lime" type="submit" value="M'enlever de la liste" />
 </form>
 
 <div></div>
