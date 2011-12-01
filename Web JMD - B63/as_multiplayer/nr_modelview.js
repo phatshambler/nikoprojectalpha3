@@ -134,6 +134,27 @@ Vue.prototype.afficheMetaObject= function(liste, sizex, sizey){
 
 }
 
+Vue.prototype.afficheMultiShips= function(liste, sizex, sizey){
+	var canvas = document.getElementById("canvas");
+    if (canvas.getContext) {  
+		var ctx = canvas.getContext("2d");
+		
+				if(liste.x != 0  && liste.y != 0){
+				//console.log("winning");
+				//console.log(liste.color + " " + liste.x + " " + liste.y);
+				ctx.fillStyle = liste.color;
+				ctx.beginPath();
+				ctx.arc(liste.x, liste.y, sizex,0,2*Math.PI,false);
+				ctx.fill();
+				ctx.closePath();
+				}
+	}
+
+}
+	
+
+
+
 Vue.prototype.affichePower= function(liste, sizex, sizey){
     var canvas = document.getElementById("canvas");
     if (canvas.getContext) {  
@@ -191,5 +212,49 @@ Vue.prototype.afficheMenu= function(score){
 		ctx.fillText("Hi-Score: " + Math.floor(score), 100 , 600);
 	}
 
+}
+
+Vue.prototype.afficheMulti= function(liste){
+    var canvas = document.getElementById("canvas");
+    if (canvas.getContext) {
+		var ctx = canvas.getContext("2d");
+		
+		//controleur.modele.ship.selfCheck();
+		//console.log(liste);
+		ctx.font = 'normal 30px sans-serif';
+		var i = "";
+		var hauteur = 500;
+		var couleur = 100;
+		
+		ctx.fillStyle = "rgba(" + couleur + "," + couleur + "," + couleur + ", 0.9)";
+		ctx.fillText("STATS:::MULTI", 20 , hauteur);
+		hauteur += 30;
+		ctx.fillText("0o0o0o0o0o0o0", 20 , hauteur);
+		hauteur += 30;
+		couleur += 20;
+		
+		for (x in liste){
+		ctx.fillStyle = "rgba(" + couleur + "," + couleur + "," + couleur + ", 0.9)";
+		//console.log(liste[x]);
+			
+			ctx.fillText(liste[x]["NOMJOUEUR"], 20 , hauteur);
+			hauteur += 30;
+			ctx.fillText(liste[x]["SCORE"], 20 , hauteur);
+			hauteur += 30;
+			//ctx.fillText(currentuser, 20 , hauteur);
+			//hauteur += 30;
+			
+			if(liste[x]["NOMJOUEUR"] != currentuser){
+			
+			liste[x].x = liste[x]["X"];
+			liste[x].y = liste[x]["Y"];
+			liste[x].color = "rgba(" + couleur + "," + couleur + "," + couleur + ", 0.7)";
+			console.log(liste[x].x);
+			console.log(liste[x].y);
+			controleur.vue.afficheMultiShips(liste[x], 20, 20);
+			couleur += 40;
+			}
+		}
+	}
 }
 

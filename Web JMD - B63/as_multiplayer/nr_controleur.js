@@ -71,10 +71,15 @@ function loadGame(){
 		document.onmousedown = controleur.mousedown;
 		document.onmouseup = controleur.mouseup;
 		
-		controleur.vue.afficheMenu(ship.lastHiScore);
+		controleur.display = true;
+		controleur.paused = false;
+		
+		updateUser();
+		
+		controleur.mainloop();
 		console.log("Voici votre nouveau Controleur "+controleur);
 		
-		lalagame();
+		//lalagame();
 	}else{
 		console.log("...!");
 	}
@@ -130,6 +135,8 @@ function setCookies(ship){
 function Controleur(vue,modele,date){
 	this.vue=vue;
 	this.modele=modele;
+	
+	this.listemulti = "";
 	
 	this.leftKey = false;
 	this.rightKey = false;
@@ -207,6 +214,8 @@ function masterloop(){
 			
 			controleur.vue.afficheMetaObject(controleur.modele.arrayStars, constants.STARS_SIZE_X,constants.STARS_SIZE_Y );
 			
+			controleur.vue.afficheMulti(controleur.listemulti);
+			
 			controleur.frame++;
 		}
 		
@@ -240,9 +249,10 @@ function masterloop(){
 */
 Controleur.prototype.newItems = function(){
 		
-		if(controleur.frame % 10 == 0){
+		//updateScore(controleur.modele.ship.hiscore, controleur.modele.ship.x, controleur.modele.ship.y);
+		if(controleur.frame % 5 == 0){
 			
-			updateScore(controleur.modele.ship.hiscore, controleur.modele.ship.x, controleur.modele.ship.x);
+			updateScore(controleur.modele.ship.hiscore, controleur.modele.ship.x, controleur.modele.ship.y);
 			
 		}
 		

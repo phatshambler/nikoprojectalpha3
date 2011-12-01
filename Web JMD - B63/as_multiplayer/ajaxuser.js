@@ -1,10 +1,7 @@
-function updateScore(str, x, y)
+var currentuser = "";
+
+function updateUser()
 {
-if (str=="")
-  {
-  document.getElementById("txtHint").innerHTML="";
-  return;
-  } 
 if (window.XMLHttpRequest)
   {// code for IE7+, Firefox, Chrome, Opera, Safari
   xmlhttp=new XMLHttpRequest();
@@ -20,14 +17,14 @@ xmlhttp.onreadystatechange=function()
     {
     //document.getElementById("txtHint").innerHTML=xmlhttp.responseText;
 	//console.log(xmlhttp.responseText);
-	var liste = JSON.parse(xmlhttp.responseText);
+	currentuser = xmlhttp.responseText;
 	
-	controleur.listemulti = liste;
+	//controleur.listemulti = liste;
     }
   }
   
-xmlhttp.open("POST", "updatescore.php",true);
+xmlhttp.open("POST", "getuser.php",true);
 /* Effectue la requête en envoyant les données : */
 xmlhttp.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-xmlhttp.send("var1=" + str + "&var2=" + x + "&var3=" + y);
+xmlhttp.send("var1=0");
 }

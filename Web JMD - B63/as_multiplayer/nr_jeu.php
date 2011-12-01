@@ -24,6 +24,7 @@ $master = new GameMulti();
 		<script type="text/javascript" src="nr_star.js"></script>
 		<script type="text/javascript" src="nr_powerup.js"></script>
 		<script type="text/javascript" src="ajax.js"></script>
+		<script type="text/javascript" src="ajaxuser.js"></script>
 		
 		<link href="nr_style.css" rel="stylesheet" type="text/css" />
 	</head>
