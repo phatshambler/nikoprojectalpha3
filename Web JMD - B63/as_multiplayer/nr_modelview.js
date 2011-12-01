@@ -258,3 +258,54 @@ Vue.prototype.afficheMulti= function(liste){
 	}
 }
 
+Vue.prototype.afficheEndGame= function(liste){
+    var canvas = document.getElementById("canvas");
+    if (canvas.getContext) {
+		var ctx = canvas.getContext("2d");
+		ctx.clearRect(0,0,constants.MAX_X,constants.MAX_Y);
+		//controleur.modele.ship.selfCheck();
+		//console.log(liste);
+		ctx.font = 'normal 30px sans-serif';
+		var i = "";
+		var hauteur = 400;
+		var couleur = 100;
+		
+		ctx.fillStyle = "rgba(" + couleur + "," + couleur + "," + couleur + ", 0.9)";
+		ctx.fillText("VOUS ÊTES MORT!", 20 , hauteur);
+		hauteur += 30;
+		ctx.fillStyle = "rgba(" + couleur + "," + couleur + "," + couleur + ", 0.9)";
+		ctx.fillText("Appuyez sur quitter pour revenir au menu principal...", 20 , hauteur);
+		hauteur += 70;
+		
+		ctx.fillStyle = "rgba(" + couleur + "," + couleur + "," + couleur + ", 0.9)";
+		ctx.fillText("STATS:::MULTI", 20 , hauteur);
+		hauteur += 30;
+		ctx.fillText("0o0o0o0o0o0o0", 20 , hauteur);
+		hauteur += 30;
+		couleur += 20;
+		
+		for (x in liste){
+		ctx.fillStyle = "rgba(" + couleur + "," + couleur + "," + couleur + ", 0.9)";
+		//console.log(liste[x]);
+			
+			ctx.fillText(liste[x]["NOMJOUEUR"], 20 , hauteur);
+			hauteur += 30;
+			ctx.fillText(liste[x]["SCORE"], 20 , hauteur);
+			hauteur += 30;
+			//ctx.fillText(currentuser, 20 , hauteur);
+			//hauteur += 30;
+			
+			if(liste[x]["NOMJOUEUR"] != currentuser){
+			
+			liste[x].x = liste[x]["X"];
+			liste[x].y = liste[x]["Y"];
+			liste[x].color = "rgba(" + couleur + "," + couleur + "," + couleur + ", 0.7)";
+			console.log(liste[x].x);
+			console.log(liste[x].y);
+			controleur.vue.afficheMultiShips(liste[x], 20, 20);
+			couleur += 40;
+			}
+		}
+	}
+}
+

@@ -55,7 +55,7 @@ function loadGame(){
 		var ship = new Ship(Math.floor(constants.MAX_X / 2), constants.MAX_Y - 100);
 		
 		setCookies(ship);
-		
+		ship.lives = 1;
 		//bonus
 		
 		var v = new Vue();
@@ -233,9 +233,16 @@ function masterloop(){
 			
 			
 			
-			window.location.search = "";
-			controleur = "";
-			loadGame();
+			//window.location.search = "";
+			controleur.paused = true;
+			controleur.display = false;
+			
+			
+			sleeping();
+			
+			//controleur = "";
+			//loadGame();
+			
 			constants.ENEMYA_SPEED = 2;
 			constants.ENEMYB_SPEED = 4;
 			constants.ENEMYC_SPEED = 3;
@@ -243,6 +250,15 @@ function masterloop(){
 			
 		}
 }
+
+function sleeping(){
+				
+				//console.log("lala")
+				controleur.vue.afficheEndGame(controleur.listemulti);
+				updateScore(controleur.modele.ship.hiscore, controleur.modele.ship.x, controleur.modele.ship.y);
+				setTimeout(sleeping, 200);
+				
+			}
 
 /*
 	Contrôle la création des nouveaux items en haut de l'écran

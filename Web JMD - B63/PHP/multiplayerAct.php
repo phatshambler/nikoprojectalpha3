@@ -12,6 +12,7 @@
 		public $no_partie;
 		public $liste_users;
 		public $timeout;
+		public $finalScores;
 		
 		public $user;
 		
@@ -36,7 +37,7 @@
 			}
 			if(isset($_SESSION["status"])){
 				if($_SESSION["status"] == MultiplayerAction::$STATUS_EXIT){
-				
+					$this->finalScores = MagicDAO::getEndingConditions(1);
 				}
 			}
 			

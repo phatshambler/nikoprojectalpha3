@@ -110,6 +110,28 @@
 			return $result;
 		}
 		
+		public static function getEndingConditions($game){
+			$connection = Connection::getConnection();
+			
+			$query = "SELECT DISTINCT NOMJOUEUR, SCORE FROM current_game WHERE NOPARTIE = :pGame";
+			
+			$statement = oci_parse($connection, $query);
+			
+			oci_bind_by_name($statement, ":pGame", $game);
+			
+			oci_execute($statement);
+			
+			$result = array();
+			
+			while (($row = oci_fetch_array($statement, OCI_ASSOC))) {
+				array_push($result, $row);
+			}
+			
+			Connection::closeConnection();
+			
+			return $result;
+		}
+		
 		public static function deleteRecords (){
 			$connection = Connection::getConnection();
 			

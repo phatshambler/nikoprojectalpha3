@@ -11,7 +11,7 @@
 		public function run() {
 			
 			if(isset($_SESSION["userid"]) && isset($_SESSION["status"]) && isset($_SESSION["username"])){
-				echo "<p>" . $_SESSION["username"] . "-" . $_SESSION["userid"] . " Status:" . $_SESSION["status"] . "</p>";
+				//echo "<p>" . $_SESSION["username"] . "-" . $_SESSION["userid"] . " Status:" . $_SESSION["status"] . "</p>";
 				echo "<p id='txtHint'>lala</p>";
 				echo '<form action="nr_jeu.php" method="post">
 				<input name="unlock" class="niceButton" style="font-size: 14px; color:lime; background-color:black" type="submit" value="Quitter" />

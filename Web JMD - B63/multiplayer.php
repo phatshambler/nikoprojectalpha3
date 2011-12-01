@@ -101,6 +101,33 @@ $action->start();
 
 <?php } ?>
 
+<?php if($_SESSION["status"] == MultiplayerAction::$STATUS_EXIT){ ?>
+
+<div class="square">
+<p class="bold">
+
+<?php 
+echo "FIN DU JEU";
+
+?>
+
+</p>
+
+<p>
+<?php foreach ($action->finalScores as $value){
+
+foreach ($value as $x){
+
+echo $x . " - ";
+
+}
+}
+?>
+</p>
+</div>
+
+<?php } ?>
+
 <div class="square"><p class="bold">NAVIGATION</p> <p><a href="index.php">Retour</a></p></div>
 </div>
 <?php
