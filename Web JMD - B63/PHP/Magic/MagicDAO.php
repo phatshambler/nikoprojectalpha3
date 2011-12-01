@@ -89,6 +89,35 @@
 			return $result;
 		}
 		
+		public static function getLockedStatus($username){
+			$connection = Connection::getConnection();
+			
+			$query = "SELECT STATUS FROM current_game WHERE NOMJOUEUR = :pUsername";
+			
+			$statement = oci_parse($connection, $query);
+			
+			oci_bind_by_name($statement, ":pUsername", $username);
+			
+			oci_execute($statement);
+			
+			$result = array();
+			
+			while (($row = oci_fetch_array($statement, OCI_ASSOC))) {
+				array_push($result, $row);
+			}
+			
+			
+			Connection::closeConnection();
+			
+			if($result[0]["STATUS"] == 2){ ///2 == MultiplayerAction::$STATUS_LOCKED
+				return true;
+			}
+			else{
+				return false;
+			}
+			
+		}
+		
 		public static function getStartingConditions($game){
 			$connection = Connection::getConnection();
 			

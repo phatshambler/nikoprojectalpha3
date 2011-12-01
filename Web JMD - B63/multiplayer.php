@@ -13,7 +13,7 @@
 
 <p class="bold">Liste des jeux disponibles</p>
 
-<?php if($_SESSION["status"] == MultiplayerAction::$STATUS_OFF){ ?>
+<?php if(!$action->testInListe()){ ?>
 
 <p class="logged">Enregistrez-vous</p>
 
@@ -36,8 +36,9 @@
 <p></p>
 <?php
 foreach($action->liste_users as $value){
+	$test = $action->testLocked($value["NOMJOUEUR"]);
 	
-	if(isset($value["status"]) && $value["status"] == MultiplayerAction::$STATUS_WAITING){
+	if($test){
 		echo "<p class='bold' style='color:lime'>Joueur:"  . $value["NOMJOUEUR"];
 		echo " --- JOUEUR EN ATTENTE</p>";
 	}
@@ -122,11 +123,12 @@ echo "FIN DU JEU";
 <p>
 <?php foreach ($action->finalScores as $value){
 
-foreach ($value as $x){
+foreach ($value as $key => $x){
 
-echo $x . " - ";
+echo "<p style='color:orange; font-weight:bold'>" . $key . ":  " . $x . "</p>";
 
 }
+echo "<p style='color:orange; font-weight:bold'> --- </p>";
 }
 ?>
 </p>

@@ -37,14 +37,17 @@
 			}
 			else{
 				$arr = MagicDAO::getMyGamesStatus($_SESSION["username"]);
-				var_dump($_SESSION["username"]);
-				var_dump($arr);
-				$_SESSION["status"] = $arr[0]["STATUS"];
+				//var_dump($_SESSION["username"]);
+				//var_dump($arr);
+				if(isset($arr[0])){
+					$_SESSION["status"] = $arr[0]["STATUS"];
+				}
 			}
 			
 			if(isset($_SESSION["status"])){
 				if($_SESSION["status"] == MultiplayerAction::$STATUS_EXIT){
 					$this->finalScores = MagicDAO::getEndingConditions(1);
+					arsort($this->finalScores);
 				}
 			}
 			
@@ -96,26 +99,7 @@
 		}
 		
 		public function start(){
-			/*
-			$this->timeout = intval($_GET["timeout"]) - 1;
 			
-			$errorCode = "Le jeu démarrera dans " . $this->timeout . " secondes.";
-			if($this->timeout > 0){
-			echo '<script language="Javascript">
-						<!--
-						document.location.replace("multiplayer.php?timeout='. $timeout .'");
-						// -->
-						</script>';
-						
-			}
-			else{
-			echo '<script language="Javascript">
-						<!--
-						document.location.replace("as_multiplayer/nr_jeu.php");
-						// -->
-						</script>';
-			}
-			*/
 			$lol = false;
 			while (!$lol){
 				
@@ -136,6 +120,21 @@
 						</script>';
 			
 		
+		}
+		
+		public function testInListe(){
+			$arr = MagicDAO::getMyGamesStatus($_SESSION["username"]);
+			
+			if(isset($arr[0]) && $arr[0] != null){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		
+		public function testLocked($username){
+			return MagicDAO::getLockedStatus($username);
 		}
 		
 	}
