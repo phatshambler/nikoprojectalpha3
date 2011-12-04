@@ -381,6 +381,26 @@
 			return $result;
 		}
 		
+		public static function getUsers(){
+			$connection = Connection::getConnection();
+			
+			$query = "SELECT NOAUDITEUR, CODEAUDITEUR, NOM, PRENOM FROM P_AUDITEUR ORDER BY NOAUDITEUR";
+
+			$statement = oci_parse($connection, $query);
+			
+			oci_execute($statement);
+			
+			$result = array();
+			
+			while (($row = oci_fetch_array($statement, OCI_ASSOC))) {
+				array_push($result, $row);
+			}
+			
+			Connection::closeConnection();
+			
+			return $result;
+		}
+		
 		public static function updateJuge($username, $judgement) {
 			$connection = Connection::getConnection();
 			
@@ -459,15 +479,7 @@
 			while (($row = oci_fetch_array($statement, OCI_ASSOC))) {
 				array_push($result, $row);
 			}
-			/*
-			if($result != null){
-			foreach($result as $key => $value){
-				if(is_int($key)){
-					unset($result[$key]);
-				}
-			}
-			}
-			*/
+			
 			Connection::closeConnection();
 			
 			return $result;
@@ -801,6 +813,56 @@
 			Connection::closeConnection();
 			
 			return $result;
+		}
+		
+	public static function removeEval($auditeur){
+			$connection = Connection::getConnection();
+			
+			$query = "DELETE FROM P_EVALUATION WHERE NOAUDITEUR = :pUsername";
+
+			$statement = oci_parse($connection, $query);
+
+			oci_bind_by_name($statement, ":pUsername", $auditeur);
+			
+			if(oci_execute($statement)){
+				$result = true;
+			}
+			else{
+				$result = false;
+			}
+			
+			Connection::closeConnection();
+			
+			return $result;
+			
+		}
+		
+	public static function createEval($auditeur, $atelier, $nocritere){
+			$connection = Connection::getConnection();
+			
+			$query = "SELECT * FROM P_EVALUATION WHERE NOAUDITEUR = :pUsername AND NOATEL = :pAtel AND NOCRITERE = :pCritere";
+
+			$statement = oci_parse($connection, $query);
+
+			oci_bind_by_name($statement, ":pUsername", $auditeur);
+			oci_bind_by_name($statement, ":pAtel", $atelier);
+			oci_bind_by_name($statement, ":pCritere", $nocritere);
+			oci_execute($statement);
+			
+			$result = array();
+			
+			while (($row = oci_fetch_array($statement, OCI_ASSOC))) {
+				array_push($result, $row);
+			}
+			
+			Connection::closeConnection();
+			
+			if(count($result) > 0){
+				return $result;
+			}
+			else{
+				return null;
+			}
 		}
 	}
 	

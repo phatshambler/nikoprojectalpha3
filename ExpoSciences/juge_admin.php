@@ -18,8 +18,8 @@
 			<?php
 			if ($action->errorCode != null && $action->errorCode === 101) {
 			?>
-				<div style="color:red">
-					Erreur!
+				<div class="square" style="color:red">
+					<p class="bold">Erreur!</p>
 				</div>
 			<?php
 			}
@@ -28,13 +28,13 @@
 			<?php
 			if ($action->errorCode != null && $action->errorCode === 102) {
 			?>
-				<div style="color:green">
-					Succès!
+				<div class="square" style="color:green">
+					<p class="bold" >Succès! </p>
 				</div>
 			<?php
 			}
 			?>
-			
+			<div class="clear"></div>
 			
 			<form action="juge_admin.php" method="post">
 			<?php

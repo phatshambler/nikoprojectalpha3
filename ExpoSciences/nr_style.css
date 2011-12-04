@@ -21,6 +21,10 @@ body{
 	clear: both;
 }
 
+.float{
+	float: left;
+}
+
 .square
 {
     display:block;

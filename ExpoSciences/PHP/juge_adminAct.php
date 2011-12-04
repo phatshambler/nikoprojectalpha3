@@ -15,7 +15,7 @@
 		
 		
 		if(isset($_POST["modjuge"]) && $_POST["modjuge"] != ""){
-			echo "lol";
+			//echo "lol";
 			
 			foreach($this->content as $key => $value){
 				//var_dump($value);
@@ -31,6 +31,7 @@
 				else{
 						//echo "non: " . $value["CODEAUDITEUR"] . "<br>";
 						UserDAO::updateJuge($value["CODEAUDITEUR"], false);
+						UserDAO::removeEval($value["NOAUDITEUR"]);
 				}
 			
 			}
