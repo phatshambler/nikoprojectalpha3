@@ -17,6 +17,10 @@ body{
 	width: auto;
 }
 
+.clear{
+	clear: both;
+}
+
 .square
 {
     display:block;

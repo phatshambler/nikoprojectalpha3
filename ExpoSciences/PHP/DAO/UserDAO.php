@@ -200,6 +200,41 @@
 			
 		}
 		
+		public static function updateAuditeur($codeaudit, $nom, $prenom, $statut, $candidatjuge) {
+			$connection = Connection::getConnection();
+			
+			$query = "UPDATE p_auditeur SET NOM = :nom_bv, PRENOM = :prenom_bv, STATUT = :statut_bv, CANDIDATJUGE = TO_DATE(:candidatjuge_bv, 'DDMMYYYY') WHERE CODEAUDITEUR = :code_bv";
+
+			$statement = oci_parse($connection, $query);
+			
+			if($candidatjuge == "Oui"){
+			$candidatjuge = date("dmY");
+			}
+			else{
+			$candidatjuge = null;
+			}
+			
+			
+			oci_bind_by_name($statement, ":code_bv", $codeaudit);
+			oci_bind_by_name($statement, ":nom_bv", $nom);
+			oci_bind_by_name($statement, ":prenom_bv", $prenom);
+			oci_bind_by_name($statement, ":statut_bv", $statut);
+			oci_bind_by_name($statement, ":candidatjuge_bv", $candidatjuge);
+			
+			if(oci_execute($statement)){
+				$result = true;
+			}
+			else{
+				$result = false;
+			}
+			
+			
+			Connection::closeConnection();
+			
+			return $result;
+			
+		}
+		
 		public static function newCoord($nocoord, $rue, $ville, $code_postal, $noregion, $telephone, $cell, $courriel) {
 			$connection = Connection::getConnection();
 			
@@ -207,6 +242,35 @@
 
 			$statement = oci_parse($connection, $query);
 			
+			
+			oci_bind_by_name($statement, ":one_bv", $nocoord);
+			oci_bind_by_name($statement, ":two_bv", $rue);
+			oci_bind_by_name($statement, ":three_bv", $ville);
+			oci_bind_by_name($statement, ":four_bv", $code_postal);
+			oci_bind_by_name($statement, ":five_bv", $noregion);
+			oci_bind_by_name($statement, ":six_bv", $telephone);
+			oci_bind_by_name($statement, ":seven_bv", $cell);
+			oci_bind_by_name($statement, ":eight_bv", $courriel);
+			
+			if(oci_execute($statement)){
+				$result = true;
+			}
+			else{
+				$result = false;
+			}
+			
+			
+			Connection::closeConnection();
+			
+			return $result;
+		}
+		
+		public static function updateCoord($nocoord, $rue, $ville, $code_postal, $noregion, $telephone, $cell, $courriel) {
+			$connection = Connection::getConnection();
+			
+			$query = "UPDATE p_coordonnees SET RUE = :two_bv, VILLE = :three_bv, CODE_POSTAL = :four_bv, NOREGION = :five_bv, TELEPHONE = :six_bv, CELL = :seven_bv, COURRIEL = :eight_bv WHERE NOCOORD = :one_bv";
+
+			$statement = oci_parse($connection, $query);
 			
 			oci_bind_by_name($statement, ":one_bv", $nocoord);
 			oci_bind_by_name($statement, ":two_bv", $rue);
@@ -360,6 +424,7 @@
 			else{
 				$juge = null;
 			}
+			//var_dump($juge);
 			
 			oci_bind_by_name($statement, ":pUsername", $username);
 			oci_bind_by_name($statement, ":juge_bv", $juge);
@@ -704,6 +769,26 @@
 
 			oci_bind_by_name($statement, ":pUsername", $auditeur);
 			oci_bind_by_name($statement, ":pAtel", $atelier);
+			
+			oci_execute($statement);
+			
+			$result = array();
+			
+			while (($row = oci_fetch_array($statement, OCI_ASSOC))) {
+				array_push($result, $row);
+			}
+			
+			Connection::closeConnection();
+			
+			return $result;
+		}
+		
+	public static function getTableAdminJuge(){
+			$connection = Connection::getConnection();
+			
+			$query = "SELECT NOAUDITEUR, CODEAUDITEUR, NOM, PRENOM, JUGE FROM P_AUDITEUR ORDER BY NOAUDITEUR";
+
+			$statement = oci_parse($connection, $query);
 			
 			oci_execute($statement);
 			
