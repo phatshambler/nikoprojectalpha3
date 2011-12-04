@@ -13,7 +13,6 @@
 <?php if(isset($_SESSION["administrator"]) && $_SESSION["administrator"] === true){
 			
 ?>
-<<<<<<< HEAD
 		<p class="bold">Choissisez un utilisateur à modifier:</p>
 		
 		<?php
@@ -35,11 +34,8 @@
 			}
 		
 		?>
-		
-=======
-		<p>hello</p>
 
->>>>>>> d7d80d335103df9ade994bec2d53bba96f03005e
+
 			<?php
 		}
 ?>
