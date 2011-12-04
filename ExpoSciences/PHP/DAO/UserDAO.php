@@ -384,9 +384,17 @@
 		public static function getUsers(){
 			$connection = Connection::getConnection();
 			
+<<<<<<< HEAD
 			$query = "SELECT NOAUDITEUR, CODEAUDITEUR, NOM, PRENOM FROM P_AUDITEUR ORDER BY NOAUDITEUR";
 
 			$statement = oci_parse($connection, $query);
+=======
+			$query = "SELECT * FROM P_AUDITEUR WHERE CODEAUDITEUR = :pUsername";
+
+			$statement = oci_parse($connection, $query);
+
+			oci_bind_by_name($statement, ":pUsername", $username);
+>>>>>>> d7d80d335103df9ade994bec2d53bba96f03005e
 			
 			oci_execute($statement);
 			
