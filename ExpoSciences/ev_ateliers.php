@@ -80,11 +80,29 @@ function loadEv(){
 						<?php
 					
 					foreach($action->ateliersIns[$i] as $keyB => $valueB){
-						echo $keyB;
-						echo ":";
-						echo $valueB;
-						echo " ";
 						
+						if($keyB === "NOTES"){
+						echo "<p class='bold'>(NOTES PRÉCÉDENTES: ";
+							foreach($action->ateliersIns[$i]["NOTES"] as $value){
+								if($value != null){
+								foreach($value as $finalvalue){
+									if(isset($finalvalue) && isset($finalvalue["COTE"]) && isset($finalvalue["NOCRITERE"])){
+									echo $finalvalue["NOCRITERE"];
+									echo ":";
+									echo $finalvalue["COTE"];
+									echo " ";
+									}
+								}
+								}
+							}
+						echo ")</p>";
+						}
+						else{
+							echo $keyB;
+							echo ":";
+							echo $valueB;
+							echo " ";
+						}
 					}
 					?></p><?php
 				
