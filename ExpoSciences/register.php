@@ -5,6 +5,8 @@
 	$action->execute();
 
 	require_once("PHP/header.php");
+	
+	//var_dump($action->oldval);
 ?>
 
 		<div id="top" class="square">
@@ -39,6 +41,35 @@
 			}
 		?>
 		
+		<?php
+			if ($action->errorCode != null && $action->errorCode === 109) {
+		?>
+				<div style='color:red'>
+					Ce code postal est incorrect.
+				</div>
+				<?php
+			}
+		?>
+		
+		<?php
+			if ($action->errorCode != null && $action->errorCode === 110) {
+		?>
+				<div style='color:red'>
+					Ce téléphone est incorrect.
+				</div>
+				<?php
+			}
+		?>
+		
+		<?php
+			if ($action->errorCode != null && $action->errorCode === 111) {
+		?>
+				<div style='color:red'>
+					Ce téléphone cellulaire est incorrect.
+				</div>
+				<?php
+			}
+		?>
 		
 		<?php if(!isset($_SESSION["username"])){
 		
@@ -96,7 +127,11 @@
 			}
 			if($key === "CODEAUDITEUR"){
 			echo ' maxlength=7 ';
-			}	
+			}
+			
+			if(isset($action->oldval[$key])){
+			echo ' value="' . $action->oldval[$key] . '" ';
+			}
 			?>
 			
 			/>
@@ -118,7 +153,7 @@
 				<?php echo $key?>
 				<?php
 				if($key === "TELEPHONE" || $key === "CELL"){
-					echo '(Format: seulement les chiffres) ';
+					echo '(Format: 555-666-7777) ';
 				}
 				if($key === "CODE_POSTAL"){
 					echo '(Format: 6 lettres et chiffres) ';
@@ -158,11 +193,16 @@
 			echo ' readonly="readonly" style="background-color: grey" ';
 			}			
 			else if($key === "TELEPHONE" || $key === "CELL"){
-			echo ' maxlength=10 ';
+			echo ' maxlength=13 ';
 			}
 			else if($key === "CODE_POSTAL"){
 			echo ' maxlength=6 ';
 			}
+			
+			if(isset($action->oldval[$key])){
+			echo ' value="' . $action->oldval[$key] . '" ';
+			}
+			
 			?>
 			/>
 			</div>

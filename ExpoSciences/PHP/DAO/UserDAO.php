@@ -163,6 +163,7 @@
 
 			$statement = oci_parse($connection, $query);
 			
+			
 			if($juge === "Oui"){
 			$juge = date("dmY");
 			}
@@ -242,6 +243,10 @@
 
 			$statement = oci_parse($connection, $query);
 			
+			$telephone = ereg_replace("[^A-Za-z0-9]", "", $telephone);
+			$cell = ereg_replace("[^A-Za-z0-9]", "", $cell);
+			
+			//var_dump($telephone);
 			
 			oci_bind_by_name($statement, ":one_bv", $nocoord);
 			oci_bind_by_name($statement, ":two_bv", $rue);
