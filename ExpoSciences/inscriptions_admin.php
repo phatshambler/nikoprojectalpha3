@@ -1,23 +1,26 @@
 <?php
-	require_once("PHP/atel_adminAct.php");
+	require_once("PHP/inscriptions_adminAct.php");
 	
-	$action = new AtelAdminAction();
+	$action = new InscriptionAdminAction();
 	$action->execute();
 
 	require_once("PHP/header.php");
 ?>
 
 <div class="square">
-<p class="xbold">Modification des notes</p>
+<p class="xbold">Modification des inscriptions</p>
 </div>
 
+
 <div class="clear"></div>
+
 <div class="square">
+
 <?php if(isset($_SESSION["administrator"]) && $_SESSION["administrator"] === true){
 			
 ?>
-		<p class="bold">Choissisez un utilisateur à modifier:</p>
-		<form action="atel_admin.php" method="post">
+		<p class="bold" style="color:orange">Choissisez un utilisateur à modifier:</p>
+		<form action="inscriptions_admin.php" method="post">
 		<?php
 			foreach($action->contentUsers as $keyone => $value){
 			
@@ -29,9 +32,7 @@
 				<?php
 				foreach($value as $key => $data){
 				?>
-				
-						
-				
+								
 					 <?php echo $key . ": " . $data . ". ";?>
 				
 				<?php

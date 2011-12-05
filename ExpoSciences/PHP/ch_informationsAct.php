@@ -3,7 +3,8 @@
 
 	class InformationsAction extends DefaultAct {
 		public $errorCode;
-		
+		public $userInfos;
+		public $userCoords;
 	
 		public function __construct() {
 			parent::__construct(DefaultAct::$VISIBILITY_PUBLIC);
@@ -11,6 +12,10 @@
 		
 		protected function executeAction() {
 			
+			if(isset($_SESSION["username"])){
+				$this->userInfos = UserDAO::getUser($_SESSION["username"]);
+				$this->userCoords = UserDAO::getUserCoord($this->userInfos["NOCOORD"]);
+			}
 			//valide code et mot de passe
 			if (isset($_POST["update"]) && $_POST["update"] == "Enregistrer") {
 				
@@ -28,7 +33,8 @@
 				
 				if($resultA === true && $resultB === true){
 					$this->errorCode = 103;
-					
+					$this->userInfos = UserDAO::getUser($_SESSION["username"]);
+					$this->userCoords = UserDAO::getUserCoord($this->userInfos["NOCOORD"]);
 					
 					//header("location:ch_informations.php");
 					//exit;

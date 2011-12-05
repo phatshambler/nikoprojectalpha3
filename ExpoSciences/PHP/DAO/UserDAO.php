@@ -137,16 +137,16 @@
 			
 			$result = null;
 			
-			if ($row = oci_fetch_array($statement)) {
+			if ($row = oci_fetch_array($statement, OCI_ASSOC)) {
 				$result = $row;
 			}
-			
+			/*
 			foreach($result as $key => $value){
 				if(is_int($key)){
 					unset($result[$key]);
 				}
 			}
-			
+			*/
 			Connection::closeConnection();
 			
 			//var_dump($result);
@@ -381,6 +381,28 @@
 			return $result;
 		}
 		
+		public static function getUserCoord($username){
+			$connection = Connection::getConnection();
+			
+			$query = "SELECT * FROM P_COORDONNEES WHERE NOCOORD = :pUsername";
+
+			$statement = oci_parse($connection, $query);
+
+			oci_bind_by_name($statement, ":pUsername", $username);
+			
+			oci_execute($statement);
+			
+			$result = null;
+			
+			if ($row = oci_fetch_array($statement, OCI_ASSOC)) {
+				$result = $row;
+			}
+			
+			Connection::closeConnection();
+			
+			return $result;
+		}
+		
 		public static function getUsers(){
 			$connection = Connection::getConnection();
 			
@@ -488,7 +510,7 @@
 		public static function getAteliersSortedDate($date){
 			$connection = Connection::getConnection();
 			
-			$query = "SELECT * FROM P_ATELIER WHERE DATEATEL = TO_DATE(:pDate , 'DD-MM-YY')";
+			$query = "SELECT * FROM P_ATELIER WHERE DATEATEL = TO_DATE(:pDate , 'YYMMDD')";
 			
 			$statement = oci_parse($connection, $query);
 			
@@ -847,6 +869,58 @@
 			oci_bind_by_name($statement, ":pUsername", $auditeur);
 			oci_bind_by_name($statement, ":pAtel", $atelier);
 			oci_bind_by_name($statement, ":pCritere", $nocritere);
+			oci_execute($statement);
+			
+			$result = array();
+			
+			while (($row = oci_fetch_array($statement, OCI_ASSOC))) {
+				array_push($result, $row);
+			}
+			
+			Connection::closeConnection();
+			
+			if(count($result) > 0){
+				return $result;
+			}
+			else{
+				return null;
+			}
+		}
+		
+		public static function getStats($nocritere){
+			$connection = Connection::getConnection();
+			
+			$query = "SELECT AVG(COTE) FROM P_EVALUATION WHERE NOCRITERE = :pCritere";
+
+			$statement = oci_parse($connection, $query);
+
+			oci_bind_by_name($statement, ":pCritere", $nocritere);
+			oci_execute($statement);
+			
+			$result = array();
+			
+			while (($row = oci_fetch_array($statement, OCI_ASSOC))) {
+				array_push($result, $row);
+			}
+			
+			Connection::closeConnection();
+			
+			if(count($result) > 0){
+				return $result;
+			}
+			else{
+				return null;
+			}
+		}
+		
+		public static function getStatsAtel($noatel){
+			$connection = Connection::getConnection();
+			
+			$query = "SELECT AVG(COTE) FROM P_EVALUATION WHERE NOATEL = :pAtel";
+
+			$statement = oci_parse($connection, $query);
+
+			oci_bind_by_name($statement, ":pAtel", $noatel);
 			oci_execute($statement);
 			
 			$result = array();

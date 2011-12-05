@@ -6,6 +6,7 @@
 		public $user;
 		public $ateliers;
 		public $ateliersIns;
+		public $specialAdmin;
 	
 		public function __construct() {
 			parent::__construct(DefaultAct::$VISIBILITY_PUBLIC);
@@ -13,18 +14,26 @@
 		
 		protected function executeAction() {
 			
+			if (isset($_POST["cancel"])){
+				$_SESSION["usurpate"] = null;
+			
+			}
+			
 			if (isset($_SESSION["username"])) {
 			
-			$this->user = UserDAO::getUser($_SESSION["username"]);
+			if(isset($_SESSION["usurpate"])){
+				$this->user = UserDAO::getUser($_SESSION["usurpate"]);
+				$this->specialAdmin = $_SESSION["usurpate"];
+			}
+			else{
+				$this->user = UserDAO::getUser($_SESSION["username"]);
+			}
 			
 			//var_dump($this->user);
 			
-			$this->ateliers = UserDAO::getAteliersAll();
+			//$this->ateliers = UserDAO::getAteliersAll();
 			
 			$this->ateliersIns = UserDAO::getInscriptionsAll($this->user["NOAUDITEUR"]);
-			
-			
-			
 			
 			}
 			
@@ -37,23 +46,24 @@
 				$temparr = UserDAO::getAteliersSortedTitre($_POST["titre"]);
 				$this->ateliers = array_merge($this->ateliers, $temparr);
 				$test = true;
-				echo "titre";
+				//echo "titre";
 			}
 			
-			if(isset($_POST["date"]) && $_POST["date"] != ""){
+			if(isset($_POST["date"]) && $_POST["date"] != "" && is_numeric($_POST["date"]) && strlen($_POST["date"]) === 6){
 				$temparr = UserDAO::getAteliersSortedDate($_POST["date"]);
 				$this->ateliers = array_merge($this->ateliers, $temparr);
 			
 				$test = true;
-				echo "date";
+				//echo "date";
 			}
+			
 			
 			if(isset($_POST["langue"]) && $_POST["langue"] != ""){
 				$temparr = UserDAO::getAteliersSortedlangue($_POST["langue"]);
 				$this->ateliers = array_merge($this->ateliers, $temparr);
 			
 				$test = true;
-				echo "langue";
+				//echo "langue";
 			}
 			
 			if($test){
@@ -96,6 +106,9 @@
 			}
 			
 			if(isset($_POST["enregistrer"])){
+			
+				$this->ateliers = UserDAO::getAteliersAll();
+				
 				if(isset($_POST["sex"]) && $_POST["sex"] != "" && $_POST["sex"] != null){
 				echo "kill1";
 				$test = true;
@@ -115,9 +128,13 @@
 				
 				if($test){
 					UserDAO::newInscription($nouser, $noatel);
-					echo "kill";
+					//echo "kill";
 				
 					$this->ateliersIns = UserDAO::getInscriptionsAll($this->user["NOAUDITEUR"]);
+					
+					$this->ateliers = null;
+					
+					$this->errorCode = "Succès";
 				}
 				else{
 					$this->errorCode = "Vous êtes déja inscrit à cet atelier.";
@@ -126,9 +143,14 @@
 				else{
 					$this->errorCode = "Choisissez un atelier pour vous inscrire.";
 				}
+				
+				
 			}
 			
 			if(isset($_POST["enlever"])){
+			
+				$this->ateliers = UserDAO::getAteliersAll();
+				
 				if(isset($_POST["kkk"]) && $_POST["kkk"] != "" && $_POST["kkk"] != null){
 				//echo $_POST["kkk"];
 				
@@ -142,10 +164,14 @@
 				
 				$this->ateliersIns = UserDAO::getInscriptionsAll($this->user["NOAUDITEUR"]);
 				
+				$this->ateliers = null;
+				
 			}
 			else{
 				$this->errorCode = "Choisissez un atelier pour vous désinscrire.";
 			}
+			
+				
 			}
 		}
 	}

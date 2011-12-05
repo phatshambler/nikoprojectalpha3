@@ -39,14 +39,28 @@
 			}
 		?>
 		
-		
+		<div class="spaced">
+		<p class="bold"> Vos informations présentement: </p>
 		<?php if(isset($_SESSION["username"])){
+		foreach ($action->userInfos as $key => $value){
+			echo "<p class='float' style='color:grey'> " . "(" . $key . " : " . $value . ")</p>";
 		
+		}
+		foreach ($action->userCoords as $key => $value){
+			echo "<p class='float' style='color:grey'> ". "(" . $key . " : " . $value . ")</p>";
 		
+		}
+		?>
+		
+		</div>
+		<div class="clear"></div>
+		<p class="float">///////</p>
+		<div class="clear"></div>
+		<?php
 		$v = UserDAO::getTableDesc('p_auditeur');
 		
 		?>
-        <p class="bold">Entrez vos informations personnelles(tous les champs seront modifiés):</p>
+        <p class="bold">Changez vos informations personnelles(tous les champs seront modifiés):</p>
 		<form action="ch_informations.php" method="post">
 		
 		<?php foreach($v as $key => $value){
@@ -82,7 +96,7 @@
 			
 			?>
 			
-			<input class="niceField" type="text" name="<?php echo $key?>" id="<?php echo $key?>" 
+			<input class="niceField" type="text" name="<?php echo $key?>" id="<?php echo $key?>" value="<?php if(isset($action->userInfos[$key])){ echo $action->userInfos[$key]; } else{ echo "";}?>" 
 			
 			<?php
 			if($key === "NOCOORD" || $key === "NOAUDITEUR" || $key === "JUGE" || $key === "MOTDEPASSE" || $key === "CODEAUDITEUR"){
@@ -135,7 +149,7 @@
 				$regions = UserDAO::getRegions();
 				//var_dump($regions);
 				?>  
-				<select class="niceField" name="<?php echo $key?>" >
+				<select class="niceField" name="<?php echo $key?>">
 					<?php
 					for($l = 0; $l < count($regions); $l++){
 					//foreach($regions as $key => $value){
@@ -152,7 +166,7 @@
 			?>
 			
 			
-			<input class="niceField" type="text" name="<?php echo $key?>" id="<?php echo $key?>" 
+			<input class="niceField" type="text" name="<?php echo $key?>" id="<?php echo $key?>" value="<?php if(isset($action->userCoords[$key])){ echo $action->userCoords[$key]; } else{ echo "";}?>"" 
 			<?php
 			if($key === "NOCOORD" || $key === "NOREGION"){
 			echo ' readonly="readonly" style="background-color: grey" ';
@@ -181,7 +195,7 @@
 	</form>
 
 <div class="square">
-<a href="register.php">Réinitialiser</a>
+<a href="ch_informations.php">Réinitialiser</a>
 </div>	
 	
 <div class="square">
