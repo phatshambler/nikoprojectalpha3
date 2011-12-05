@@ -14,26 +14,34 @@
 			
 ?>
 		<p class="bold">Choissisez un utilisateur à modifier:</p>
-		
+		<form action="atel_admin.php" method="post">
 		<?php
-			foreach($action->contentUsers as $value){
+			foreach($action->contentUsers as $keyone => $value){
 			
 			?> 
-			<div class="square"><p class="bold"> 
+			<p class="bold">
+			
+				<input type="radio" name="usager" value="<?php echo $value["CODEAUDITEUR"]; ?>"> 
+			
 				<?php
 				foreach($value as $key => $data){
-				
 				?>
+				
+						
+				
 					 <?php echo $key . ": " . $data . ". ";?>
+				
 				<?php
 				
 				}
 				?>
-			</p></div>
+			</p>
 			<?php
 			}
+			?>
+			<input class="niceButton" name="usurpate" type="submit" value="Choisir cet utilisateur" />
+			</form>
 		
-		?>
 
 
 			<?php

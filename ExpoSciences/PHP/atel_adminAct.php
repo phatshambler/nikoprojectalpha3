@@ -17,8 +17,16 @@
 		$this->contentUsers = UserDAO::getUsers();
 		
 		
-		if(isset($_POST["usurpate"]) && $_POST["usurpate"] != ""){
-		
+		if(isset($_POST["usurpate"]) && isset($_POST["usager"])){
+			//echo "hello!";
+			//var_dump($_POST["usager"]);
+			$_SESSION["usurpate"] = $_POST["usager"];
+			
+			header("location:ev_ateliers.php");
+			exit;
+			
 		}
 		
+	}
+	
 	}

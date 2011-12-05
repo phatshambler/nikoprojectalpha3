@@ -15,9 +15,20 @@
 		
 		protected function executeAction() {
 			
+			if (isset($_POST["cancel"])){
+				$_SESSION["usurpate"] = null;
+			
+			}
+			
 			if (isset($_SESSION["username"])) {
 			
-			$this->user = UserDAO::getUser($_SESSION["username"]);
+			if(isset($_SESSION["usurpate"])){
+				$this->user = UserDAO::getUser($_SESSION["usurpate"]);
+				$this->errorCode = $_SESSION["usurpate"];
+			}
+			else{
+				$this->user = UserDAO::getUser($_SESSION["username"]);
+			}
 			
 			$this->juge = $this->user["JUGE"];
 			
