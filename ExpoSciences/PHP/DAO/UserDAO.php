@@ -820,7 +820,7 @@
 	public static function getTableAdminJuge(){
 			$connection = Connection::getConnection();
 			
-			$query = "SELECT NOAUDITEUR, CODEAUDITEUR, NOM, PRENOM, JUGE FROM P_AUDITEUR ORDER BY NOAUDITEUR";
+			$query = "SELECT NOAUDITEUR, CODEAUDITEUR, NOM, PRENOM, JUGE, CANDIDATJUGE FROM P_AUDITEUR ORDER BY NOAUDITEUR";
 
 			$statement = oci_parse($connection, $query);
 			

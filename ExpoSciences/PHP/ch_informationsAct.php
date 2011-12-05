@@ -15,7 +15,14 @@
 			if(isset($_SESSION["username"])){
 				$this->userInfos = UserDAO::getUser($_SESSION["username"]);
 				$this->userCoords = UserDAO::getUserCoord($this->userInfos["NOCOORD"]);
+				
+				if(isset($_POST["reinit"])){
+				$this->userInfos = array();
+				$this->userCoords = array();
 			}
+			}
+			
+			
 			//valide code et mot de passe
 			if (isset($_POST["update"]) && $_POST["update"] == "Enregistrer") {
 				

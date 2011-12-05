@@ -54,7 +54,7 @@
 		
 		</div>
 		<div class="clear"></div>
-		<p class="float">///////</p>
+		<p class="float"></p>
 		<div class="clear"></div>
 		<?php
 		$v = UserDAO::getTableDesc('p_auditeur');
@@ -195,7 +195,10 @@
 	</form>
 
 <div class="square">
-<a href="ch_informations.php">Réinitialiser</a>
+<form action="ch_informations.php" method="post">
+<input class="niceButton" style="color:yellow" type="submit" name="reinit" value="Réinitialiser" />
+		
+	</form>
 </div>	
 	
 <div class="square">

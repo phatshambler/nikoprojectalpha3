@@ -35,7 +35,7 @@
 			}
 			?>
 			<div class="clear"></div>
-			
+			<div class="square">
 			<form action="juge_admin.php" method="post">
 			<?php
 			foreach ($action->content as $value){
@@ -48,6 +48,9 @@
 				if($key === "JUGE"){
 					
 				
+				}
+				else if($key === "CANDIDATJUGE"){
+					echo "<p style='color:yellow'>" . $key . " : " . $data . " </p>";
 				}
 				else{
 				
@@ -94,6 +97,7 @@
 			?>
 			<input class="niceButton" style="color:yellow; font-size: 1.5em" type="submit" name="modjuge" value="Modifier les juges" />
 			</form>
+			</div>
 			<?php
 		}
 ?>
