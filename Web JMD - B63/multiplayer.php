@@ -7,8 +7,10 @@
 	require_once("PHP/header.php");
 ?>
 			
-
-
+<?php if(isset($_SESSION["status"])){
+	echo "<p class='bold'>" . $_SESSION["status"] . "</p>";
+}
+?>
 <div class="square">
 
 <p class="bold">Liste des jeux disponibles</p>
@@ -108,16 +110,11 @@ $action->start();
 
 <?php } ?>
 
-<?php if($_SESSION["status"] == MultiplayerAction::$STATUS_EXIT){ ?>
+<?php if($action->isExiting){ ?>
 
 <div class="square">
 <p class="bold">
-
-<?php 
-echo "FIN DU JEU";
-
-?>
-
+FIN DU JEU
 </p>
 
 <p>
@@ -134,7 +131,40 @@ echo "<p style='color:orange; font-weight:bold'> --- </p>";
 </p>
 </div>
 
-<?php } ?>
+<?php }
+
+$action->finalScores = null; 
+?>
+
+
+<div class="square">
+<p class="bold">
+HI-SCORES
+</p>
+<?php 
+
+$number = 1;
+
+foreach ($action->hiScores as $value){
+
+echo "<p style='color:orange; font-weight:bold'>";
+echo $number . "-";
+
+foreach ($value as $key => $x){
+
+if($number < 11){
+  echo $key . ":  " . $x . ":::";
+}
+
+}
+echo "</p>";
+$number++;
+//echo "<p style='color:orange; font-weight:bold'> --- </p>";
+}
+?>
+</div>
+
+
 
 <div class="square"><p class="bold">NAVIGATION</p> <p><a href="index.php">Retour</a></p></div>
 </div>

@@ -16,6 +16,7 @@
 		public $hiScores;
 		public $conditions;
 		public $isStarted;
+		public $isExiting;
 		
 		public $user;
 		
@@ -33,13 +34,27 @@
 		
 		protected function executeAction() {
 			
+			if (!isset($_SESSION["username"])) {
+				header("location:index.php");
+				exit;
+			}
+			
+			if(!isset($_SESSION["userid"])){
+				$_SESSION["userid"] = rand();
+			}
+			
 			$this->liste_users = MagicDAO::getAllGamesStatus();
 
 			$this->hiScores = MagicDAO::getHighScores();
 			arsort($this->hiScores);
-
-			$this->conditions = MagicDAO::getStartingConditions();
-
+			
+			if(isset($_SESSION["partie"])){
+			
+			$this->conditions = MagicDAO::getStartingConditions($_SESSION["partie"]);
+			}
+			else{
+			$this->conditions = MagicDAO::getStartingConditions(1);
+			}
 			$isStarted = true;
 
 			foreach ($this->conditions as $value){
@@ -53,20 +68,37 @@
 			}
 			else{
 				$arr = MagicDAO::getMyGamesStatus($_SESSION["username"]);
-				//var_dump($_SESSION["username"]);
-				//var_dump($arr);
+				
 				if(isset($arr[0])){
 					$_SESSION["status"] = $arr[0]["STATUS"];
 				}
 			}
 			
+			$this->isExiting = false;
+			
 			if(isset($_SESSION["status"])){
 				if($_SESSION["status"] == MultiplayerAction::$STATUS_EXIT){
 					$this->finalScores = MagicDAO::getEndingConditions(1);
 					arsort($this->finalScores);
+					$this->isExiting = true;
 					MagicDAO::updateStatus($_SESSION["userid"], MultiplayerAction::$STATUS_WAITING);
+					foreach ($this->finalScores as $key => $value){
+						foreach($value as $key2 => $value2){
+							if($key2 == "SCORE"){
+								if($value["NOMJOUEUR"] == $_SESSION["username"]){
+							
+									//var_dump($_SESSION["username"]);
+									//var_dump($value2);
+									MagicDAO::updateScores(1, $_SESSION["username"], $value2);
+							}
+							}
+						}
+					}
+					
 					$_SESSION["status"] = MultiplayerAction::$STATUS_WAITING;
 					$this->liste_users = MagicDAO::getAllGamesStatus();
+					$this->hiScores = MagicDAO::getHighScores();
+					arsort($this->hiScores);
 				}
 			}
 			
@@ -81,7 +113,7 @@
 				
 				//var_dump($lol);
 				
-				$_SESSION["userid"] = rand();
+				
 				$_SESSION["partie"] = 1;
 				$_SESSION["status"] = MultiplayerAction::$STATUS_WAITING;
 				

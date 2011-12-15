@@ -214,16 +214,17 @@
 			return $result;
 		}
 
-		public static function updateScores($id, $game, $name, $score){
+		public static function updateScores($game, $name, $score){
 		
 			
 			$connection = Connection::getConnection();
 			
-			$query = "INSERT INTO game_scores (ID, NAME, GAME, SCORE) VALUES (:pid, :pname, :pgame, :pscore)";
-
+			$query = "INSERT INTO game_scores (NAME, GAME, SCORE) VALUES (:pname, :pgame, :pscore)";
+			
+			//$score = intval($score);
+			
 			$statement = oci_parse($connection, $query);
 
-			oci_bind_by_name($statement, ":pid", $id);
 			oci_bind_by_name($statement, ":pname", $name);
 			oci_bind_by_name($statement, ":pgame", $game);
 			oci_bind_by_name($statement, ":pscore", $score);
@@ -243,7 +244,7 @@
 		public static function getHighScores(){
 			$connection = Connection::getConnection();
 			
-			$query = "SELECT NAME, SCORE FROM game_scores";
+			$query = "SELECT NAME, SCORE FROM game_scores ORDER BY SCORE DESC";
 			
 			$statement = oci_parse($connection, $query);
 			

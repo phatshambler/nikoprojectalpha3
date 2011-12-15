@@ -106,10 +106,10 @@ function setSize(){
 	}
 	
 	var canvas = document.getElementById("canvas");
-		canvas.height = (winH - 5);
+		canvas.height = (winH - 25);
 		canvas.width = (winW - 5);
 		constants.MAX_X = winW - 5;
-		constants.MAX_Y = winH - 5;
+		constants.MAX_Y = winH - 25;
 	
 }
 /*
