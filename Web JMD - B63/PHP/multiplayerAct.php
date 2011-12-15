@@ -13,6 +13,9 @@
 		public $liste_users;
 		public $timeout;
 		public $finalScores;
+		public $hiScores;
+		public $conditions;
+		public $isStarted;
 		
 		public $user;
 		
@@ -31,6 +34,19 @@
 		protected function executeAction() {
 			
 			$this->liste_users = MagicDAO::getAllGamesStatus();
+
+			$this->hiScores = MagicDAO::getHighScores();
+			arsort($this->hiScores);
+
+			$this->conditions = MagicDAO::getStartingConditions();
+
+			$isStarted = true;
+
+			foreach ($this->conditions as $value){
+					if ($value["STATUS"] != MultiplayerAction::$STATUS_RUNNING){
+						$isStarted = false;
+					}
+			}
 			
 			if(!isset($_SESSION["status"])){
 				$_SESSION["status"] = MultiplayerAction::$STATUS_OFF;
@@ -48,6 +64,9 @@
 				if($_SESSION["status"] == MultiplayerAction::$STATUS_EXIT){
 					$this->finalScores = MagicDAO::getEndingConditions(1);
 					arsort($this->finalScores);
+					MagicDAO::updateStatus($_SESSION["userid"], MultiplayerAction::$STATUS_WAITING);
+					$_SESSION["status"] = MultiplayerAction::$STATUS_WAITING;
+					$this->liste_users = MagicDAO::getAllGamesStatus();
 				}
 			}
 			
@@ -99,7 +118,7 @@
 		}
 		
 		public function start(){
-			
+			try{
 			$lol = false;
 			while (!$lol){
 				
@@ -113,11 +132,20 @@
 				}
 				
 			}
+			sleep(1);
+			$_SESSION["status"] = MultiplayerAction::$STATUS_RUNNING;
+
+			MagicDAO::updateStatus($_SESSION["userid"], MultiplayerAction::$STATUS_RUNNING);
+
 			echo '<script language="Javascript">
 						<!--
 						document.location.replace("as_multiplayer/nr_jeu.php");
 						// -->
 						</script>';
+			}
+			catch (Exception $e) {
+    			return false;
+			}
 			
 		
 		}
