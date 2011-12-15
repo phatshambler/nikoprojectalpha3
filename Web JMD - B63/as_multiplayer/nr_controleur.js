@@ -55,7 +55,7 @@ function loadGame(){
 		var ship = new Ship(Math.floor(constants.MAX_X / 2), constants.MAX_Y - 100);
 		
 		setCookies(ship);
-		ship.lives = 1;
+		ship.lives = 5;
 		//bonus
 		
 		var v = new Vue();

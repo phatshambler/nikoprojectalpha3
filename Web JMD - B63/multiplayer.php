@@ -8,7 +8,7 @@
 ?>
 			
 <?php if(isset($_SESSION["status"])){
-	echo "<p class='bold'>" . $_SESSION["status"] . "</p>";
+	//echo "<p class='bold'>" . $_SESSION["status"] . "</p>";
 }
 ?>
 <div class="square">
@@ -34,10 +34,6 @@
 	</p>
 </form>
 
-<form action="">
-
-</form>
-
 <?php
 }
 ?>
@@ -53,6 +49,9 @@
 <p class="logged"><?php if (isset($_SESSION["partie"])) {echo "No. de Partie:" . $_SESSION["partie"]; } ?></p>
 <p></p>
 <?php
+
+$someConnected = false; 
+
 foreach($action->liste_users as $value){
 	$test = $action->testLocked($value["NOMJOUEUR"]);
 	$testRun = $action->testRunning($value["NOMJOUEUR"]);
@@ -64,6 +63,7 @@ foreach($action->liste_users as $value){
 	else if($testRun){
 		echo "<p class='bold' style='color:red'>Joueur:"  . $value["NOMJOUEUR"];
 		echo " --- JOUEUR EN COURS DE PARTIE</p>";
+		$someConnected = true;
 	}
 	else if($_SESSION["username"] == $value["NOMJOUEUR"]){
 		echo "<p class='bold' style='color:yellow'>Moi:"  . $value["NOMJOUEUR"] . "</p>";
@@ -97,10 +97,17 @@ foreach($action->liste_users as $value){
 
 <div></div>
 
+<?php if(!$someConnected){ ?>
+
 <form action="multiplayer.php" method="post">
 	<input name="lock" class="niceButton" style="font-size: 14px; color:lime" type="submit" value="Synchroniser et démarrer" />
 </form>
 
+<?php } else { ?>
+
+<p class="bold">Partie en cours(autre joueur connecté). Veuilliez attendre (et rafraîchir) ou vous joindre à une autre partie.</p>
+
+<?php } ?>
 <div></div>
 
 

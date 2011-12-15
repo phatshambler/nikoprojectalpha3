@@ -15,9 +15,9 @@ $p = intval($p);
 $q = intval($q);
 $k = intval($k);
 
-GameDAO::updateScore($_SESSION["userid"], $p, $q, $k);
+GameDAO::updateScore($_SESSION["userid"], $p, $q, $k, $_SESSION["partie"]);
 
-$a = GameDAO::getScores();
+$a = GameDAO::getScores($_SESSION["partie"]);
 
 $jsa = json_encode($a);
 echo (string)$jsa;

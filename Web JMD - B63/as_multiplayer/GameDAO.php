@@ -42,14 +42,15 @@
 			
 		}
 		
-		public static function getMyGamesStatus ($username){
+		public static function getMyGamesStatus ($username, $partie){
 			$connection = Connection::getConnection();
 			
-			$query = "SELECT * FROM current_game WHERE NOMJOUEUR = :pUsername";
+			$query = "SELECT * FROM current_game WHERE NOMJOUEUR = :pUsername AND NOPARTIE = :partie";
 			
 			$statement = oci_parse($connection, $query);
 			
 			oci_bind_by_name($statement, ":pUsername", $username);
+			oci_bind_by_name($statement, ":partie", $partie);
 			
 			oci_execute($statement);
 			
@@ -64,13 +65,15 @@
 			return $result;
 		}
 		
-		public static function getScores(){
+		public static function getScores($partie){
 			$connection = Connection::getConnection();
 			
-			$query = "SELECT DISTINCT NOMJOUEUR, SCORE, X, Y FROM current_game ORDER BY NOMJOUEUR";
+			$query = "SELECT DISTINCT NOMJOUEUR, SCORE, X, Y FROM current_game WHERE NOPARTIE = :partie ORDER BY NOMJOUEUR";
 			
 			$statement = oci_parse($connection, $query);
 			
+			oci_bind_by_name($statement, ":partie", $partie);
+			
 			oci_execute($statement);
 			
 			$result = array();
@@ -84,12 +87,12 @@
 			return $result;
 		}
 		
-		public static function updateScore($id, $score, $x, $y){
+		public static function updateScore($id, $score, $x, $y, $partie){
 		
 			
 			$connection = Connection::getConnection();
 			
-			$query = "UPDATE CURRENT_GAME SET SCORE = :pScore, X = :pX, Y = :pY WHERE NOJOUEUR = :pID";
+			$query = "UPDATE CURRENT_GAME SET SCORE = :pScore, X = :pX, Y = :pY WHERE NOJOUEUR = :pID AND NOPARTIE = :partie";
 
 			$statement = oci_parse($connection, $query);
 
@@ -98,6 +101,7 @@
 			oci_bind_by_name($statement, ":pScore", $score);
 			oci_bind_by_name($statement, ":pX", $x);
 			oci_bind_by_name($statement, ":pY", $y);
+			oci_bind_by_name($statement, ":partie", $partie);
 			
 			if(oci_execute($statement)){
 				$result = true;
@@ -111,17 +115,18 @@
 			return $result;
 		}
 		
-		public static function updateStatus($id, $status){
+		public static function updateStatus($id, $status, $partie){
 		
 			
 			$connection = Connection::getConnection();
 			
-			$query = "UPDATE CURRENT_GAME SET STATUS = :pStatus WHERE NOJOUEUR = :pID";
+			$query = "UPDATE CURRENT_GAME SET STATUS = :pStatus WHERE NOJOUEUR = :pID AND NOPARTIE = :partie";
 
 			$statement = oci_parse($connection, $query);
 
 			oci_bind_by_name($statement, ":pID", $id);
 			oci_bind_by_name($statement, ":pStatus", $status);
+			oci_bind_by_name($statement, ":partie", $partie);
 			
 			if(oci_execute($statement)){
 				$result = true;
@@ -138,14 +143,15 @@
 		
 		
 		
-		public static function deleteMyScore ($id){
+		public static function deleteMyScore ($id, $partie){
 			$connection = Connection::getConnection();
 			
-			$query = "DELETE FROM current_game WHERE NOJOUEUR = :pID";
+			$query = "DELETE FROM current_game WHERE NOJOUEUR = :pID AND NOPARTIE = :partie";
 			
 			$statement = oci_parse($connection, $query);
 			
 			oci_bind_by_name($statement, ":pID", $id);
+			oci_bind_by_name($statement, ":partie", $partie);
 			
 			oci_execute($statement);
 			
