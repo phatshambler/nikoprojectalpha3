@@ -47,14 +47,15 @@
 			
 		}
 		
-		public static function getMyGamesStatus ($username){
+		public static function getMyGamesStatus ($username, $partie){
 			$connection = Connection::getConnection();
 			
-			$query = "SELECT * FROM current_game WHERE NOMJOUEUR = :pUsername";
+			$query = "SELECT * FROM current_game WHERE NOMJOUEUR = :pUsername AND NOPARTIE = :partie";
 			
 			$statement = oci_parse($connection, $query);
 			
 			oci_bind_by_name($statement, ":pUsername", $username);
+			oci_bind_by_name($statement, ":partie", $partie);
 			
 			oci_execute($statement);
 			
@@ -69,12 +70,14 @@
 			return $result;
 		}
 		
-		public static function getAllGamesStatus(){
+		public static function getAllGamesStatus($partie){
 			$connection = Connection::getConnection();
 			
-			$query = "SELECT DISTINCT NOMJOUEUR FROM current_game";
+			$query = "SELECT DISTINCT NOMJOUEUR FROM current_game WHERE NOPARTIE = :partie";
 			
 			$statement = oci_parse($connection, $query);
+			
+			oci_bind_by_name($statement, ":partie", $partie);
 			
 			oci_execute($statement);
 			
@@ -89,14 +92,15 @@
 			return $result;
 		}
 		
-		public static function getLockedStatus($username){
+		public static function getLockedStatus($username, $partie){
 			$connection = Connection::getConnection();
 			
-			$query = "SELECT STATUS FROM current_game WHERE NOMJOUEUR = :pUsername";
+			$query = "SELECT STATUS FROM current_game WHERE NOMJOUEUR = :pUsername AND NOPARTIE = :partie";
 			
 			$statement = oci_parse($connection, $query);
 			
 			oci_bind_by_name($statement, ":pUsername", $username);
+			oci_bind_by_name($statement, ":partie", $partie);
 			
 			oci_execute($statement);
 			
@@ -110,6 +114,36 @@
 			Connection::closeConnection();
 			
 			if($result[0]["STATUS"] == 2){ ///2 == MultiplayerAction::$STATUS_LOCKED
+				return true;
+			}
+			else{
+				return false;
+			}
+			
+		}
+		
+		public static function getRunningStatus($username, $partie){
+			$connection = Connection::getConnection();
+			
+			$query = "SELECT STATUS FROM current_game WHERE NOMJOUEUR = :pUsername AND NOPARTIE = :partie";
+			
+			$statement = oci_parse($connection, $query);
+			
+			oci_bind_by_name($statement, ":pUsername", $username);
+			oci_bind_by_name($statement, ":partie", $partie);
+			
+			oci_execute($statement);
+			
+			$result = array();
+			
+			while (($row = oci_fetch_array($statement, OCI_ASSOC))) {
+				array_push($result, $row);
+			}
+			
+			
+			Connection::closeConnection();
+			
+			if($result[0]["STATUS"] > 2){ ///2 == MultiplayerAction::$STATUS_LOCKED
 				return true;
 			}
 			else{
@@ -162,12 +196,14 @@
 			return $result;
 		}
 		
-		public static function deleteRecords (){
+		public static function deleteRecords ($partie){
 			$connection = Connection::getConnection();
 			
-			$query = "DELETE FROM current_game";
+			$query = "DELETE FROM current_game WHERE NOPARTIE = :partie";
 			
 			$statement = oci_parse($connection, $query);
+			
+			oci_bind_by_name($statement, ":partie", $partie);
 			
 			oci_execute($statement);
 			
@@ -175,14 +211,15 @@
 			
 		}
 		
-		public static function deleteMyRecords ($user){
+		public static function deleteMyRecords ($user, $partie){
 			$connection = Connection::getConnection();
 			
-			$query = "DELETE FROM current_game WHERE NOMJOUEUR = :pJoueur";
+			$query = "DELETE FROM current_game WHERE NOMJOUEUR = :pJoueur AND NOPARTIE = :partie";
 			
 			$statement = oci_parse($connection, $query);
 			
 			oci_bind_by_name($statement, ":pJoueur", $user);
+			oci_bind_by_name($statement, ":partie", $partie);
 			
 			oci_execute($statement);
 			
@@ -190,17 +227,18 @@
 			
 		}
 		
-		public static function updateStatus($id, $status){
+		public static function updateStatus($id, $status, $partie){
 		
 			
 			$connection = Connection::getConnection();
 			
-			$query = "UPDATE CURRENT_GAME SET STATUS = :pStatus WHERE NOJOUEUR = :pID";
+			$query = "UPDATE CURRENT_GAME SET STATUS = :pStatus WHERE NOJOUEUR = :pID AND NOPARTIE = :partie";
 
 			$statement = oci_parse($connection, $query);
 
 			oci_bind_by_name($statement, ":pID", $id);
 			oci_bind_by_name($statement, ":pStatus", $status);
+			oci_bind_by_name($statement, ":partie", $partie);
 			
 			if(oci_execute($statement)){
 				$result = true;

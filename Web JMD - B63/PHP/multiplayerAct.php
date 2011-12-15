@@ -43,7 +43,11 @@
 				$_SESSION["userid"] = rand();
 			}
 			
-			$this->liste_users = MagicDAO::getAllGamesStatus();
+			if(!isset($_SESSION["partie"])){
+				$_SESSION["partie"] = 1;
+			}
+			
+			$this->liste_users = MagicDAO::getAllGamesStatus($_SESSION["partie"]);
 
 			$this->hiScores = MagicDAO::getHighScores();
 			arsort($this->hiScores);
@@ -55,6 +59,7 @@
 			else{
 			$this->conditions = MagicDAO::getStartingConditions(1);
 			}
+			
 			$isStarted = true;
 
 			foreach ($this->conditions as $value){
@@ -66,8 +71,9 @@
 			if(!isset($_SESSION["status"])){
 				$_SESSION["status"] = MultiplayerAction::$STATUS_OFF;
 			}
+			
 			else{
-				$arr = MagicDAO::getMyGamesStatus($_SESSION["username"]);
+				$arr = MagicDAO::getMyGamesStatus($_SESSION["username"], $_SESSION["partie"]);
 				
 				if(isset($arr[0])){
 					$_SESSION["status"] = $arr[0]["STATUS"];
@@ -78,10 +84,10 @@
 			
 			if(isset($_SESSION["status"])){
 				if($_SESSION["status"] == MultiplayerAction::$STATUS_EXIT){
-					$this->finalScores = MagicDAO::getEndingConditions(1);
+					$this->finalScores = MagicDAO::getEndingConditions($_SESSION["partie"]);
 					arsort($this->finalScores);
 					$this->isExiting = true;
-					MagicDAO::updateStatus($_SESSION["userid"], MultiplayerAction::$STATUS_WAITING);
+					MagicDAO::updateStatus($_SESSION["userid"], MultiplayerAction::$STATUS_WAITING, $_SESSION["partie"]);
 					foreach ($this->finalScores as $key => $value){
 						foreach($value as $key2 => $value2){
 							if($key2 == "SCORE"){
@@ -96,7 +102,7 @@
 					}
 					
 					$_SESSION["status"] = MultiplayerAction::$STATUS_WAITING;
-					$this->liste_users = MagicDAO::getAllGamesStatus();
+					$this->liste_users = MagicDAO::getAllGamesStatus($_SESSION["partie"]);
 					$this->hiScores = MagicDAO::getHighScores();
 					arsort($this->hiScores);
 				}
@@ -113,38 +119,40 @@
 				
 				//var_dump($lol);
 				
-				
-				$_SESSION["partie"] = 1;
+				$_SESSION["partie"] = $_POST["nopartie"];
 				$_SESSION["status"] = MultiplayerAction::$STATUS_WAITING;
 				
-				MagicDAO::newGame($this->nom_jeu_choisi, 1 , 1, $_SESSION["userid"], $_SESSION["username"], MultiplayerAction::$STATUS_WAITING);
+				MagicDAO::newGame($this->nom_jeu_choisi, $_SESSION["partie"] , 1, $_SESSION["userid"], $_SESSION["username"], MultiplayerAction::$STATUS_WAITING);
 				
-				$this->liste_users = MagicDAO::getAllGamesStatus();
+				$this->liste_users = MagicDAO::getAllGamesStatus($_SESSION["partie"]);
 			
 			}
 			
 			if(isset($_POST["lock"])){
-				MagicDAO::updateStatus($_SESSION["userid"], MultiplayerAction::$STATUS_LOCKED);
+				MagicDAO::updateStatus($_SESSION["userid"], MultiplayerAction::$STATUS_LOCKED, $_SESSION["partie"]);
 				$_SESSION["status"] = MultiplayerAction::$STATUS_LOCKED;
-				$this->liste_users = MagicDAO::getAllGamesStatus();
+				$this->liste_users = MagicDAO::getAllGamesStatus($_SESSION["partie"]);
 				$this->timeout = 10;
 			}
 			
 			if(isset($_POST["delete"])){
-				MagicDAO::deleteRecords();
+				MagicDAO::deleteRecords($_SESSION["partie"]);
 				$_SESSION["status"] = MultiplayerAction::$STATUS_OFF;
-				$this->liste_users = MagicDAO::getAllGamesStatus();
+				$_SESSION["partie"] = 1;
+				$this->liste_users = MagicDAO::getAllGamesStatus($_SESSION["partie"]);
 			}
 			
 			if(isset($_POST["reload"])){
 				
-				$this->liste_users = MagicDAO::getAllGamesStatus();
+				$this->liste_users = MagicDAO::getAllGamesStatus($_SESSION["partie"]);
 			}
 			
 			if(isset($_POST["deleteme"])){
-				MagicDAO::deleteMyRecords($_SESSION["username"]);
+				MagicDAO::deleteMyRecords($_SESSION["username"], $_SESSION["partie"]);
 				$_SESSION["status"] = MultiplayerAction::$STATUS_OFF;
-				$this->liste_users = MagicDAO::getAllGamesStatus();
+				$_SESSION["partie"] = 1;
+				
+				$this->liste_users = MagicDAO::getAllGamesStatus($_SESSION["partie"]);
 			}
 		
 		}
@@ -167,7 +175,7 @@
 			sleep(1);
 			$_SESSION["status"] = MultiplayerAction::$STATUS_RUNNING;
 
-			MagicDAO::updateStatus($_SESSION["userid"], MultiplayerAction::$STATUS_RUNNING);
+			MagicDAO::updateStatus($_SESSION["userid"], MultiplayerAction::$STATUS_RUNNING, $_SESSION["partie"]);
 
 			echo '<script language="Javascript">
 						<!--
@@ -183,7 +191,7 @@
 		}
 		
 		public function testInListe(){
-			$arr = MagicDAO::getMyGamesStatus($_SESSION["username"]);
+			$arr = MagicDAO::getMyGamesStatus($_SESSION["username"], $_SESSION["partie"]);
 			
 			if(isset($arr[0]) && $arr[0] != null){
 				return true;
@@ -194,7 +202,10 @@
 		}
 		
 		public function testLocked($username){
-			return MagicDAO::getLockedStatus($username);
+			return MagicDAO::getLockedStatus($username, $_SESSION["partie"]);
 		}
 		
+		public function testRunning($username){
+			return MagicDAO::getRunningStatus($username, $_SESSION["partie"]);
+		}
 	}

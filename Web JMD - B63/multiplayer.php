@@ -20,9 +20,24 @@
 <p class="logged">Enregistrez-vous</p>
 
 <form action="multiplayer.php" method="post">
+	<p> No. de Partie:
+	<select name="nopartie">
+	<option value="1">1</option>
+	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	<option value="5">5</option>
+	</select>
 	<input name="newmulti" class="niceButton" style="font-size: 16px" type="submit" value="Awesome Shooter" />
 	<p> version 2, multiplayer </p>
+	
+	</p>
 </form>
+
+<form action="">
+
+</form>
+
 <?php
 }
 ?>
@@ -35,14 +50,23 @@
 
 <p class="bold">Liste des Joueurs</p>
 <p class="logged">Joueurs inscrits: Awesome Shooter</p>
+<p class="logged"><?php if (isset($_SESSION["partie"])) {echo "No. de Partie:" . $_SESSION["partie"]; } ?></p>
 <p></p>
 <?php
 foreach($action->liste_users as $value){
 	$test = $action->testLocked($value["NOMJOUEUR"]);
+	$testRun = $action->testRunning($value["NOMJOUEUR"]);
 	
 	if($test){
 		echo "<p class='bold' style='color:lime'>Joueur:"  . $value["NOMJOUEUR"];
 		echo " --- JOUEUR EN ATTENTE</p>";
+	}
+	else if($testRun){
+		echo "<p class='bold' style='color:red'>Joueur:"  . $value["NOMJOUEUR"];
+		echo " --- JOUEUR EN COURS DE PARTIE</p>";
+	}
+	else if($_SESSION["username"] == $value["NOMJOUEUR"]){
+		echo "<p class='bold' style='color:yellow'>Moi:"  . $value["NOMJOUEUR"] . "</p>";
 	}
 	else{
 		echo "<p class='bold' style='color:red'>Joueur:"  . $value["NOMJOUEUR"] . "</p>";
@@ -159,6 +183,9 @@ if($number < 11){
 }
 echo "</p>";
 $number++;
+if($number > 10){
+  break;
+}
 //echo "<p style='color:orange; font-weight:bold'> --- </p>";
 }
 ?>
