@@ -213,6 +213,52 @@
 			
 			return $result;
 		}
+
+		public static function updateScores($id, $game, $name, $score){
+		
+			
+			$connection = Connection::getConnection();
+			
+			$query = "INSERT INTO game_scores (ID, NAME, GAME, SCORE) VALUES (:pid, :pname, :pgame, :pscore)";
+
+			$statement = oci_parse($connection, $query);
+
+			oci_bind_by_name($statement, ":pid", $id);
+			oci_bind_by_name($statement, ":pname", $name);
+			oci_bind_by_name($statement, ":pgame", $game);
+			oci_bind_by_name($statement, ":pscore", $score);
+
+			if(oci_execute($statement)){
+				$result = true;
+			}
+			else{
+				$result = false;
+			}
+			
+			Connection::closeConnection();
+			
+			return $result;
+		}
+
+		public static function getHighScores(){
+			$connection = Connection::getConnection();
+			
+			$query = "SELECT NAME, SCORE FROM game_scores";
+			
+			$statement = oci_parse($connection, $query);
+			
+			oci_execute($statement);
+			
+			$result = array();
+			
+			while (($row = oci_fetch_array($statement, OCI_ASSOC))) {
+				array_push($result, $row);
+			}
+			
+			Connection::closeConnection();
+			
+			return $result;
+		}
 		
 		
 	}
