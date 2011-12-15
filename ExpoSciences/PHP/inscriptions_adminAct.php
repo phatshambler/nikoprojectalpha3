@@ -1,7 +1,7 @@
 <?php
 	require_once("PHP/defaultAct.php");
 
-	class AtelAdminAction extends DefaultAct {
+	class InscriptionAdminAction extends DefaultAct {
 		public $errorCode;
 		public $contentUsers;
 
@@ -22,7 +22,7 @@
 			//var_dump($_POST["usager"]);
 			$_SESSION["usurpate"] = $_POST["usager"];
 			
-			header("location:ev_ateliers.php");
+			header("Location: in_ateliers.php");
 			exit;
 			
 		}

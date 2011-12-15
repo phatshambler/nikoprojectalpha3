@@ -9,6 +9,16 @@
 
 <div class="square">
 
+<?php if (isset($action->specialAdmin)){ ?>
+	<p class="bold" style="color:yellow">Vous modifiez les inscriptions de l'auditeur <?php echo $action->specialAdmin; ?> </p>
+	<form action="ev_ateliers.php" method="post">
+	<input class="niceButton" name="cancel" type="submit" value="Annuler l'usurpation d'identité" />
+	</form>	
+	
+<?php
+}
+?>
+
 <form action="in_ateliers.php" method="post">
 		
 		<?php
@@ -30,7 +40,7 @@
 
 		<div>
 			<label for="date">
-				Date(format: jj-MM-YY): 
+				Date(format: AAMMJJ): 
 			</label>
 			<input class="niceField" type="text" name="date" id="date" maxlength="8" />
 		</div>
@@ -47,7 +57,7 @@
 </div>
 
 <div class="square">
-<p class="bold">Résultats</p>
+<p class="bold">Résultats:</p>
 <form action="in_ateliers.php" method="post">
 
 	<?php 
@@ -75,6 +85,9 @@
 					?></p><?php
 				
 			}
+	}
+	else{
+		echo "<p class='bold'> Aucun résultat </p>";
 	}
 	?>
 

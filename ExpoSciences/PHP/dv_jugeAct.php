@@ -33,7 +33,9 @@
 				UserDAO::updateJuge($_SESSION["username"], false);
 				
 				$this->user = UserDAO::getUser($_SESSION["username"]);
-			
+				
+				UserDAO::removeEval($this->user["NOAUDITEUR"]);
+				
 				$this->juge = $this->user["JUGE"];
 			}
 			if(isset($_POST["annulerdemande"])){

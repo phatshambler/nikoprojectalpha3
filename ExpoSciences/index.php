@@ -106,7 +106,8 @@
         <p class="bold">Options Administrateur</p>
         	<p><a href="atel_admin.php">Modifier les évaluations des auditeurs</a></p>
         	<p><a href="juge_admin.php">Modifier le statut juge des auditeurs</a></p>
-        	<p><a href="notes_admin.php">Statistiques des notes</a></p>
+        	<p><a href="inscriptions_admin.php">Modifier les inscriptions des auditeurs</a></p>
+			<p><a href="statistiques.php">Statistiques</a></p>
         </div>
         <?php }?>
 <?php

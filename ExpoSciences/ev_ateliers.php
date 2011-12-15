@@ -54,6 +54,17 @@ function loadEv(){
 
 <div class="square">
 <p class="xbold">Évaluation des ateliers</p>
+
+<?php if (isset($action->errorCode)){ ?>
+	<p class="bold" style="color:yellow">Vous notez pour l'auditeur <?php echo $action->errorCode; ?> </p>
+	<form action="ev_ateliers.php" method="post">
+	<input class="niceButton" name="cancel" type="submit" value="Annuler l'usurpation d'identité" />
+	</form>	
+	
+<?php
+}
+?>
+
 <p class="logged">Choisissez un atelier à évaluer:</p>
 	<?php if(isset($action->juge) && $action->juge != null &&  $action->juge != ""){
 		//echo "lol";
@@ -80,23 +91,46 @@ function loadEv(){
 						<?php
 					
 					foreach($action->ateliersIns[$i] as $keyB => $valueB){
-						echo $keyB;
-						echo ":";
-						echo $valueB;
-						echo " ";
 						
+						if($keyB === "NOTES"){
+						echo "<p class='bold'>(NOTES PRÉCÉDENTES: ";
+							foreach($action->ateliersIns[$i]["NOTES"] as $value){
+								if($value != null){
+								foreach($value as $finalvalue){
+									if(isset($finalvalue) && isset($finalvalue["COTE"]) && isset($finalvalue["NOCRITERE"])){
+									echo $finalvalue["NOCRITERE"];
+									echo ":";
+									echo $finalvalue["COTE"];
+									echo " ";
+									}
+								}
+								}
+							}
+						echo ")</p>";
+						}
+						else{
+							echo $keyB;
+							echo ":";
+							echo $valueB;
+							echo " ";
+						}
 					}
 					?></p><?php
 				
 			}
 	}
+	else{
+	
+	echo "<p class='xbold'>Vous n'êtes inscrit à aucun atelier! </p>";
+	}
 	?>
 </div>
 <div class="square">
-<p class="logged">Entrez des notes pour l'atelier sélectionné:</p>
+
 	<?php 
 	
-	if($action->criteres != null){
+	if($action->criteres != null && $action->ateliersIns != null){
+			?> <p class="logged">Entrez des notes pour l'atelier sélectionné:</p> <?php
 			for($i = 0; $i < count($action->criteres); $i++){
 					 
 					//echo " -- ";
@@ -110,24 +144,15 @@ function loadEv(){
 						<?php
 				
 			}
-	}
-	?>
+			?>
+	
 	
 	<input class="niceButton" name="noter" type="submit" value="Noter l'atelier" />
 </form>	
-
+	<?php
+	}
+	?>
 </div>
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 	
 	
 	<?php

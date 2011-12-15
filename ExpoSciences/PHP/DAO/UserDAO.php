@@ -137,16 +137,16 @@
 			
 			$result = null;
 			
-			if ($row = oci_fetch_array($statement)) {
+			if ($row = oci_fetch_array($statement, OCI_ASSOC)) {
 				$result = $row;
 			}
-			
+			/*
 			foreach($result as $key => $value){
 				if(is_int($key)){
 					unset($result[$key]);
 				}
 			}
-			
+			*/
 			Connection::closeConnection();
 			
 			//var_dump($result);
@@ -162,6 +162,7 @@
 			$query = "INSERT INTO p_auditeur (NOAUDITEUR, CODEAUDITEUR, MOTDEPASSE, NOM, PRENOM, NOCOORD, JUGE, STATUT, CANDIDATJUGE) VALUES(:id_bv, :text_bv, :pass_bv, :nom_bv, :prenom_bv, :nocoord_bv, TO_DATE(:juge_bv, 'DDMMYYYY'), :statut_bv, TO_DATE(:candidatjuge_bv, 'DDMMYYYY'))";
 
 			$statement = oci_parse($connection, $query);
+			
 			
 			if($juge === "Oui"){
 			$juge = date("dmY");
@@ -242,6 +243,10 @@
 
 			$statement = oci_parse($connection, $query);
 			
+			$telephone = ereg_replace("[^A-Za-z0-9]", "", $telephone);
+			$cell = ereg_replace("[^A-Za-z0-9]", "", $cell);
+			
+			//var_dump($telephone);
 			
 			oci_bind_by_name($statement, ":one_bv", $nocoord);
 			oci_bind_by_name($statement, ":two_bv", $rue);
@@ -381,6 +386,28 @@
 			return $result;
 		}
 		
+		public static function getUserCoord($username){
+			$connection = Connection::getConnection();
+			
+			$query = "SELECT * FROM P_COORDONNEES WHERE NOCOORD = :pUsername";
+
+			$statement = oci_parse($connection, $query);
+
+			oci_bind_by_name($statement, ":pUsername", $username);
+			
+			oci_execute($statement);
+			
+			$result = null;
+			
+			if ($row = oci_fetch_array($statement, OCI_ASSOC)) {
+				$result = $row;
+			}
+			
+			Connection::closeConnection();
+			
+			return $result;
+		}
+		
 		public static function getUsers(){
 			$connection = Connection::getConnection();
 			
@@ -488,7 +515,7 @@
 		public static function getAteliersSortedDate($date){
 			$connection = Connection::getConnection();
 			
-			$query = "SELECT * FROM P_ATELIER WHERE DATEATEL = TO_DATE(:pDate , 'DD-MM-YY')";
+			$query = "SELECT * FROM P_ATELIER WHERE DATEATEL = TO_DATE(:pDate , 'YYMMDD')";
 			
 			$statement = oci_parse($connection, $query);
 			
@@ -798,7 +825,7 @@
 	public static function getTableAdminJuge(){
 			$connection = Connection::getConnection();
 			
-			$query = "SELECT NOAUDITEUR, CODEAUDITEUR, NOM, PRENOM, JUGE FROM P_AUDITEUR ORDER BY NOAUDITEUR";
+			$query = "SELECT NOAUDITEUR, CODEAUDITEUR, NOM, PRENOM, JUGE, CANDIDATJUGE FROM P_AUDITEUR ORDER BY NOAUDITEUR";
 
 			$statement = oci_parse($connection, $query);
 			
@@ -847,6 +874,58 @@
 			oci_bind_by_name($statement, ":pUsername", $auditeur);
 			oci_bind_by_name($statement, ":pAtel", $atelier);
 			oci_bind_by_name($statement, ":pCritere", $nocritere);
+			oci_execute($statement);
+			
+			$result = array();
+			
+			while (($row = oci_fetch_array($statement, OCI_ASSOC))) {
+				array_push($result, $row);
+			}
+			
+			Connection::closeConnection();
+			
+			if(count($result) > 0){
+				return $result;
+			}
+			else{
+				return null;
+			}
+		}
+		
+		public static function getStats($nocritere){
+			$connection = Connection::getConnection();
+			
+			$query = "SELECT AVG(COTE) FROM P_EVALUATION WHERE NOCRITERE = :pCritere";
+
+			$statement = oci_parse($connection, $query);
+
+			oci_bind_by_name($statement, ":pCritere", $nocritere);
+			oci_execute($statement);
+			
+			$result = array();
+			
+			while (($row = oci_fetch_array($statement, OCI_ASSOC))) {
+				array_push($result, $row);
+			}
+			
+			Connection::closeConnection();
+			
+			if(count($result) > 0){
+				return $result;
+			}
+			else{
+				return null;
+			}
+		}
+		
+		public static function getStatsAtel($noatel){
+			$connection = Connection::getConnection();
+			
+			$query = "SELECT AVG(COTE) FROM P_EVALUATION WHERE NOATEL = :pAtel";
+
+			$statement = oci_parse($connection, $query);
+
+			oci_bind_by_name($statement, ":pAtel", $noatel);
 			oci_execute($statement);
 			
 			$result = array();
